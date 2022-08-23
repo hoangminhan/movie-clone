@@ -1,7 +1,12 @@
-import "./App.css";
+import { DefaultLayout } from "layout";
+import "./App.less";
 
 function App() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  return (
+    <div className="text-3xl font-poppin">
+      <DefaultLayout>content</DefaultLayout>
+    </div>
+  );
 }
 
 export default App;
