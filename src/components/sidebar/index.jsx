@@ -7,7 +7,7 @@ import {
   HomeOutlined,
 } from "@ant-design/icons";
 import { Menu, Button } from "antd";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useTheme } from "styled-components";
 
@@ -43,6 +43,7 @@ function getItem(label, key, icon, children, title) {
 
 const items = [
   getItem("Home", "/", <HomeOutlined />),
+  getItem("Movie", "/movie", <DesktopOutlined />),
   getItem("Discovery", "/discovery", <DesktopOutlined />),
   getItem("Favorite", "/favorite", <ContainerOutlined />),
   getItem("Playlist", "/playlist", <ContainerOutlined />),
@@ -50,9 +51,11 @@ const items = [
 ];
 
 export const Sidebar = ({ toggleMenu, handleToggleMenu }) => {
+  let navigate = useNavigate();
   const theme = useTheme();
-  console.log("Current theme: ", theme);
   const location = useLocation();
+
+  //  check full sidebar
   const handleChangeStatusMenu = (event) => {
     handleToggleMenu(!toggleMenu);
   };
@@ -64,8 +67,9 @@ export const Sidebar = ({ toggleMenu, handleToggleMenu }) => {
     selectedKeys,
     domEvent,
   }) => {
-    console.log({ item, key, keyPath, selectedKeys, domEvent });
+    navigate(key);
   };
+
   return (
     // <Col xs={24} md={collapsed ? 2 : 3}>
 

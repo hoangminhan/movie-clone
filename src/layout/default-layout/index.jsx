@@ -8,11 +8,13 @@ export const DefaultLayout = ({ children }) => {
     setToggleMenu(data);
   };
   return (
-    <div className="">
+    <div className="min-h-[100vh]">
       <Sidebar toggleMenu={toggleMenu} handleToggleMenu={handleToggleMenu} />
       <div
         className={`${
-          toggleMenu ? "ml-[110px] duration-300 ease-in-out" : "ml-[280px]"
+          toggleMenu
+            ? "ml-[110px] duration-300 ease-in-out"
+            : "ml-[280px] h-[100%]"
         }`}
       >
         <Row>
