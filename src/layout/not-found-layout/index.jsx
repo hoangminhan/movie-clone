@@ -1,27 +1,8 @@
-import { Button, Result } from "antd";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-
-export const NotFoundLayout = () => {
-  const navigate = useNavigate();
+export const NotFoundLayout = ({ children }) => {
   return (
-    <div className="container mx-auto">
-      {" "}
-      <Result
-        status="404"
-        title="404"
-        subTitle="Sorry, the page you visited does not exist."
-        extra={
-          <Button
-            type="primary"
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            Back Home
-          </Button>
-        }
-      />
+    <div className="container mx-auto flex justify-center items-center h-[100vh]">
+      {children}
     </div>
   );
 };

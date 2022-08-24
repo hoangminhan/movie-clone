@@ -8,21 +8,20 @@ export const DefaultLayout = ({ children }) => {
     setToggleMenu(data);
   };
   return (
-    <div className="min-h-[100vh]">
+    <div className="min-h-[100vh] bg-[#1c1c1e]">
       <Sidebar toggleMenu={toggleMenu} handleToggleMenu={handleToggleMenu} />
       <div
         className={`${
           toggleMenu
-            ? "ml-[110px] duration-300 ease-in-out"
-            : "ml-[280px] h-[100%]"
+            ? "ml-[100px] duration-300 ease-in-out"
+            : "ml-[270px] min-h-[100vh]"
         }`}
       >
-        <Row>
+        <Row className="relative">
           <Col xs={24} md={19}>
-            <section>
+            <section className="px-[10px]">
               <Header />
               {children}
-              <Footer />
             </section>
           </Col>
           <Col xs={24} md={5}>
@@ -30,6 +29,7 @@ export const DefaultLayout = ({ children }) => {
           </Col>
         </Row>
       </div>
+      <Footer toggleMenu={toggleMenu} />
     </div>
   );
 };

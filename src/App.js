@@ -6,14 +6,12 @@ import "./App.less";
 
 function App() {
   return (
-    <div className="text-3xl font-poppin">
+    <div className="text-2xl text-[#989898] font-poppin">
       <Routes>
         {RouteList.map((item, index) => {
           const Page = item.component;
           const checkLayout = item.layout;
-          console.log({ checkLayout });
           let CurrentLayout = checkLayout ? DefaultLayout : NotFoundLayout;
-          console.log(CurrentLayout);
           return (
             <Route
               path={item.path}
