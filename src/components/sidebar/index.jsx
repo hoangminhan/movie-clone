@@ -13,6 +13,7 @@ import { faClock, faCompass } from "@fortawesome/free-regular-svg-icons";
 import { faUserTie } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style.scss";
+import { useTranslation } from "react-i18next";
 
 // styled
 const StyledMenu = styled(Menu)`
@@ -67,18 +68,18 @@ function getItem(label, key, icon, children, title) {
   };
 }
 
-const items = [
-  getItem("Home", "/", <HomeOutlined />),
-  // getItem("Movie", "/movie", <DesktopOutlined />),
-  getItem("Discovery", "/discovery", <FontAwesomeIcon icon={faCompass} />),
-  getItem("Favorite", "/favorite", <ContainerOutlined />),
-  getItem("History", "/history", <FontAwesomeIcon icon={faClock} />),
-  getItem("Settings", "/settings", <SettingOutlined />, [
-    getItem("Profile", "account", <FontAwesomeIcon icon={faUserTie} />),
-  ]),
-];
-
 export const Sidebar = ({ isToggle, handleToggleMenu }) => {
+  const { t } = useTranslation();
+  const items = [
+    getItem("Home", "/", <HomeOutlined />),
+    // getItem("Movie", "/movie", <DesktopOutlined />),
+    getItem(t("Discovery"), "/discovery", <FontAwesomeIcon icon={faCompass} />),
+    getItem(t("Favorite"), "/favorite", <ContainerOutlined />),
+    getItem(t("History"), "/history", <FontAwesomeIcon icon={faClock} />),
+    getItem(t("Settings"), "/settings", <SettingOutlined />, [
+      getItem(t("Profile"), "account", <FontAwesomeIcon icon={faUserTie} />),
+    ]),
+  ];
   let navigate = useNavigate();
   const location = useLocation();
 

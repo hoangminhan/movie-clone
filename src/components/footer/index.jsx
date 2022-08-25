@@ -8,8 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Col, Row } from "antd";
 // import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export const Footer = ({ toggleMenu }) => {
+  const { t } = useTranslation();
   return (
     <div
       className={`absolute z-[999] left-0 right-0  h-[260px] bg-[#1c1c1e] border-t-[1px] border-[#ccc] duration-300 ease-in-out ${
@@ -27,52 +29,52 @@ export const Footer = ({ toggleMenu }) => {
           <Col span={5}>
             <div>
               <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
-                Mô tả âm thanh
+                {t("Audio description")}
               </p>
               <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
-                Quan hệ với nhà đầu tư
+                {t("Investor relations")}
               </p>
               <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
-                Thông báo pháp lý
-              </p>
-            </div>
-          </Col>
-          <Col span={5}>
-            <div>
-              <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
-                Trung tâm trợ giúp
-              </p>
-              <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
-                Việc làm
-              </p>
-              <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
-                Tùy chọn cookie
+                {t("Policy notification")}
               </p>
             </div>
           </Col>
           <Col span={5}>
             <div>
               <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
-                Thẻ quà tặng
+                {t("Help center")}
               </p>
               <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
-                Điều khoản sử dụng
+                {t("Job")}
               </p>
               <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
-                Thông tin doanh nghiệp
+                {t("Cookie options")}
               </p>
             </div>
           </Col>
           <Col span={5}>
             <div>
               <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
-                Trung tâm đa phương tiện
+                {t("Gift card")}
               </p>
               <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
-                Quyền riêng tư
+                {t("Terms of use")}
               </p>
               <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
-                Liên hệ với chúng tôi
+                {t("Business information")}
+              </p>
+            </div>
+          </Col>
+          <Col span={5}>
+            <div>
+              <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
+                {t("Multimedia Center")}
+              </p>
+              <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
+                {t("Privacy")}
+              </p>
+              <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
+                {t("Contact us")}
               </p>
             </div>
           </Col>

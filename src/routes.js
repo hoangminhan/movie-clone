@@ -1,14 +1,11 @@
 import { TabMovie, TabSeries, TabTvShow } from "components";
 import { DefaultLayout } from "layout";
-import HomePage from "pages/home-page";
-import PageMovie from "pages/movie-page";
-import NotFound from "pages/not-found";
 
-// const NotFound = lazy(() => import("./pages/not-found"));
-// const HomePage = lazy(() => import("./pages/home-page/index"));
-// const PageMovie = lazy(() => import("./pages/movie-page"));
-// const TabMovie = lazy(() => import("./components/tab-movie"));
-// const TabTvShow = lazy(() => import("./components/tab-tv-show"));
+import { lazy } from "react";
+
+const NotFound = lazy(() => import("./pages/not-found"));
+const HomePage = lazy(() => import("./pages/home-page/index"));
+const PageMovie = lazy(() => import("./pages/movie-page"));
 
 //  const RouteList = [
 //   {
