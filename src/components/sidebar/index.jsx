@@ -74,17 +74,17 @@ const items = [
   getItem("Favorite", "/favorite", <ContainerOutlined />),
   getItem("History", "/history", <FontAwesomeIcon icon={faClock} />),
   getItem("Settings", "/settings", <SettingOutlined />, [
-    getItem("Account", "5", <FontAwesomeIcon icon={faUserTie} />),
+    getItem("Profile", "account", <FontAwesomeIcon icon={faUserTie} />),
   ]),
 ];
 
-export const Sidebar = ({ toggleMenu, handleToggleMenu }) => {
+export const Sidebar = ({ isToggle, handleToggleMenu }) => {
   let navigate = useNavigate();
   const location = useLocation();
 
   //  check full sidebar
   const handleChangeStatusMenu = (event) => {
-    handleToggleMenu(!toggleMenu);
+    handleToggleMenu(!isToggle);
   };
 
   const handleChangeCurrentMenu = ({
@@ -102,25 +102,23 @@ export const Sidebar = ({ toggleMenu, handleToggleMenu }) => {
 
     <aside
       className={`fixed top-0 bottom-0 left-0  bg-[#0d0c0f] duration-300 ease-in-out ${
-        !toggleMenu ? "w-[270px]" : "w-[100px]"
+        !isToggle ? "w-[270px]" : "w-[100px]"
       }`}
     >
       <section className="mt-[64px] text-[18px]">
-        {!toggleMenu ? (
+        {!isToggle ? (
           <StyledMenuToggle
-            defaultOpenKeys={["sub1"]}
             defaultSelectedKeys={[location.pathname]}
             mode="inline"
-            inlineCollapsed={toggleMenu}
+            inlineCollapsed={isToggle}
             items={items}
             onSelect={handleChangeCurrentMenu}
           />
         ) : (
           <StyledMenu
-            defaultOpenKeys={["sub1"]}
             defaultSelectedKeys={[location.pathname]}
             mode="inline"
-            inlineCollapsed={toggleMenu}
+            inlineCollapsed={isToggle}
             items={items}
             onSelect={handleChangeCurrentMenu}
           />
@@ -128,7 +126,7 @@ export const Sidebar = ({ toggleMenu, handleToggleMenu }) => {
       </section>
       <div className="absolute bottom-[16px] left-[50%] translate-x-[-50%] cursor-pointer">
         <div onClick={handleChangeStatusMenu}>
-          {toggleMenu ? <RightOutlined /> : <LeftOutlined />}
+          {isToggle ? <RightOutlined /> : <LeftOutlined />}
         </div>
       </div>
     </aside>

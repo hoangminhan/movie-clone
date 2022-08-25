@@ -2,3 +2,10 @@
 .ant-menu-title-content {
   font-size: 18px;
 }
+
+.ant-menu-vertical.ant-menu-sub .ant-menu-item {
+  .ant-menu-item .ant-menu-item-icon,
+  .ant-menu-title-content {
+    color: #000;
+  }
+}

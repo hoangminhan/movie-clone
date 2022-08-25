@@ -2,13 +2,14 @@ import React from "react";
 import { Tabs } from "antd";
 import { TabMovie, TabTvShow } from "components";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const { TabPane } = Tabs;
 
 const StyledTabs = styled(Tabs)`
   .ant-tabs-tab {
     color: #989898;
-    font-size: 16px;
+    font-size: 22px;
   }
   .ant-tabs-tab:hover {
     color: #fff !important;
@@ -29,27 +30,27 @@ const StyledTabs = styled(Tabs)`
 `;
 
 export const Menu = () => {
+  const currentTab = sessionStorage.getItem("currentTab") || "/";
+  const navigate = useNavigate();
   const handleChangeCurrentTab = (data) => {
-    switch (data) {
-      case "Movie":
-        return <TabMovie />;
-      case "Tv Show":
-        return <TabTvShow />;
+    sessionStorage.setItem("currentTab", data);
 
-      default:
-        return <TabMovie />;
+    if (data === "/") {
+      navigate(`/`);
+    } else {
+      navigate(`/${data}`);
     }
   };
   return (
     <nav className="basis-1/5">
       <StyledTabs
-        defaultActiveKey="1"
+        defaultActiveKey={currentTab}
         animated
         onChange={handleChangeCurrentTab}
       >
-        <TabPane key={1} tab={"Movie"}></TabPane>
-        <TabPane key={2} tab={"Tv Show"}></TabPane>
-        <TabPane key={3} tab={"Series"}></TabPane>
+        <TabPane key={"/"} tab={"Movie"}></TabPane>
+        <TabPane key={"tab-tv-show"} tab={"Tv Show"}></TabPane>
+        <TabPane key={"tab-series"} tab={"Series"}></TabPane>
       </StyledTabs>
     </nav>
   );

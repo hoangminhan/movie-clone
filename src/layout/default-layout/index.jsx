@@ -3,13 +3,15 @@ import { Aside, Header, Footer, Sidebar } from "components";
 import { Col, Row } from "antd";
 
 export const DefaultLayout = ({ children }) => {
-  const [toggleMenu, setToggleMenu] = useState(false);
+  const [toggleMenu, setToggleMenu] = useState(
+    !!sessionStorage.getItem("isToggleMenu") || false
+  );
   const handleToggleMenu = (data) => {
     setToggleMenu(data);
   };
   return (
     <div className="min-h-[100vh] bg-[#1c1c1e]">
-      <Sidebar toggleMenu={toggleMenu} handleToggleMenu={handleToggleMenu} />
+      <Sidebar isToggle={toggleMenu} handleToggleMenu={handleToggleMenu} />
       <div
         className={`${
           toggleMenu

@@ -15,7 +15,7 @@ const NotFound = () => {
           <Button
             type="primary"
             onClick={() => {
-              navigate("/");
+              navigate(-1);
             }}
           >
             Back Home
