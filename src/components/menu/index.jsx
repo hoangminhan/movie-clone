@@ -1,6 +1,5 @@
 import React from "react";
 import { Tabs } from "antd";
-import { TabMovie, TabTvShow } from "components";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 

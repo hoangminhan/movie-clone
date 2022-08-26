@@ -9,7 +9,6 @@ export const LanguageProject = () => {
   const [currentLocale, setCurrentLocale] = useState(
     sessionStorage.getItem("currentLocale") || "vi"
   );
-  console.log(currentLocale);
 
   return (
     <Tooltip title={t("Click to change language")}>
@@ -18,7 +17,6 @@ export const LanguageProject = () => {
         onClick={() => {
           let newLocale = currentLocale === "vi" ? "en" : "vi";
           setCurrentLocale(newLocale);
-          console.log("click", newLocale);
           i18n.changeLanguage(currentLocale === "vi" ? "en" : "vi");
           sessionStorage.setItem("currentLocale", newLocale);
         }}

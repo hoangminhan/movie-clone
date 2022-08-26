@@ -1,7 +1,6 @@
 import { Menu } from "components";
 import React from "react";
-import i18n from "translation/i18n";
-import { LanguageProject, Notification, Profile } from "./component";
+import { LanguageProject, Profile } from "./component";
 
 export const Header = () => {
   return (

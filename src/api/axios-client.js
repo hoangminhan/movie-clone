@@ -2,7 +2,7 @@ import axios from "axios";
 import queryString from "query-string";
 
 const axiosClient = axios.create({
-  baseURL: "https://api.themoviedb.org/3",
+  baseURL: process.env.REACT_APP_BASE_URL,
 
   paramsSerializer: (params) =>
     queryString.stringify(params, { arrayFormat: "comma" }),
@@ -11,7 +11,6 @@ const axiosClient = axios.create({
 // Add a request interceptor
 axiosClient.interceptors.request.use(
   function (config) {
-    debugger;
     // Do something before request is sent
     return config;
   },

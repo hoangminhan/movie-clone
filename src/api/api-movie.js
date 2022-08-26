@@ -1,8 +1,8 @@
 import axiosClient from "./axios-client";
 
 export const apiMovie = {
-  getListMovie: (params) => {
-    const url = "";
+  getListMovie: (type, params) => {
+    const url = `movie/${type}`;
     return axiosClient.get(url, { params });
   },
 };
