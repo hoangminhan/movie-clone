@@ -21,7 +21,7 @@ export const DefaultLayout = ({ children }) => {
       >
         <Row className="relative">
           <Col xs={24} md={19}>
-            <section className="px-[10px]">
+            <section className="px-[24px]">
               <Header />
               {children}
             </section>

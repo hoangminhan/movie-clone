@@ -3,7 +3,6 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export const ImageCustom = ({
   src,
-  size,
   alt = "loading",
   width,
   height,

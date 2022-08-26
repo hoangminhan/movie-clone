@@ -20,6 +20,7 @@
     "i18next": "^21.9.1",
     "i18next-browser-languagedetector": "^6.1.5",
     "i18next-http-backend": "^1.4.1",
+    "moment": "^2.29.4",
     "node-sass": "^6.0.1",
     "query-string": "^7.1.1",
     "react": "^18.2.0",
@@ -32,6 +33,7 @@
     "react-scripts": "5.0.1",
     "redux": "^4.2.0",
     "styled-components": "^5.3.5",
+    "swiper": "^8.3.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -59,6 +61,7 @@
     ]
   },
   "devDependencies": {
+    "@tailwindcss/line-clamp": "^0.4.0",
     "autoprefixer": "^10.4.8",
     "eslint": "^8.22.0",
     "postcss": "^8.4.16",

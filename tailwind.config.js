@@ -6,7 +6,10 @@ module.exports = {
       fontFamily: {
         poppin: ["Poppins", "sans-serif"],
       },
+      colors: {
+        primary: "#1890ff",
+      },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/line-clamp")],
 };

@@ -7,5 +7,5 @@ export * from "./tab-movie";
 export * from "./tab-tv-show";
 export * from "./tab-series";
 export * from "./loading";
-export * from "./image";
+export * from "./image-custom";
 export * from "./banner";

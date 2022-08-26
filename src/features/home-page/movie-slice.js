@@ -1,9 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { handleGetListMovie } from "./api-thunk";
+import { getListTrending, handleGetListMovie } from "./api-thunk";
 const initialState = {
   listMovie: [],
   isLoading: false,
   detail: {
+    currentPage: 1,
+    totalPages: 1,
+  },
+  listTrending: [],
+  detailTrending: {
     currentPage: 1,
     totalPages: 1,
   },
@@ -12,6 +17,7 @@ export const movieSlice = createSlice({
   name: "movie",
   initialState,
   extraReducers: {
+    // handle get list movie
     [handleGetListMovie.pending]: (state, action) => {
       state.isLoading = true;
     },
@@ -26,6 +32,25 @@ export const movieSlice = createSlice({
       state.isLoading = false;
     },
     [handleGetListMovie.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+
+    // handle get list trending
+    [getListTrending.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [getListTrending.fulfilled]: (state, action) => {
+      const { results, page, total_pages } = action.payload;
+      state.listTrending = results;
+      state.detailTrending = {
+        ...state.detailTrending,
+        currentPage: page,
+        totalPages: total_pages,
+      };
+
+      state.isLoading = false;
+    },
+    [getListTrending.rejected]: (state, action) => {
       state.isLoading = false;
     },
   },
