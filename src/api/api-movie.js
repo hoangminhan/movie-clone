@@ -5,4 +5,12 @@ export const apiMovie = {
     const url = `movie/${type}`;
     return axiosClient.get(url, { params });
   },
+  getDetailMovie: (id, params) => {
+    const url = `movie/${id}`;
+    return axiosClient.get(url, { params });
+  },
+  getVideoMovie: (id, params) => {
+    const url = `movie/${id}/videos`;
+    return axiosClient.get(url, { params });
+  },
 };

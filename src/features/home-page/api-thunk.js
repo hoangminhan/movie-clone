@@ -1,4 +1,4 @@
-import { apiMovie, apiTrending } from "api";
+import { apiMovie, apiTrending, ApiTvShow } from "api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const handleGetListMovie = createAsyncThunk(
@@ -9,11 +9,37 @@ export const handleGetListMovie = createAsyncThunk(
     return response;
   }
 );
+// get list trending
 export const getListTrending = createAsyncThunk(
   "list-trending",
   async (payload) => {
     const { type, time, params } = payload;
-    const response = await apiTrending.getListTrendning(params, type, time);
+    const response = await apiTrending.getListTrending(params, type, time);
+    return response;
+  }
+);
+// get detail movie
+export const getDetailMovie = createAsyncThunk(
+  "detail-type",
+  async (payload) => {
+    const { id, params } = payload;
+    const response = await apiMovie.getDetailMovie(id, params);
+    return response;
+  }
+);
+export const getVideoMovie = createAsyncThunk(
+  "video-movie",
+  async (payload) => {
+    const { id, params } = payload;
+    const response = await apiMovie.getVideoMovie(id, params);
+    return response;
+  }
+);
+export const getTrailerTvShow = createAsyncThunk(
+  "video-movie",
+  async (payload) => {
+    const { id, params } = payload;
+    const response = await ApiTvShow.getTrailerTv(id, params);
     return response;
   }
 );

@@ -1,3 +1,4 @@
+import { notification } from "antd";
 import { EMBED_TO, EMBED_TO_TRAILER, IMAGE_URL } from "constant";
 
 // get img base on width and url
@@ -6,4 +7,13 @@ export const getImage = (url, width = "original") => {
 };
 
 export const embedMovie = (id) => `${EMBED_TO}/movie?id=${id}`;
-export const embedMovieTrailer = (id) => `${EMBED_TO_TRAILER}/movie?id=${id}`;
+export const embedMovieTrailer = (url) => `${EMBED_TO_TRAILER}${url}`;
+
+// open notification
+
+export const handleOpenNotification = (type, message, description) => {
+  notification[type]({
+    message,
+    description,
+  });
+};

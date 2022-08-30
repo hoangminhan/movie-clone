@@ -1,4 +1,3 @@
-import { apiTrending } from "api";
 import { useHomePage } from "hooks/use-homepage";
 import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
@@ -10,13 +9,15 @@ const HomePage = () => {
     listMovie,
     detail,
   } = useHomePage();
-  console.log({ listMovie, detail });
-  const { getListTrendning } = apiTrending;
+  // console.log({ listMovie, detail });
   useEffect(() => {
-    console.log("hello");
-    handleGetListTrending({
-      api_key: process.env.REACT_APP_API_KEY,
-    });
+    const type = "movie";
+    handleGetListTrending(
+      {
+        api_key: process.env.REACT_APP_API_KEY,
+      },
+      type
+    );
     handleGetMovie("popular", {
       page: 1,
       api_key: process.env.REACT_APP_API_KEY,

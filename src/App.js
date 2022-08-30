@@ -1,3 +1,4 @@
+import { ComponentModalGlobal } from "modal";
 import { useRoutes } from "react-router-dom";
 import RouteList from "routes";
 import "./App.less";
@@ -37,6 +38,7 @@ function App() {
         })}
       </Routes> */}
       {mainContent}
+      <ComponentModalGlobal />
     </div>
   );
 }
