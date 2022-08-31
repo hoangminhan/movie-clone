@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHomePage } from "hooks/use-homepage";
 import { t } from "i18next";
 import { Autoplay, Navigation, Pagination } from "swiper";
-import { getImage, handleOpenNotification } from "utils";
+import { formatNumber, getImage, handleOpenNotification } from "utils";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useModal } from "hooks";
 import { TYPEMODAL } from "constant";
@@ -41,18 +41,11 @@ export const Banner = () => {
   } = useHomePage();
   const { resultModal, handleToggleModal, handleToggleAutoBanner } = useModal();
   const { stopSlider } = resultModal;
-  // console.log({ resultModal });
   const swiperRef = useRef(null);
+  const [listType, setListType] = useState();
+  const [currentActiveIndex, setCurrentActiveIndex] = useState(0);
 
-  useEffect(() => {
-    console.log({ stopSlider });
-    if (stopSlider) {
-      console.log(swiperRef.current.swiper);
-      swiperRef.current.swiper.autoplay.stop();
-    } else {
-      swiperRef.current.swiper.autoplay.start();
-    }
-  }, [stopSlider]);
+  // get type movie
   const handleGetTypeMovie = (listId, listType) => {
     let newList = [];
     listType.forEach((type, index) => {
@@ -62,29 +55,10 @@ export const Banner = () => {
         }
       });
     });
-    console.log(newList);
     return newList;
   };
-  const [listType, setListType] = useState();
-  const [currentActiveIndex, setCurrentActiveIndex] = useState(0);
-  useEffect(() => {
-    if (listTrending?.length) {
-      const genresId = listTrending[currentActiveIndex]?.genre_ids;
-      console.log("gen", genresId);
-      const idMovie = listTrending[currentActiveIndex]?.id;
-      const getDataDetail = async () => {
-        const result = await handleGetDetailMovie(idMovie, {
-          api_key: process.env.REACT_APP_API_KEY,
-        });
-        const resultUnwrap = unwrapResult(result);
-        const { genres } = resultUnwrap;
-        console.log(resultUnwrap);
-        setListType(handleGetTypeMovie(genresId, genres));
-      };
 
-      getDataDetail();
-    }
-  }, [listTrending, setListType, currentActiveIndex]);
+  // handle click trailer
   const handleClickTrailer = async (slider) => {
     let currentUrl;
     console.log({ slider });
@@ -116,6 +90,35 @@ export const Banner = () => {
     }
   };
 
+  useEffect(() => {
+    console.log({ stopSlider });
+    if (stopSlider) {
+      console.log(swiperRef.current.swiper);
+      swiperRef.current.swiper.autoplay.stop();
+    } else {
+      swiperRef.current.swiper.autoplay.start();
+    }
+  }, [stopSlider]);
+
+  useEffect(() => {
+    if (listTrending?.length) {
+      const genresId = listTrending[currentActiveIndex]?.genre_ids;
+      console.log("gen", genresId);
+      const idMovie = listTrending[currentActiveIndex]?.id;
+      const getDataDetail = async () => {
+        const result = await handleGetDetailMovie(idMovie, {
+          api_key: process.env.REACT_APP_API_KEY,
+        });
+        const resultUnwrap = unwrapResult(result);
+        const { genres } = resultUnwrap;
+        console.log(resultUnwrap);
+        setListType(handleGetTypeMovie(genresId, genres));
+      };
+
+      getDataDetail();
+    }
+  }, [listTrending, setListType, currentActiveIndex]);
+
   return (
     <div onMouseEnter={() => swiperRef.current.swiper.autoplay.start()}>
       <Swiper
@@ -128,6 +131,7 @@ export const Banner = () => {
         pagination={false}
         navigation={true}
         modules={[Autoplay, Pagination, Navigation]}
+        // modules={[Pagination, Navigation]}
         onSlideChange={(event) => {
           console.log(event.activeIndex);
           setCurrentActiveIndex(event.activeIndex);
@@ -138,12 +142,16 @@ export const Banner = () => {
           return (
             <SwiperSlide key={index}>
               <div className="group relative ">
-                <img src={getImage(slider.backdrop_path)} alt="" />
+                <img
+                  src={getImage(slider.backdrop_path)}
+                  alt=""
+                  className="h-auto max-w-full "
+                />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0b0b0bd9] to-transparent "></div>
                 {/* vote_average */}
-                <div className="flex justify-center items-center rounded-2xl text-red absolute top-[4%] right-[2%] bg-primary py-[6px] px-3 text-[18px]">
+                <div className="flex justify-center items-center rounded-2xl text-red absolute top-[4%] right-[2%] bg-primary py-[3px] px-3 text-[18px]">
                   <p className="text-white m-0 pr-1 text-[16px]">
-                    {slider.vote_average}
+                    {formatNumber(slider.vote_average, 10)}
                   </p>
                   <FontAwesomeIcon icon={faStar} className="text-white" />
                 </div>
@@ -167,9 +175,20 @@ export const Banner = () => {
                     </div>
                   </div>
                   {/* genres */}
-                  <div>
-                    <p>{listType}</p>
-                  </div>
+                  {listType?.length ? (
+                    <div className="mt-7 flex gap-3">
+                      {listType?.map((item, index) => (
+                        <p
+                          key={index}
+                          className="bg-zinc-900  px-2 border-[#ccc] backdrop-opacity-5 text-[18px] border-[1px] border-solid rounded-xl"
+                        >
+                          <span className="text-[#dcd4d4]">{item}</span>
+                        </p>
+                      ))}
+                    </div>
+                  ) : (
+                    ""
+                  )}
 
                   {/* trailer */}
                   <div
@@ -182,23 +201,6 @@ export const Banner = () => {
                     <button className="font-medium">Trailer</button>
                   </div>
                 </div>
-                {/* button change banner */}
-                {/* <div className="absolute  right-[1%] bottom-[3%] flex gap-3">
-                <div
-                  className="px-6 py-3
-                  rounded-[999px] cursor-pointer bg-[#ccc]   ease-in-out delay-250 hover:scale-110 duration-300"
-                  onClick={handlePrev}
-                >
-                  <FontAwesomeIcon icon={faAngleLeft} />
-                </div>
-                <div
-                  className=" px-6 py-3
-                  rounded-[999px] cursor-pointer bg-[#ccc]   ease-in-out delay-250 hover:scale-110 duration-300"
-                  onClick={handleNext}
-                >
-                  <FontAwesomeIcon icon={faAngleRight} />
-                </div>
-              </div> */}
 
                 {/* button play */}
 

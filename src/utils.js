@@ -17,3 +17,10 @@ export const handleOpenNotification = (type, message, description) => {
     description,
   });
 };
+
+export const formatNumber = (number, type = 1) => {
+  // 1 => math.round , 10 =>.1, 100=>.12
+  return number
+    ? new Intl.NumberFormat().format(Math.round(number * type) / type)
+    : 0;
+};

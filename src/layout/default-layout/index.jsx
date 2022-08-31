@@ -14,9 +14,7 @@ export const DefaultLayout = ({ children }) => {
       <Sidebar isToggle={toggleMenu} handleToggleMenu={handleToggleMenu} />
       <div
         className={`${
-          toggleMenu
-            ? "ml-[100px] duration-300 ease-in-out"
-            : "ml-[270px] min-h-[100vh]"
+          toggleMenu ? "ml-[100px] duration-300 ease-in-out" : "ml-[270px]"
         }`}
       >
         <Row className="relative">
