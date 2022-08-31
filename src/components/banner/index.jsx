@@ -61,7 +61,6 @@ export const Banner = () => {
   // handle click trailer
   const handleClickTrailer = async (slider) => {
     let currentUrl;
-    console.log({ slider });
     const { id: idMovie, media_type: type } = slider;
     const resultAction = await handleGetTrailer(idMovie, type, {
       api_key: process.env.REACT_APP_API_KEY,
@@ -91,9 +90,7 @@ export const Banner = () => {
   };
 
   useEffect(() => {
-    console.log({ stopSlider });
     if (stopSlider) {
-      console.log(swiperRef.current.swiper);
       swiperRef.current.swiper.autoplay.stop();
     } else {
       swiperRef.current.swiper.autoplay.start();
@@ -103,7 +100,6 @@ export const Banner = () => {
   useEffect(() => {
     if (listTrending?.length) {
       const genresId = listTrending[currentActiveIndex]?.genre_ids;
-      console.log("gen", genresId);
       const idMovie = listTrending[currentActiveIndex]?.id;
       const getDataDetail = async () => {
         const result = await handleGetDetailMovie(idMovie, {
@@ -111,7 +107,6 @@ export const Banner = () => {
         });
         const resultUnwrap = unwrapResult(result);
         const { genres } = resultUnwrap;
-        console.log(resultUnwrap);
         setListType(handleGetTypeMovie(genresId, genres));
       };
 
@@ -133,7 +128,6 @@ export const Banner = () => {
         modules={[Autoplay, Pagination, Navigation]}
         // modules={[Pagination, Navigation]}
         onSlideChange={(event) => {
-          console.log(event.activeIndex);
           setCurrentActiveIndex(event.activeIndex);
           setListType("");
         }}

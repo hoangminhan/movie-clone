@@ -9,3 +9,4 @@ export * from "./tab-series";
 export * from "./loading";
 export * from "./image-custom";
 export * from "./banner";
+export * from "./popular";
