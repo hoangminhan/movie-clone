@@ -18,19 +18,19 @@ export const DefaultLayout = ({ children }) => {
         }`}
       >
         <Row className="relative">
-          <Col xs={24} md={19}>
+          <Col span={24}>
             <section className="px-[24px]">
               <Header />
               {children}
             </section>
           </Col>
-          <Col
+          {/* <Col
             xs={24}
             md={5}
             className="absolute right-0 top-0 bottom-0 w-full"
           >
             <Aside />
-          </Col>
+          </Col> */}
         </Row>
       </div>
       <Footer toggleMenu={toggleMenu} />

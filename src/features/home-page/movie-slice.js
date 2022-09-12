@@ -4,9 +4,11 @@ import {
   getDetailMovie,
   getListTrending,
   handleGetListMovie,
+  handleGetListMovieTopRated,
 } from "./api-thunk";
 const initialState = {
   listMovie: [],
+  listMovieTopRated: [],
   isLoading: false,
   detail: {
     currentPage: 1,
@@ -38,6 +40,23 @@ export const movieSlice = createSlice({
       state.isLoading = false;
     },
     [handleGetListMovie.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    // movie top rated
+    [handleGetListMovieTopRated.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [handleGetListMovieTopRated.fulfilled]: (state, action) => {
+      const { results, page, total_pages } = action.payload;
+      state.listMovieTopRated = results;
+      // state.detail = {
+      //   ...state.detail,
+      //   currentPage: page,
+      //   totalPages: total_pages,
+      // };
+      state.isLoading = false;
+    },
+    [handleGetListMovieTopRated.rejected]: (state, action) => {
       state.isLoading = false;
     },
 

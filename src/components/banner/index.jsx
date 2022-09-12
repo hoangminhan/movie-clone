@@ -6,34 +6,18 @@ import "swiper/scss/pagination";
 
 import "./style.scss";
 
-import {
-  faAngleRight,
-  faCaretRight,
-  faStar,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCaretRight, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHomePage } from "hooks/use-homepage";
 import { t } from "i18next";
 import { Autoplay, Navigation, Pagination } from "swiper";
 import { formatNumber, getImage, handleOpenNotification } from "utils";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useModal } from "hooks";
 import { TYPEMODAL } from "constant";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 export const Banner = () => {
-  const sliderRef = useRef(null);
-
-  // const handlePrev = useCallback(() => {
-  //   if (!sliderRef.current) return;
-  //   sliderRef.current.swiper.slidePrev();
-  // }, []);
-
-  // const handleNext = useCallback(() => {
-  //   if (!sliderRef.current) return;
-  //   sliderRef.current.swiper.slideNext();
-  // }, []);
-
   const {
     listTrending,
     handleGetTrailer,
@@ -115,7 +99,10 @@ export const Banner = () => {
   }, [listTrending, setListType, currentActiveIndex]);
 
   return (
-    <div onMouseEnter={() => swiperRef.current.swiper.autoplay.start()}>
+    <div
+      onMouseEnter={() => swiperRef.current.swiper.autoplay.start()}
+      className="max-h-[450px]"
+    >
       <Swiper
         ref={swiperRef}
         autoplay={{
@@ -133,13 +120,14 @@ export const Banner = () => {
         }}
       >
         {listTrending.map((slider, index) => {
+          console.log({ slider });
           return (
             <SwiperSlide key={index}>
-              <div className="group relative ">
+              <div className="group relative">
                 <img
-                  src={getImage(slider.backdrop_path)}
+                  src={getImage(slider.backdrop_path, "w1280")}
                   alt=""
-                  className="h-auto max-w-full "
+                  className="h-auto w-full"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0b0b0bd9] to-transparent "></div>
                 {/* vote_average */}

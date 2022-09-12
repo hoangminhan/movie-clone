@@ -4,6 +4,7 @@ import {
   getTrailerTvShow,
   getVideoMovie,
   handleGetListMovie,
+  handleGetListMovieTopRated,
 } from "features";
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,7 +12,25 @@ import { useSelector, useDispatch } from "react-redux";
 export const useHomePage = () => {
   const dispatch = useDispatch();
   const resultMovie = useSelector((state) => state.storeMovie);
-  const { listMovie, detail, listTrending, detailTrending } = resultMovie;
+  const {
+    listMovie,
+    listMovieTopRated,
+    detail,
+    listTrending,
+    detailTrending,
+  } = resultMovie;
+
+  const handleGetTypeAction = (payload) => {
+    const { type } = payload;
+    switch (type) {
+      case "popular":
+        return dispatch(handleGetListMovie(payload));
+      case "top_rated":
+        return dispatch(handleGetListMovieTopRated(payload));
+      default:
+        return dispatch(handleGetListMovie(payload));
+    }
+  };
 
   // get list movie lastest || now playing || popular || top rated || upcoming
   const handleGetMovie = React.useCallback((type, params) => {
@@ -19,7 +38,8 @@ export const useHomePage = () => {
       type,
       params,
     };
-    return dispatch(handleGetListMovie(payload));
+    handleGetTypeAction(payload);
+    // return dispatch(handleGetListMovie(payload));
   }, []);
 
   // get list trending all||movie || tv || person
@@ -54,6 +74,7 @@ export const useHomePage = () => {
 
   return {
     listMovie,
+    listMovieTopRated,
     detail,
     listTrending,
     detailTrending,

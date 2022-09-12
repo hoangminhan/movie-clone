@@ -33,20 +33,9 @@ export const ComponentModalGlobal = () => {
       closable={false}
       wrapClassName="modal-config"
       onCancel={handleCloseModal}
-      // title={
-      //   <div className="flex items-center justify-between cursor-pointer ">
-      //     <h2 className="m-0 text-[22px] text-[#989898] font-medium uppercase ">
-      //       {title}
-      //     </h2>
-      //     <FontAwesomeIcon
-      //       icon={faClose}
-      //       className="text-[22px] text-[#989898]"
-      //       onClick={() => {
-      //         handleToggleModal({ type: "" });
-      //       }}
-      //     />
-      //   </div>
-      // }
+      style={{
+        top: 0,
+      }}
       footer={null}
       {...attrModal}
     >

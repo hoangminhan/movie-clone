@@ -8,16 +8,16 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { formatNumber, getImage } from "utils";
 import "./style.scss";
 
-export const Popular = React.memo(({ dataPopular, children }) => {
-  console.log({ dataPopular });
-  return (
-    <div className="my-[64px]">
-      <div>
-        <p className="text-white uppercase font-[600] tracking-[2px]">
-          Popular
-        </p>
-      </div>
-      <div>
+export const ComponentSlider = React.memo(
+  ({ dataPopular, children, title }) => {
+    console.log({ dataPopular });
+    return (
+      <div className={`${title ? "mt-[64px]" : "mt-[128px]"}`}>
+        <div>
+          <p className="text-white uppercase font-[600] tracking-[2px]">
+            {title}
+          </p>
+        </div>
         <Swiper
           slidesPerView={6}
           spaceBetween={30}
@@ -29,29 +29,23 @@ export const Popular = React.memo(({ dataPopular, children }) => {
           className="swiper-popular"
         >
           {dataPopular?.map((item, index) => {
-            console.log(item.poster_path);
             return (
-              <SwiperSlide
-                key={index}
-                // className="scale-95 hover:scale-125 ease-in duration-500"
-              >
-                <div className="group relative">
+              <SwiperSlide key={index} className="">
+                <div className="group relative delay-150 hover:scale-110 duration-[250ms]">
                   <img
-                    className=" max-w-full object-cover  rounded-[6px]
-                    
-                    "
+                    className=" max-w-full object-cover rounded-[6px]"
                     src={getImage(item.poster_path, "w185")}
                     alt=""
                   />
                   {/* btn play */}
-                  <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 px-[18px] py-2 rounded-full bg-gradient-to-br from-primary to-[#f80223] hidden group-hover:block cursor-pointer delay-250 hover:scale-110 duration-300">
+                  <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 px-[12px] py-[2px] rounded-full bg-gradient-to-br from-primary to-[#f80223] hidden group-hover:block cursor-pointer delay-250 hover:scale-110 duration-300">
                     <FontAwesomeIcon
                       icon={faCaretRight}
                       className="text-white"
                     />
                   </div>
                   {/* rate */}
-                  <div className="absolute top-[-8px] right-[2px] text-[13px]">
+                  <div className="absolute top-[-8px] right-[12px] text-[13px]">
                     <Badge.Ribbon
                       color="#1890ff"
                       text={
@@ -73,6 +67,6 @@ export const Popular = React.memo(({ dataPopular, children }) => {
           })}
         </Swiper>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);

@@ -9,6 +9,15 @@ export const handleGetListMovie = createAsyncThunk(
     return response;
   }
 );
+// get list top rated
+export const handleGetListMovieTopRated = createAsyncThunk(
+  "movie-list-top-rated",
+  async (payload) => {
+    const { type, params } = payload;
+    const response = await apiMovie.getListMovie(type, params);
+    return response;
+  }
+);
 // get list trending
 export const getListTrending = createAsyncThunk(
   "list-trending",

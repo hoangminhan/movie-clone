@@ -23,7 +23,7 @@ export const LanguageProject = () => {
       >
         <ImageCustom
           src={currentLocale === "vi" ? iconImg.flagVn : iconImg.flagUs}
-          width="50px"
+          width="35px"
         />
       </div>
     </Tooltip>
