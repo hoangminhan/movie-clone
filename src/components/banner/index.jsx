@@ -120,7 +120,6 @@ export const Banner = () => {
         }}
       >
         {listTrending.map((slider, index) => {
-          console.log({ slider });
           return (
             <SwiperSlide key={index}>
               <div className="group relative">

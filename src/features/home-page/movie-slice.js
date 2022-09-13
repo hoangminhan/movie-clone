@@ -5,10 +5,12 @@ import {
   getListTrending,
   handleGetListMovie,
   handleGetListMovieTopRated,
+  handleGetListMovieUpComming,
 } from "./api-thunk";
 const initialState = {
   listMovie: [],
   listMovieTopRated: [],
+  listMovieUpComing: [],
   isLoading: false,
   detail: {
     currentPage: 1,
@@ -56,8 +58,16 @@ export const movieSlice = createSlice({
       // };
       state.isLoading = false;
     },
+
     [handleGetListMovieTopRated.rejected]: (state, action) => {
       state.isLoading = false;
+    },
+
+    // get list upComing
+
+    [handleGetListMovieUpComming.fulfilled]: (state, action) => {
+      const { results, page, total_pages } = action.payload;
+      state.listMovieUpComing = results;
     },
 
     // handle get list trending
@@ -83,8 +93,6 @@ export const movieSlice = createSlice({
       state.isLoading = true;
     },
     [getDetailMovie.fulfilled]: (state, action) => {
-      // console.log(action.payload);
-
       state.isLoading = false;
     },
     [getDetailMovie.rejected]: (state, action) => {

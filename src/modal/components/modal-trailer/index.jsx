@@ -22,7 +22,6 @@ export const ModalTrailer = ({ idMovie, currentUrl }) => {
     };
     getData();
   }, [idMovie]);
-  console.log(isLoading);
   return (
     <div className="relative flex justify-center">
       {/* button close */}

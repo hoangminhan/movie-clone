@@ -4,7 +4,6 @@ import { Outlet } from "react-router-dom";
 
 const HomePage = () => {
   const { handleGetMovie, handleGetListTrending } = useHomePage();
-  // console.log({ listMovie, detail });
   useEffect(() => {
     const getDataApi = async () => {
       const type = "movie";
@@ -22,11 +21,15 @@ const HomePage = () => {
         page: 1,
         api_key: process.env.REACT_APP_API_KEY,
       });
+      await handleGetMovie("upcoming", {
+        page: 1,
+        api_key: process.env.REACT_APP_API_KEY,
+      });
     };
     getDataApi();
   }, []);
   return (
-    <div className="pt-8">
+    <div className="py-8">
       <Outlet />
     </div>
   );

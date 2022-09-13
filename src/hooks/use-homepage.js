@@ -5,6 +5,7 @@ import {
   getVideoMovie,
   handleGetListMovie,
   handleGetListMovieTopRated,
+  handleGetListMovieUpComming,
 } from "features";
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,6 +16,7 @@ export const useHomePage = () => {
   const {
     listMovie,
     listMovieTopRated,
+    listMovieUpComing,
     detail,
     listTrending,
     detailTrending,
@@ -27,6 +29,8 @@ export const useHomePage = () => {
         return dispatch(handleGetListMovie(payload));
       case "top_rated":
         return dispatch(handleGetListMovieTopRated(payload));
+      case "upcoming":
+        return dispatch(handleGetListMovieUpComming(payload));
       default:
         return dispatch(handleGetListMovie(payload));
     }
@@ -75,6 +79,7 @@ export const useHomePage = () => {
   return {
     listMovie,
     listMovieTopRated,
+    listMovieUpComing,
     detail,
     listTrending,
     detailTrending,

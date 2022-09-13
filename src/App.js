@@ -1,13 +1,42 @@
 import { ComponentModalGlobal } from "modal";
-import { useRoutes } from "react-router-dom";
+import { useLocation, useRoutes } from "react-router-dom";
 import RouteList from "routes";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import "./App.less";
+import { useLayoutEffect } from "react";
+import { useEffect } from "react";
+
+const Wrapper = ({ children }) => {
+  const location = useLocation();
+  useLayoutEffect(() => {
+    console.log("hehe");
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [location.pathname]);
+  return children;
+};
 
 function App() {
   let mainContent = useRoutes(RouteList);
+
+  useEffect(() => {
+    AOS.init({
+      once: true,
+      initClassName: "aos-init",
+      offset: 200,
+      duration: 600,
+      easing: "ease-in-sine",
+      delay: 100,
+    });
+  }, []);
+
   return (
-    <div className="text-2xl text-[#989898] font-poppin">
-      {/* <Routes>
+    <Wrapper>
+      <div data-aos="fade-up" className="text-2xl text-[#989898] font-poppin">
+        {/* <Routes>
         {RouteList.map((item, index) => {
           let Page = item.component;
           const checkLayout = item.layout;
@@ -37,9 +66,10 @@ function App() {
           );
         })}
       </Routes> */}
-      {mainContent}
-      <ComponentModalGlobal />
-    </div>
+        {mainContent}
+        <ComponentModalGlobal />
+      </div>
+    </Wrapper>
   );
 }
 

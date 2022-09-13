@@ -1,14 +1,17 @@
-import React, { Suspense } from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
-import { I18nextProvider } from "react-i18next";
-import i18n from "translation/i18n";
-import { LoadingSuspense } from "components";
 import { store } from "app/store";
+import { LoadingSuspense } from "components";
+import { Suspense } from "react";
+import ReactDOM from "react-dom/client";
+import { I18nextProvider } from "react-i18next";
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import i18n from "translation/i18n";
+import App from "./App";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+
+import "react-lazy-load-image-component/src/effects/blur.css";
+import "react-lazy-load-image-component/src/effects/opacity.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

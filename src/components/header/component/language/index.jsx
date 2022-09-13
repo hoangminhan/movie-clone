@@ -22,8 +22,9 @@ export const LanguageProject = () => {
         }}
       >
         <ImageCustom
+          data-aos="fade-right"
           src={currentLocale === "vi" ? iconImg.flagVn : iconImg.flagUs}
-          width="35px"
+          width="25px"
         />
       </div>
     </Tooltip>

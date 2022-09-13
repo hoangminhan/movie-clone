@@ -10,3 +10,4 @@ export * from "./loading";
 export * from "./image-custom";
 export * from "./banner";
 export * from "./component-slider";
+export * from "./scroll-to-top";
