@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  getCastsMovie,
   getDetail,
   getDetailMovie,
   getListTrending,
+  getSimilarMovie,
   handleGetListMovie,
   handleGetListMovieTopRated,
   handleGetListMovieUpComming,
@@ -11,6 +13,8 @@ const initialState = {
   listMovie: [],
   listMovieTopRated: [],
   listMovieUpComing: [],
+  listCastsMovie: [],
+  listSimilarMovie: [],
   isLoading: false,
   detail: {
     currentPage: 1,
@@ -94,8 +98,32 @@ export const movieSlice = createSlice({
     },
     [getDetailMovie.fulfilled]: (state, action) => {
       state.isLoading = false;
+      state.detailMovie = action.payload;
     },
     [getDetailMovie.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    // similar movie
+    [getSimilarMovie.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [getSimilarMovie.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.listSimilarMovie = action.payload;
+    },
+    [getSimilarMovie.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    // get list casts of movie
+    [getCastsMovie.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [getCastsMovie.fulfilled]: (state, action) => {
+      const { cast } = action.payload;
+      state.listCastsMovie = cast.filter((item, index) => index <= 8);
+      state.isLoading = false;
+    },
+    [getCastsMovie.rejected]: (state, action) => {
       state.isLoading = false;
     },
   },

@@ -53,10 +53,29 @@ export const getVideoMovie = createAsyncThunk(
   }
 );
 export const getTrailerTvShow = createAsyncThunk(
-  "video-movie",
+  "trailer-movie",
   async (payload) => {
     const { id, params } = payload;
     const response = await ApiTvShow.getTrailerTv(id, params);
+    return response;
+  }
+);
+// similar content movie
+export const getSimilarMovie = createAsyncThunk(
+  "similar-movie",
+  async (payload) => {
+    const { id, params } = payload;
+    const response = await apiMovie.getSimilarMovie(id, params);
+    return response;
+  }
+);
+// get casts movie
+
+export const getCastsMovie = createAsyncThunk(
+  "casts-movie",
+  async (payload) => {
+    const { id, params } = payload;
+    const response = await apiMovie.getCastsMovie(id, params);
     return response;
   }
 );

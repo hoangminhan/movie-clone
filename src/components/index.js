@@ -11,3 +11,6 @@ export * from "./image-custom";
 export * from "./banner";
 export * from "./component-slider";
 export * from "./scroll-to-top";
+export * from "./button-play";
+export * from "./button-custom";
+export * from "./similar-content";

@@ -13,4 +13,14 @@ export const apiMovie = {
     const url = `movie/${id}/videos`;
     return axiosClient.get(url, { params });
   },
+  // similar movie
+  getSimilarMovie: (id, params) => {
+    const url = `movie/${id}/similar`;
+    return axiosClient.get(url, { params });
+  },
+  // get casts
+  getCastsMovie: (id, params) => {
+    const url = `movie/${id}/credits`;
+    return axiosClient.get(url, { params });
+  },
 };

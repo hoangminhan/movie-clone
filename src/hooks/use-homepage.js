@@ -1,6 +1,8 @@
 import {
+  getCastsMovie,
   getDetailMovie,
   getListTrending,
+  getSimilarMovie,
   getTrailerTvShow,
   getVideoMovie,
   handleGetListMovie,
@@ -17,9 +19,11 @@ export const useHomePage = () => {
     listMovie,
     listMovieTopRated,
     listMovieUpComing,
+    listSimilarMovie,
     detail,
     listTrending,
     detailTrending,
+    listCastsMovie,
   } = resultMovie;
 
   const handleGetTypeAction = (payload) => {
@@ -55,6 +59,7 @@ export const useHomePage = () => {
     };
     return dispatch(getListTrending(payload));
   };
+
   // get detail movie
   const handleGetDetailMovie = (id, params) => {
     const payload = {
@@ -63,6 +68,16 @@ export const useHomePage = () => {
     };
     return dispatch(getDetailMovie(payload));
   };
+
+  // similar movie
+  const handleGetSimilarMovie = (id, params) => {
+    const payload = {
+      id,
+      params,
+    };
+    return dispatch(getSimilarMovie(payload));
+  };
+
   // get video trailer movie
   const handleGetTrailer = (id, type, params) => {
     const payload = {
@@ -75,17 +90,28 @@ export const useHomePage = () => {
       return dispatch(getTrailerTvShow(payload));
     }
   };
+  const handleGetListCasts = (id, params) => {
+    const payload = {
+      id,
+      params,
+    };
+    return dispatch(getCastsMovie(payload));
+  };
 
   return {
     listMovie,
     listMovieTopRated,
     listMovieUpComing,
+    listSimilarMovie,
     detail,
     listTrending,
     detailTrending,
+    listCastsMovie,
     handleGetDetailMovie,
     handleGetMovie,
     handleGetListTrending,
     handleGetTrailer,
+    handleGetListCasts,
+    handleGetSimilarMovie,
   };
 };

@@ -7,7 +7,7 @@ import i18n from "translation/i18n";
 
 export const LanguageProject = () => {
   const [currentLocale, setCurrentLocale] = useState(
-    sessionStorage.getItem("currentLocale") || "vi"
+    sessionStorage.getItem("currentLocale") || "vi-VN"
   );
 
   return (
@@ -15,15 +15,15 @@ export const LanguageProject = () => {
       <div
         className="cursor-pointer"
         onClick={() => {
-          let newLocale = currentLocale === "vi" ? "en" : "vi";
+          let newLocale = currentLocale === "vi-VN" ? "en-US" : "vi-VN";
           setCurrentLocale(newLocale);
-          i18n.changeLanguage(currentLocale === "vi" ? "en" : "vi");
+          i18n.changeLanguage(currentLocale === "vi-VN" ? "en-US" : "vi-VN");
           sessionStorage.setItem("currentLocale", newLocale);
         }}
       >
         <ImageCustom
           data-aos="fade-right"
-          src={currentLocale === "vi" ? iconImg.flagVn : iconImg.flagUs}
+          src={currentLocale === "vi-VN" ? iconImg.flagVn : iconImg.flagUs}
           width="25px"
         />
       </div>

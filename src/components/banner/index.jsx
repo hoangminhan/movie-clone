@@ -16,12 +16,15 @@ import { useEffect, useRef, useState } from "react";
 import { useModal } from "hooks";
 import { TYPEMODAL } from "constant";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { ButtomCustom, ButtonPlay } from "components";
 
 export const Banner = () => {
   const {
     listTrending,
     handleGetTrailer,
     handleGetDetailMovie,
+    handleGetListCasts,
+    handleGetSimilarMovie,
   } = useHomePage();
   const { resultModal, handleToggleModal, handleToggleAutoBanner } = useModal();
   const { stopSlider } = resultModal;
@@ -44,13 +47,34 @@ export const Banner = () => {
 
   // handle click trailer
   const handleClickTrailer = async (slider) => {
+    const currentLocale = sessionStorage.getItem("currentLocale");
     let currentUrl;
     const { id: idMovie, media_type: type } = slider;
+    handleGetListCasts(idMovie, {
+      api_key: process.env.REACT_APP_API_KEY,
+    });
     const resultAction = await handleGetTrailer(idMovie, type, {
       api_key: process.env.REACT_APP_API_KEY,
     });
     const newResult = unwrapResult(resultAction);
     const { results } = newResult;
+
+    // get data detail movie to send modal
+    const resultDetailMovie = await handleGetDetailMovie(idMovie, {
+      api_key: process.env.REACT_APP_API_KEY,
+      append_to_response: "videos",
+      language: currentLocale,
+    });
+    const newResultDetailMovie = unwrapResult(resultDetailMovie);
+
+    // get data Similar Movie
+    const resultSimilarMovie = await handleGetSimilarMovie(idMovie, {
+      api_key: process.env.REACT_APP_API_KEY,
+      language: currentLocale,
+    });
+    const newResultSimilarMovie = unwrapResult(resultSimilarMovie);
+    const { results: dataSimilar } = newResultSimilarMovie;
+
     if (results?.length) {
       currentUrl = results[results.length - 1].key;
       handleToggleModal({
@@ -60,6 +84,8 @@ export const Banner = () => {
         propsModal: {
           idMovie: idMovie,
           currentUrl,
+          dataDetail: newResultDetailMovie,
+          dataSimilar,
         },
 
         attrModal: {
@@ -73,21 +99,24 @@ export const Banner = () => {
     }
   };
 
-  useEffect(() => {
-    if (stopSlider) {
-      swiperRef.current.swiper.autoplay.stop();
-    } else {
-      swiperRef.current.swiper.autoplay.start();
-    }
-  }, [stopSlider]);
+  // useEffect(() => {
+  //   if (stopSlider) {
+  //     swiperRef.current.swiper.autoplay.stop();
+  //   } else {
+  //     swiperRef.current.swiper.autoplay.start();
+  //   }
+  // }, [stopSlider]);
 
   useEffect(() => {
     if (listTrending?.length) {
+      const currentLocale = sessionStorage.getItem("currentLocale");
+
       const genresId = listTrending[currentActiveIndex]?.genre_ids;
       const idMovie = listTrending[currentActiveIndex]?.id;
       const getDataDetail = async () => {
         const result = await handleGetDetailMovie(idMovie, {
           api_key: process.env.REACT_APP_API_KEY,
+          language: currentLocale,
         });
         const resultUnwrap = unwrapResult(result);
         const { genres } = resultUnwrap;
@@ -100,7 +129,7 @@ export const Banner = () => {
 
   return (
     <div
-      onMouseEnter={() => swiperRef.current.swiper.autoplay.start()}
+      // onMouseEnter={() => swiperRef.current.swiper.autoplay.start()}
       className="max-h-[450px]"
     >
       <Swiper
@@ -112,8 +141,8 @@ export const Banner = () => {
         className="banner-wrapper"
         pagination={false}
         navigation={true}
-        modules={[Autoplay, Pagination, Navigation]}
-        // modules={[Pagination, Navigation]}
+        // modules={[Autoplay, Pagination, Navigation]}
+        modules={[Pagination, Navigation]}
         onSlideChange={(event) => {
           setCurrentActiveIndex(event.activeIndex);
           setListType("");
@@ -173,6 +202,14 @@ export const Banner = () => {
 
                   {/* trailer */}
                   <div
+                    className="absolute bottom-[-72px] mt-[32px]  ease-in-out delay-250 hover:scale-110 duration-300"
+                    onClick={() => {
+                      handleClickTrailer(slider);
+                    }}
+                  >
+                    <ButtomCustom nameIcon="iconPlay" />
+                  </div>
+                  {/* <div
                     className="absolute bottom-[-72px] mt-[32px]  px-[32px] py-[10px] rounded-md bg-[#fff] hover:bg-[#ffffffbf] flex items-center gap-2 text-black cursor-pointer"
                     onClick={() => {
                       handleClickTrailer(slider);
@@ -180,19 +217,20 @@ export const Banner = () => {
                   >
                     <FontAwesomeIcon icon={faCaretRight} className="text-2xl" />
                     <button className="font-medium">Trailer</button>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* button play */}
 
                 <div
-                  className=" w-5 h-5 px-7 py-7 absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2
-                  rounded-[999px] cursor-pointer bg-gradient-to-br from-primary to-[#f80223]    ease-in-out delay-250 hover:scale-110 duration-300 hidden group-hover:block"
+                  className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2
+                  ease-in-out delay-250 hover:scale-110 duration-300 hidden  group-hover:block"
                 >
-                  <FontAwesomeIcon
+                  <ButtonPlay size="large" sizeImg="30px" />
+                  {/* <FontAwesomeIcon
                     icon={faCaretRight}
                     className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2"
-                  />
+                  /> */}
                 </div>
               </div>
             </SwiperSlide>

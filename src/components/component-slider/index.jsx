@@ -1,7 +1,7 @@
 import { faCaretRight, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Badge } from "antd";
-import { ImageCustom } from "components";
+import { Badge, Tooltip } from "antd";
+import { ButtonPlay, ImageCustom } from "components";
 import { useHomePage } from "hooks/use-homepage";
 import React from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -20,7 +20,7 @@ export const ComponentSlider = React.memo(
           </p>
         </div>
         <Swiper
-          slidesPerView={7}
+          slidesPerView={7.3}
           spaceBetween={30}
           slidesPerGroup={4}
           loop={true}
@@ -34,18 +34,25 @@ export const ComponentSlider = React.memo(
               <SwiperSlide key={index} className="">
                 <div className="group relative delay-150 hover:scale-110 duration-[250ms]">
                   <ImageCustom
-                    data-aos="flip-up"
+                    data-aos="zoom-in"
                     typeEffect="opacity"
                     alt="Poster"
                     src={getImage(item.poster_path, "w185")}
                     className="max-w-full w-full object-cover rounded-[6px]"
                   />
+                  {/* name film */}
+                  <div className="absolute bottom-0 bg-[#0d0c0f] w-full rounded-b-[6px]">
+                    <Tooltip
+                      title={!item?.title ? item?.original_title : item?.title}
+                    >
+                      <p className="text-[16px] line-clamp-1 text-center text-[#999898]">
+                        {!item?.title ? item?.original_title : item?.title}
+                      </p>
+                    </Tooltip>
+                  </div>
                   {/* btn play */}
-                  <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 px-[12px] py-[2px] rounded-full bg-gradient-to-br from-primary to-[#f80223] hidden group-hover:block cursor-pointer delay-250 hover:scale-110 duration-300">
-                    <FontAwesomeIcon
-                      icon={faCaretRight}
-                      className="text-white"
-                    />
+                  <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2  hidden group-hover:block delay-250 hover:scale-110 duration-300">
+                    <ButtonPlay size="small" />
                   </div>
                   {/* rate */}
                   <div className="absolute top-[-8px] right-[0px] text-[13px]">
