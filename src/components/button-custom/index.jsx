@@ -15,7 +15,7 @@ export const ButtomCustom = ({
     <div
       className={`
       bg-[#fff] hover:bg-[#ffffffbf] ${
-        size === "small" ? "w-[120px] h-[50px]" : ""
+        size === "small" ? "w-[120px] h-[40px]" : ""
       } flex justify-center
     items-center gap-2 rounded-[8px] text-black cursor-pointer
       `}

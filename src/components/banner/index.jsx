@@ -17,6 +17,7 @@ import { useModal } from "hooks";
 import { TYPEMODAL } from "constant";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { ButtomCustom, ButtonPlay } from "components";
+import { useNavigate } from "react-router-dom";
 
 export const Banner = () => {
   const {
@@ -31,7 +32,7 @@ export const Banner = () => {
   const swiperRef = useRef(null);
   const [listType, setListType] = useState();
   const [currentActiveIndex, setCurrentActiveIndex] = useState(0);
-
+  const navigate = useNavigate();
   // get type movie
   const handleGetTypeMovie = (listId, listType) => {
     let newList = [];
@@ -201,23 +202,26 @@ export const Banner = () => {
                   )}
 
                   {/* trailer */}
-                  <div
-                    className="absolute bottom-[-72px] mt-[32px]  ease-in-out delay-250 hover:scale-110 duration-300"
-                    onClick={() => {
-                      handleClickTrailer(slider);
-                    }}
-                  >
-                    <ButtomCustom nameIcon="iconPlay" />
+                  <div className="absolute bottom-[-72px] mt-[32px] flex gap-4">
+                    <div
+                      className=" ease-in-out delay-250 hover:scale-110 duration-300"
+                      onClick={() => {
+                        handleClickTrailer(slider);
+                      }}
+                    >
+                      <ButtomCustom nameIcon="iconPlay" />
+                    </div>
+                    {/* play */}
+                    {/* <div
+                      className="ease-in-out delay-250 hover:scale-110 duration-300"
+                      onClick={() => {
+                        console.log("click", slider.id);
+                        navigate(`movie/${slider.id}`);
+                      }}
+                    >
+                      <ButtomCustom nameIcon="iconPlay" title="Play" />
+                    </div> */}
                   </div>
-                  {/* <div
-                    className="absolute bottom-[-72px] mt-[32px]  px-[32px] py-[10px] rounded-md bg-[#fff] hover:bg-[#ffffffbf] flex items-center gap-2 text-black cursor-pointer"
-                    onClick={() => {
-                      handleClickTrailer(slider);
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faCaretRight} className="text-2xl" />
-                    <button className="font-medium">Trailer</button>
-                  </div> */}
                 </div>
 
                 {/* button play */}
@@ -225,6 +229,10 @@ export const Banner = () => {
                 <div
                   className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2
                   ease-in-out delay-250 hover:scale-110 duration-300 hidden  group-hover:block"
+                  onClick={() => {
+                    console.log("click", slider.id);
+                    navigate(`movie/${slider.id}`);
+                  }}
                 >
                   <ButtonPlay size="large" sizeImg="30px" />
                   {/* <FontAwesomeIcon

@@ -1,3 +1,7 @@
 .ant-modal-content {
   overflow-y: scroll;
+  /* width */
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
 }

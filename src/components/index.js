@@ -14,3 +14,4 @@ export * from "./scroll-to-top";
 export * from "./button-play";
 export * from "./button-custom";
 export * from "./similar-content";
+export * from "./button-add-list";

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Aside, Header, Footer, Sidebar } from "components";
 import { Col, Row } from "antd";
 
-export const DefaultLayout = ({ children }) => {
+export const DefaultLayout = ({ children, showTab = false }) => {
   const [toggleMenu, setToggleMenu] = useState(
     !!sessionStorage.getItem("isToggleMenu") || false
   );
@@ -20,17 +20,10 @@ export const DefaultLayout = ({ children }) => {
         <Row className="relative">
           <Col span={24}>
             <section className="px-[24px]">
-              <Header />
+              {showTab && <Header />}
               {children}
             </section>
           </Col>
-          {/* <Col
-            xs={24}
-            md={5}
-            className="absolute right-0 top-0 bottom-0 w-full"
-          >
-            <Aside />
-          </Col> */}
         </Row>
       </div>
       <Footer toggleMenu={toggleMenu} />

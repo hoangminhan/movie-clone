@@ -5,6 +5,7 @@ import { ButtonPlay, ImageCustom } from "components";
 import { useHomePage } from "hooks/use-homepage";
 import React from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { useNavigate } from "react-router-dom";
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { formatNumber, getImage } from "utils";
@@ -12,6 +13,7 @@ import "./style.scss";
 
 export const ComponentSlider = React.memo(
   ({ dataPopular, children, title }) => {
+    const navigate = useNavigate();
     return (
       <div className={`${title ? "mt-[64px]" : "mt-[128px]"}`}>
         <div>
@@ -51,7 +53,12 @@ export const ComponentSlider = React.memo(
                     </Tooltip>
                   </div>
                   {/* btn play */}
-                  <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2  hidden group-hover:block delay-250 hover:scale-110 duration-300">
+                  <div
+                    className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2  hidden group-hover:block delay-250 hover:scale-110 duration-300"
+                    onClick={() => {
+                      navigate(`movie/${item.id}`);
+                    }}
+                  >
                     <ButtonPlay size="small" />
                   </div>
                   {/* rate */}

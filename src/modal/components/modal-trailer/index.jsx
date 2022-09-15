@@ -1,8 +1,14 @@
-import { faClose } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClose,
+  faPlus,
+  faThumbsDown,
+  faThumbsUp,
+  faThumbTack,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Col, Row, Spin } from "antd";
+import { Col, Row, Spin, Tooltip } from "antd";
 import Item from "antd/lib/list/Item";
-import { ButtomCustom, SimilarContent } from "components";
+import { ButtomCustom, ButtonAddList, SimilarContent } from "components";
 import { useModal } from "hooks";
 import { useHomePage } from "hooks/use-homepage";
 import { useEffect, useState } from "react";
@@ -21,18 +27,21 @@ export const ModalTrailer = ({ currentUrl, dataDetail, dataSimilar }) => {
     <div className="relative flex justify-center flex-col">
       {/* button close */}
       <div className="absolute right-[-18px] top-[-18px]">
-        <div
-          className="px-[14px] py-[8px] bg-[#ccc] rounded-full cursor-pointer"
-          onClick={() => {
-            handleToggleModal({ type: "" });
-            handleToggleAutoBanner(false);
-          }}
-        >
-          <FontAwesomeIcon
-            icon={faClose}
-            className="text-[22px] text-[#989898]"
-          />
-        </div>
+        <Tooltip title="Click to exit" placement="right">
+          <div
+            className="px-[14px] py-[8px] bg-[#fff] rounded-full cursor-pointer border-solid border-[1px] border-[black] hover:scale-110 duration-300"
+            onClick={() => {
+              handleToggleModal({ type: "" });
+              handleToggleAutoBanner(false);
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faClose}
+              color="black"
+              className="text-[22px]"
+            />
+          </div>
+        </Tooltip>
       </div>
       {/* video trailer modal */}
       {!isLoading ? (
@@ -54,13 +63,70 @@ export const ModalTrailer = ({ currentUrl, dataDetail, dataSimilar }) => {
       )}
 
       {/* content modal */}
-      <div className="mt-[32px] text-white">
+      <div className="mt-[32px] text-white text-[16px] ">
         <Row>
           <div className="mb-8">
             <ButtomCustom title="Play" nameIcon="iconPlay" />
           </div>
+          {/* add playlist */}
+          <div className="ml-8 cursor-pointer hover:scale-110 duration-200">
+            <ButtonAddList />
+          </div>
+
+          {/* like */}
+          {/* dis like */}
+
+          <div className="ml-8 mr-[32px] group relative w-[50px] h-[50px] cursor-pointer duration-300">
+            <div className="absolute z-[2]">
+              <Tooltip title="Like">
+                <p className="bg-[white] w-10 h-10 flex items-center justify-center rounded-full border-solid border-black border-[1px]">
+                  <FontAwesomeIcon icon={faThumbsUp} color="black" />
+                </p>
+              </Tooltip>
+            </div>
+            <div className="absolute invisible group-hover:visible left-0 group-hover:left-[-50px] duration-300 z-[1]">
+              <Tooltip title="Dis Like">
+                <p className="bg-[white] w-10 h-10 flex items-center justify-center rounded-full border-solid border-black border-[1px]">
+                  <FontAwesomeIcon icon={faThumbsDown} color="black" />
+                </p>
+              </Tooltip>
+            </div>
+            <div className="absolute invisible group-hover:visible right-[9px] group-hover:right-[-45px] duration-300 z-[1]">
+              <Tooltip title="Perfect">
+                <p className="bg-[white] w-10 h-10 flex items-center justify-center rounded-full border-solid border-black border-[1px]">
+                  <FontAwesomeIcon icon={faThumbTack} color="black" />
+                </p>
+              </Tooltip>
+            </div>
+          </div>
+          {/* <div className="group ml-4 cursor-pointer bg-transparent max-w-[150px]  h-full hover:scale-110 duration-200  flex gap-3">
+            <div className="peer-hover:block  translate-x-[130%] group-hover:translate-x-0 duration-300 delay-250">
+              <Tooltip title="Dis Like">
+                <p className="bg-[white] w-10 h-10 flex items-center justify-center rounded-full">
+                  <FontAwesomeIcon icon={faThumbsDown} color="black" />
+                </p>
+              </Tooltip>
+            </div>
+            <div>
+              <Tooltip title="Like">
+                <p className="bg-[white] w-10 h-10 flex items-center justify-center rounded-full">
+                  <FontAwesomeIcon icon={faThumbsUp} color="black" />
+                </p>
+              </Tooltip>
+            </div>
+            <div className="peer-hover:block translate-x-[-130%] group-hover:translate-x-0 duration-300 delay-250">
+              <Tooltip title="Perfect">
+                <p className="bg-[white] w-10 h-10 flex items-center justify-center rounded-full">
+                  <FontAwesomeIcon icon={faThumbsUp} color="black" />
+                </p>
+              </Tooltip>
+            </div>
+          </div> */}
         </Row>
-        <Row gutter={[32, 16]}>
+        <Row
+          gutter={[32, 16]}
+          className="border-solid border-[1px] border-[#ccc] py-4"
+        >
           <Col span={12}>
             {/* run time */}
             <div className="flex items-center gap-4">
@@ -131,7 +197,11 @@ export const ModalTrailer = ({ currentUrl, dataDetail, dataSimilar }) => {
               </p>
               <p className="mt-4">
                 <span className="text-[16px] mr-2">Collection:</span>
-                <span>{dataDetail.belongs_to_collection.name}</span>
+                <span>
+                  {dataDetail?.belongs_to_collection?.name
+                    ? dataDetail?.belongs_to_collection?.name
+                    : "Updating..."}
+                </span>
               </p>
             </div>
           </Col>

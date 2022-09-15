@@ -1,11 +1,11 @@
 import { TabMovie, TabSeries, TabTvShow } from "components";
 import { DefaultLayout } from "layout";
-
 import { lazy } from "react";
 
 const NotFound = lazy(() => import("./pages/not-found"));
 const HomePage = lazy(() => import("./pages/home-page/index"));
 const PageMovie = lazy(() => import("./pages/movie-page"));
+const WatchMovieTv = lazy(() => import("./pages/watch-movie-tv"));
 
 //  const RouteList = [
 //   {
@@ -40,7 +40,7 @@ let RouteList = [
   {
     path: "/",
     element: (
-      <DefaultLayout>
+      <DefaultLayout showTab>
         <HomePage />
       </DefaultLayout>
     ),
@@ -50,20 +50,18 @@ let RouteList = [
         element: <TabMovie />,
       },
       {
-        path: "tab-tv-show",
         element: <TabTvShow />,
       },
       {
-        path: "tab-series",
         element: <TabSeries />,
       },
     ],
   },
   {
-    path: "/movie",
+    path: "/movie/:idDetail",
     element: (
       <DefaultLayout>
-        <PageMovie />
+        <WatchMovieTv />
       </DefaultLayout>
     ),
   },

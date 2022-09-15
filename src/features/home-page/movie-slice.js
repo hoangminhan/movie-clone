@@ -25,7 +25,7 @@ const initialState = {
     currentPage: 1,
     totalPages: 1,
   },
-  detailMovie: {},
+  dataDetail: {},
 };
 export const movieSlice = createSlice({
   name: "movie",
@@ -98,7 +98,7 @@ export const movieSlice = createSlice({
     },
     [getDetailMovie.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.detailMovie = action.payload;
+      state.dataDetail = action.payload;
     },
     [getDetailMovie.rejected]: (state, action) => {
       state.isLoading = false;

@@ -24,6 +24,7 @@ export const useHomePage = () => {
     listTrending,
     detailTrending,
     listCastsMovie,
+    dataDetail,
   } = resultMovie;
 
   const handleGetTypeAction = (payload) => {
@@ -107,6 +108,7 @@ export const useHomePage = () => {
     listTrending,
     detailTrending,
     listCastsMovie,
+    dataDetail,
     handleGetDetailMovie,
     handleGetMovie,
     handleGetListTrending,
