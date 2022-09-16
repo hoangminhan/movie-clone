@@ -102,7 +102,7 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
     // <Col xs={24} md={collapsed ? 2 : 3}>
 
     <aside
-      className={`fixed top-0 bottom-0 left-0  bg-[#0d0c0f] duration-300 ease-in-out ${
+      className={`fixed z-[2] top-0 bottom-0 left-0  bg-[#0d0c0f] duration-300 ease-in-out ${
         !isToggle ? "w-[270px]" : "w-[100px]"
       }`}
     >

@@ -14,8 +14,8 @@ export const Footer = ({ toggleMenu }) => {
   const { t } = useTranslation();
   return (
     <div
-      className={`absolute z-[999] left-0 right-0  h-[260px] bg-[#1c1c1e] border-t-[1px] border-[#ccc] duration-300 ease-in-out ${
-        !toggleMenu ? "pl-[280px]" : "pl-[110px]"
+      className={`absolute  left-0 right-0  h-[260px] max-h-[260px] bg-[#1c1c1e] border-t-[1px] border-[#ccc] duration-300 ease-in-out ${
+        !toggleMenu ? "pl-[310px]" : "pl-[130px]"
       }`}
     >
       <div className="pt-[64px] flex gap-8 text-white text-[30px] cursor-pointer ">

@@ -10,7 +10,6 @@ import { useEffect } from "react";
 const Wrapper = ({ children }) => {
   const location = useLocation();
   useLayoutEffect(() => {
-    console.log("hehe");
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -20,6 +19,8 @@ const Wrapper = ({ children }) => {
 };
 
 function App() {
+  console.log("appp");
+
   let mainContent = useRoutes(RouteList);
 
   useEffect(() => {
@@ -35,7 +36,7 @@ function App() {
 
   return (
     <Wrapper>
-      <div data-aos="fade-up" className="text-2xl text-[#989898] font-poppin">
+      <div className="text-2xl text-[#989898] font-poppin">
         {/* <Routes>
         {RouteList.map((item, index) => {
           let Page = item.component;
@@ -67,7 +68,6 @@ function App() {
         })}
       </Routes> */}
         {mainContent}
-        <ComponentModalGlobal />
       </div>
     </Wrapper>
   );

@@ -5,10 +5,9 @@ import { ButtonPlay, ImageCustom } from "components";
 import { formatNumber, getImage } from "utils";
 
 export const SimilarContent = ({ dataSimilar }) => {
-  console.log(dataSimilar);
   return (
     <div className="flex flex-wrap gap-12 justify-center">
-      {dataSimilar.map((similar, index) => {
+      {dataSimilar?.map((similar, index) => {
         return (
           <div
             key={index}

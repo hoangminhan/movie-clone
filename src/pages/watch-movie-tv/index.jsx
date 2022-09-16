@@ -1,7 +1,9 @@
 import { Col, Row } from "antd";
 import { useHomePage } from "hooks/use-homepage";
-import React, { useLayoutEffect } from "react";
-import { useEffect } from "react";
+import { useState } from "react";
+import { useLayoutEffect } from "react";
+import Iframe from "react-iframe";
+import ReactPlayer from "react-player";
 import { useParams } from "react-router-dom";
 import { Hero } from "./components";
 
@@ -11,19 +13,31 @@ const WatchMovieTv = () => {
 
   //   get data detail movie
   useLayoutEffect(() => {
-    console.log("get detail");
     handleGetDetailMovie(idDetail, { api_key: process.env.REACT_APP_API_KEY });
   }, [idDetail]);
+
+  const [currentUrl, setCurrentUrl] = useState("");
+  const handleChangeUrl = (newUrl) => {
+    setCurrentUrl(newUrl);
+  };
   return (
     <div>
-      <Row gutter={[32, 32]}>
-        <Col span={18}>
+      <Row>
+        <Col span={19}>
           {/* hero */}
-          <Row>
-            <Hero dataDetail={dataDetail} />
-          </Row>
+          <Hero dataDetail={dataDetail} handleChangeUrl={handleChangeUrl} />
+          <div className="h-[1000px] w-full mt-10">
+            {currentUrl && (
+              <Iframe
+                src={currentUrl}
+                height="800px"
+                width="100%"
+                allowFullScreen
+              ></Iframe>
+            )}
+          </div>
         </Col>
-        <Col span={6}>
+        <Col span={5}>
           <div>Filter</div>
         </Col>
       </Row>

@@ -1,9 +1,6 @@
-import { faClose } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "antd";
 import { TYPEMODAL } from "constant";
 import { useModal } from "hooks";
-import React from "react";
 import { ModalTrailer } from "./components";
 import "./style.scss";
 
