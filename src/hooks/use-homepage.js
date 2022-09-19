@@ -6,8 +6,8 @@ import {
   getListTrending,
   getRecommendationMovie,
   getSimilarMovie,
+  getTrailerMovie,
   getTrailerTvShow,
-  getVideoMovie,
   handleGetListMovie,
   handleGetListMovieTopRated,
   handleGetListMovieUpComming,
@@ -31,6 +31,7 @@ export const useHomePage = () => {
     listKeywordsMovie,
     listReviewsMovie,
     listRecommendationMovie,
+    infoTrailerMovie,
     dataDetail,
   } = resultMovie;
 
@@ -101,7 +102,7 @@ export const useHomePage = () => {
       params,
     };
     if (type === "movie") {
-      return dispatch(getVideoMovie(payload));
+      return dispatch(getTrailerMovie(payload));
     } else if (type === "tv") {
       return dispatch(getTrailerTvShow(payload));
     }
@@ -141,6 +142,7 @@ export const useHomePage = () => {
     listKeywordsMovie,
     listReviewsMovie,
     listRecommendationMovie,
+    infoTrailerMovie,
     dataDetail,
     handleGetDetailMovie,
     handleGetMovie,

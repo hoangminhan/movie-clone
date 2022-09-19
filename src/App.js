@@ -8,20 +8,17 @@ import { useContext, useLayoutEffect } from "react";
 import { useEffect } from "react";
 import { UserContext } from "contexts";
 
-const Wrapper = ({ children }) => {
+function App() {
+  let mainContent = useRoutes(RouteList);
   const location = useLocation();
-  useLayoutEffect(() => {
+
+  useEffect(() => {
+    console.log("scroll");
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   }, [location.pathname]);
-  return children;
-};
-
-function App() {
-  let mainContent = useRoutes(RouteList);
-
   useEffect(() => {
     AOS.init({
       once: true,
@@ -31,9 +28,8 @@ function App() {
   }, []);
 
   return (
-    <Wrapper>
-      <div className="text-2xl text-[#989898] font-poppin">
-        {/* <Routes>
+    <div className="text-2xl text-[#989898] font-poppin">
+      {/* <Routes>
         {RouteList.map((item, index) => {
           let Page = item.component;
           const checkLayout = item.layout;
@@ -63,9 +59,8 @@ function App() {
           );
         })}
       </Routes> */}
-        {mainContent}
-      </div>
-    </Wrapper>
+      {mainContent}
+    </div>
   );
 }
 

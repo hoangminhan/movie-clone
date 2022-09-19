@@ -6,7 +6,7 @@ import { useHomePage } from "hooks/use-homepage";
 import { t } from "i18next";
 import React from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { formatNumber, getImage } from "utils";
@@ -35,51 +35,55 @@ export const ComponentSlider = React.memo(
           {dataPopular?.map((item, index) => {
             return (
               <SwiperSlide key={index} className="cursor-pointer">
-                <div
-                  className="group relative delay-150 hover:scale-110 duration-[250ms]"
-                  onClick={() => {
-                    navigate(`movie/${item.id}`);
-                  }}
-                >
-                  <ImageCustom
-                    data-aos="zoom-in"
-                    typeEffect="opacity"
-                    alt="Poster"
-                    src={getImage(item.poster_path, "w185")}
-                    className="max-w-full w-full object-cover rounded-[6px]"
-                  />
-                  {/* name film */}
-                  <div className="absolute bottom-0 bg-[#0d0c0f] w-full rounded-b-[6px]">
-                    <Tooltip
-                      title={!item?.title ? item?.original_title : item?.title}
-                    >
-                      <p className="text-[16px] line-clamp-1 text-center text-[#999898]">
-                        {!item?.title ? item?.original_title : item?.title}
-                      </p>
-                    </Tooltip>
-                  </div>
-                  {/* btn play */}
-                  <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2  hidden group-hover:block delay-250 hover:scale-110 duration-300">
-                    <ButtonPlay size="small" />
-                  </div>
-                  {/* rate */}
-                  <div className="absolute top-[-8px] right-[0px] text-[13px]">
-                    <Badge.Ribbon
-                      color="#1890ff"
-                      text={
-                        <p className="rounded-[10px]  m-0 leading-6">
-                          {formatNumber(item.vote_average, 10)}
-                          <span className="inline-block ml-1">
-                            <FontAwesomeIcon
-                              icon={faStar}
-                              className="text-white"
-                            />
-                          </span>
+                <Link to={`/movie/${item.id}`}>
+                  <div
+                    className="group relative delay-150 hover:scale-110 duration-[250ms]"
+                    // onClick={() => {
+                    //   navigate(`movie/${item.id}`);
+                    // }}
+                  >
+                    <ImageCustom
+                      data-aos="zoom-in"
+                      typeEffect="opacity"
+                      alt="Poster"
+                      src={getImage(item.poster_path, "w500")}
+                      className="w-full object-cover rounded-[6px]"
+                    />
+                    {/* name film */}
+                    <div className="absolute bottom-0 bg-[#0d0c0f] w-full rounded-b-[6px]">
+                      <Tooltip
+                        title={
+                          !item?.title ? item?.original_title : item?.title
+                        }
+                      >
+                        <p className="text-[16px] line-clamp-1 text-center text-[#999898]">
+                          {!item?.title ? item?.original_title : item?.title}
                         </p>
-                      }
-                    ></Badge.Ribbon>
+                      </Tooltip>
+                    </div>
+                    {/* btn play */}
+                    <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2  hidden group-hover:block delay-250 hover:scale-110 duration-300">
+                      <ButtonPlay size="small" />
+                    </div>
+                    {/* rate */}
+                    <div className="absolute top-[-8px] right-[0px] text-[13px]">
+                      <Badge.Ribbon
+                        color="#1890ff"
+                        text={
+                          <p className="rounded-[10px]  m-0 leading-6">
+                            {formatNumber(item.vote_average, 10)}
+                            <span className="inline-block ml-1">
+                              <FontAwesomeIcon
+                                icon={faStar}
+                                className="text-white"
+                              />
+                            </span>
+                          </p>
+                        }
+                      ></Badge.Ribbon>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </SwiperSlide>
             );
           })}

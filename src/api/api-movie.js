@@ -9,7 +9,7 @@ export const apiMovie = {
     const url = `movie/${id}`;
     return axiosClient.get(url, { params });
   },
-  getVideoMovie: (id, params) => {
+  getTrailerMovie: (id, params) => {
     const url = `movie/${id}/videos`;
     return axiosClient.get(url, { params });
   },

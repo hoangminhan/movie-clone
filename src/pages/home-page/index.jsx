@@ -1,12 +1,13 @@
 import { UserContext } from "contexts";
 import { useHomePage } from "hooks/use-homepage";
 import React, { useContext, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 const HomePage = () => {
   const stateContext = useContext(UserContext);
   const { globalLocale, setGlobalLocale } = stateContext;
   const { handleGetMovie, handleGetListTrending } = useHomePage();
+
   useEffect(() => {
     const getDataApi = async () => {
       const locale = sessionStorage.getItem("currentLocale") || "vi-VN";

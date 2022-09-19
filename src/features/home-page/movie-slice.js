@@ -8,6 +8,7 @@ import {
   getListTrending,
   getRecommendationMovie,
   getSimilarMovie,
+  getTrailerMovie,
   handleGetListMovie,
   handleGetListMovieTopRated,
   handleGetListMovieUpComming,
@@ -21,6 +22,7 @@ const initialState = {
   listRecommendationMovie: [],
   listKeywordsMovie: [],
   listReviewsMovie: {},
+  infoTrailerMovie: {},
   isLoading: false,
   detail: {
     currentPage: 1,
@@ -107,6 +109,18 @@ export const movieSlice = createSlice({
       state.dataDetail = action.payload;
     },
     [getDetailMovie.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    // get trailer movie
+    [getTrailerMovie.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [getTrailerMovie.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.infoTrailerMovie =
+        action.payload.results[action.payload.results.length - 1];
+    },
+    [getTrailerMovie.rejected]: (state, action) => {
       state.isLoading = false;
     },
     // similar movie

@@ -44,16 +44,16 @@ export const getDetailMovie = createAsyncThunk(
     return response;
   }
 );
-export const getVideoMovie = createAsyncThunk(
-  "video-movie",
+export const getTrailerMovie = createAsyncThunk(
+  "trailer-movie",
   async (payload) => {
     const { id, params } = payload;
-    const response = await apiMovie.getVideoMovie(id, params);
+    const response = await apiMovie.getTrailerMovie(id, params);
     return response;
   }
 );
 export const getTrailerTvShow = createAsyncThunk(
-  "trailer-movie",
+  "trailer-tv-show",
   async (payload) => {
     const { id, params } = payload;
     const response = await ApiTvShow.getTrailerTv(id, params);

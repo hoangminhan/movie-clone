@@ -12,6 +12,7 @@ import { useHomePage } from "hooks/use-homepage";
 import { t } from "i18next";
 import { useState } from "react";
 import ReactPlayer from "react-player";
+import { Link } from "react-router-dom";
 import ShowMoreText from "react-show-more-text";
 import { embedMovieTrailer, formatNumber } from "utils";
 import "./style.scss";
@@ -81,7 +82,9 @@ export const ModalTrailer = ({
         <div className="mt-[32px] text-white text-[16px] ">
           <Row>
             <div className="mb-8">
-              <ButtomCustom title="Play" nameIcon="iconPlay" />
+              <Link to={`movie/${dataDetail.id}`}>
+                <ButtomCustom title="Play" nameIcon="iconPlay" />
+              </Link>
             </div>
             {/* add playlist */}
             <div className="ml-8 cursor-pointer hover:scale-110 duration-200">
