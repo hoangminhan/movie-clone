@@ -69,6 +69,15 @@ export const getSimilarMovie = createAsyncThunk(
     return response;
   }
 );
+// recommendation content movie
+export const getRecommendationMovie = createAsyncThunk(
+  "recommendation-movie",
+  async (payload) => {
+    const { id, params } = payload;
+    const response = await apiMovie.getRecommendationMovies(id, params);
+    return response;
+  }
+);
 // get casts movie
 
 export const getCastsMovie = createAsyncThunk(
@@ -76,6 +85,27 @@ export const getCastsMovie = createAsyncThunk(
   async (payload) => {
     const { id, params } = payload;
     const response = await apiMovie.getCastsMovie(id, params);
+    return response;
+  }
+);
+
+// get keywords
+
+export const getKeywords = createAsyncThunk(
+  "keywords-movie",
+  async (payload) => {
+    const { id, params } = payload;
+    const response = await apiMovie.getKeywords(id, params);
+    return response;
+  }
+);
+// get list review
+
+export const getListReviews = createAsyncThunk(
+  "list-reviews-movie",
+  async (payload) => {
+    const { id, params } = payload;
+    const response = await apiMovie.getListReviews(id, params);
     return response;
   }
 );

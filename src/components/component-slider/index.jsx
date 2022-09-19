@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Tooltip } from "antd";
 import { ButtonPlay, ImageCustom } from "components";
 import { useHomePage } from "hooks/use-homepage";
+import { t } from "i18next";
 import React from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +19,7 @@ export const ComponentSlider = React.memo(
       <div className={`${title ? "mt-[64px]" : "mt-[128px]"}`}>
         <div>
           <p className="text-white uppercase font-[600] tracking-[2px] mb-4">
-            {title}
+            {t(`${title}`)}
           </p>
         </div>
         <Swiper
@@ -33,8 +34,13 @@ export const ComponentSlider = React.memo(
         >
           {dataPopular?.map((item, index) => {
             return (
-              <SwiperSlide key={index} className="">
-                <div className="group relative delay-150 hover:scale-110 duration-[250ms]">
+              <SwiperSlide key={index} className="cursor-pointer">
+                <div
+                  className="group relative delay-150 hover:scale-110 duration-[250ms]"
+                  onClick={() => {
+                    navigate(`movie/${item.id}`);
+                  }}
+                >
                   <ImageCustom
                     data-aos="zoom-in"
                     typeEffect="opacity"
@@ -53,12 +59,7 @@ export const ComponentSlider = React.memo(
                     </Tooltip>
                   </div>
                   {/* btn play */}
-                  <div
-                    className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2  hidden group-hover:block delay-250 hover:scale-110 duration-300"
-                    onClick={() => {
-                      navigate(`movie/${item.id}`);
-                    }}
-                  >
+                  <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2  hidden group-hover:block delay-250 hover:scale-110 duration-300">
                     <ButtonPlay size="small" />
                   </div>
                   {/* rate */}

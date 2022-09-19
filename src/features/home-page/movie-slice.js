@@ -3,7 +3,10 @@ import {
   getCastsMovie,
   getDetail,
   getDetailMovie,
+  getKeywords,
+  getListReviews,
   getListTrending,
+  getRecommendationMovie,
   getSimilarMovie,
   handleGetListMovie,
   handleGetListMovieTopRated,
@@ -15,6 +18,9 @@ const initialState = {
   listMovieUpComing: [],
   listCastsMovie: [],
   listSimilarMovie: [],
+  listRecommendationMovie: [],
+  listKeywordsMovie: [],
+  listReviewsMovie: {},
   isLoading: false,
   detail: {
     currentPage: 1,
@@ -109,9 +115,20 @@ export const movieSlice = createSlice({
     },
     [getSimilarMovie.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.listSimilarMovie = action.payload;
+      state.listSimilarMovie = action.payload.results;
     },
     [getSimilarMovie.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    // recommendation movie
+    [getRecommendationMovie.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [getRecommendationMovie.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.listRecommendationMovie = action.payload.results;
+    },
+    [getRecommendationMovie.rejected]: (state, action) => {
       state.isLoading = false;
     },
     // get list casts of movie
@@ -124,6 +141,29 @@ export const movieSlice = createSlice({
       state.isLoading = false;
     },
     [getCastsMovie.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    // get list keywords of movie
+    [getKeywords.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [getKeywords.fulfilled]: (state, action) => {
+      const { keywords } = action.payload;
+      state.listKeywordsMovie = [...keywords];
+      state.isLoading = false;
+    },
+    [getKeywords.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    // get list reviews of movie
+    [getListReviews.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [getListReviews.fulfilled]: (state, action) => {
+      state.listReviewsMovie = { ...action.payload };
+      state.isLoading = false;
+    },
+    [getListReviews.rejected]: (state, action) => {
       state.isLoading = false;
     },
   },

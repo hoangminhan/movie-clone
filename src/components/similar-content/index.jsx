@@ -11,7 +11,6 @@ export const SimilarContent = ({ dataSimilar }) => {
         return (
           <div
             key={index}
-            rounded-global
             className="rounded-global max-w-[185px] hover:scale-110 duration-300 delay-100 rounded-[6px] overflow-hidden"
           >
             {/* img */}

@@ -1,5 +1,6 @@
 import {
   faClose,
+  faStar,
   faThumbsDown,
   faThumbsUp,
   faThumbTack,
@@ -8,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Col, Modal, Row, Spin, Tooltip } from "antd";
 import { ButtomCustom, ButtonAddList, SimilarContent } from "components";
 import { useHomePage } from "hooks/use-homepage";
+import { t } from "i18next";
 import { useState } from "react";
 import ReactPlayer from "react-player";
 import ShowMoreText from "react-show-more-text";
@@ -91,21 +93,21 @@ export const ModalTrailer = ({
 
             <div className="ml-8 mr-[32px] group relative w-[50px] h-[50px] cursor-pointer duration-300">
               <div className="absolute z-[2]">
-                <Tooltip title="Like">
+                <Tooltip title={t("Like")}>
                   <p className="bg-[white] w-10 h-10 flex items-center justify-center rounded-full border-solid border-black border-[1px]">
                     <FontAwesomeIcon icon={faThumbsUp} color="black" />
                   </p>
                 </Tooltip>
               </div>
               <div className="absolute invisible group-hover:visible left-0 group-hover:left-[-50px] duration-300 z-[1]">
-                <Tooltip title="Dis Like">
+                <Tooltip title={t("Dis Like")}>
                   <p className="bg-[white] w-10 h-10 flex items-center justify-center rounded-full border-solid border-black border-[1px]">
                     <FontAwesomeIcon icon={faThumbsDown} color="black" />
                   </p>
                 </Tooltip>
               </div>
               <div className="absolute invisible group-hover:visible right-[9px] group-hover:right-[-45px] duration-300 z-[1]">
-                <Tooltip title="Perfect">
+                <Tooltip title={t("Perfect")}>
                   <p className="bg-[white] w-10 h-10 flex items-center justify-center rounded-full border-solid border-black border-[1px]">
                     <FontAwesomeIcon icon={faThumbTack} color="black" />
                   </p>
@@ -142,23 +144,26 @@ export const ModalTrailer = ({
           >
             <Col span={12}>
               {/* run time */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center justify-between gap-4">
                 <p>
-                  <span>Run time: </span>
+                  <span>{t("Run time")}: </span>
                   {dataDetail?.runtime} phút
                 </p>
                 <p>
-                  <span>Release date: </span>
+                  <span>{t("Release date")}: </span>
                   {dataDetail?.release_date}
                 </p>
-                <p>
-                  <span>Rating: </span>
-                  {formatNumber(dataDetail?.vote_average, 10)}
-                </p>
               </div>
+              <p className="mt-2">
+                <span>{t("Rating")}: </span>
+                <span className="mr-1">
+                  {formatNumber(dataDetail?.vote_average, 10)}
+                </span>
+                <FontAwesomeIcon icon={faStar} color="yellow" />
+              </p>
               {/* overview */}
-              <p className="mt-4">
-                <span className="mr-2">Overview:</span>
+              <p className="mt-2">
+                <span className="mr-2">{t("Overview")}:</span>
                 <ShowMoreText
                   /* Default options */
                   lines={3}
@@ -179,7 +184,7 @@ export const ModalTrailer = ({
             <Col span={12}>
               <div>
                 <p className="line-clamp-2">
-                  <span className="text-[16px] mr-2">Diễn viên:</span>
+                  <span className="text-[16px] mr-2">{t("Cast")}:</span>
                   <span>
                     {listCastsMovie?.map((cast, index) => {
                       return index < listCastsMovie.length - 1
@@ -188,8 +193,8 @@ export const ModalTrailer = ({
                     })}
                   </span>
                 </p>
-                <p className="mt-4">
-                  <span className="text-[16px] mr-2">Thể loại:</span>
+                <p className="mt-2">
+                  <span className="text-[16px] mr-2">{t("Genres")}:</span>
                   <span>
                     {dataDetail?.genres?.map((genre, index) => {
                       return index < dataDetail.genres.length - 1
@@ -198,9 +203,9 @@ export const ModalTrailer = ({
                     })}
                   </span>
                 </p>
-                <p className="mt-4">
+                <p className="mt-2">
                   <span className="text-[16px] mr-2">
-                    Production companies:
+                    {t("Production companies")}:
                   </span>
                   <span>
                     {dataDetail?.production_companies?.map((company, index) => {
@@ -210,8 +215,8 @@ export const ModalTrailer = ({
                     })}
                   </span>
                 </p>
-                <p className="mt-4">
-                  <span className="text-[16px] mr-2">Collection:</span>
+                <p className="mt-2">
+                  <span className="text-[16px] mr-2">{t("Collection")}:</span>
                   <span>
                     {dataDetail?.belongs_to_collection?.name
                       ? dataDetail?.belongs_to_collection?.name
@@ -224,7 +229,9 @@ export const ModalTrailer = ({
           {/*  similar content */}
           <Row>
             <div>
-              <h2 className="text-white text-[30px] mt-4">Similar Content</h2>
+              <h2 className="text-white text-[30px] mt-4">
+                {t("Similar content")}
+              </h2>
               <div className="mt-8">
                 <SimilarContent dataSimilar={dataSimilar} />
               </div>

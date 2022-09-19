@@ -3,11 +3,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Skeleton } from "antd";
 import { ImageCustom } from "components";
 import { useHomePage } from "hooks/use-homepage";
+import { t } from "i18next";
 import { embedMovie, getImage } from "utils";
 
 export const Hero = ({ dataDetail, handleChangeUrl }) => {
-  console.log({ dataDetail });
   const { isLoading } = useHomePage();
+  const executeScroll = () => {
+    const elementToScroll = document.getElementById("movie-id");
+    console.log(elementToScroll.current);
+    elementToScroll.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div className="max-h-[500px]">
       <div className="max-h-[500px] w-full relative">
@@ -24,7 +32,7 @@ export const Hero = ({ dataDetail, handleChangeUrl }) => {
         <div className="absolute bottom-[-15%] left-[15%]">
           <ImageCustom
             src={getImage(dataDetail.poster_path, "w185")}
-            className="rounded-lg"
+            className="rounded-global"
           />
         </div>
 
@@ -54,6 +62,7 @@ export const Hero = ({ dataDetail, handleChangeUrl }) => {
           className="absolute bottom-3 right-3"
           onClick={() => {
             console.log("xem");
+            executeScroll();
 
             handleChangeUrl(embedMovie(dataDetail.id));
           }}
@@ -62,7 +71,7 @@ export const Hero = ({ dataDetail, handleChangeUrl }) => {
             <p className="w-5 h-5 bg-[red] flex items-center justify-center p-4 rounded-full">
               <FontAwesomeIcon icon={faPlay} fontSize="16px" />
             </p>
-            <p className="ml-2">Watch now</p>
+            <p className="ml-2">{t("Watch now")}</p>
           </div>
         </div>
       </div>

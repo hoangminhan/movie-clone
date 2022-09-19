@@ -1,5 +1,6 @@
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { t } from "i18next";
 import React from "react";
 
 const icons = {
@@ -22,7 +23,7 @@ export const ButtomCustom = ({
     >
       <FontAwesomeIcon icon={icons[nameIcon]} className="text-2xl" />
       <button className="font-medium ease-in-out duration-300 text-[24px]">
-        {title}
+        {t(title)}
       </button>
     </div>
   );
