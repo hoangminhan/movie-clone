@@ -12,6 +12,7 @@ import reportWebVitals from "./reportWebVitals";
 
 import "react-lazy-load-image-component/src/effects/blur.css";
 import "react-lazy-load-image-component/src/effects/opacity.css";
+import { UserProviderContext } from "contexts";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -25,7 +26,9 @@ root.render(
     <I18nextProvider i18n={i18n}>
       <BrowserRouter>
         <Provider store={store}>
-          <App />
+          <UserProviderContext>
+            <App />
+          </UserProviderContext>
         </Provider>
       </BrowserRouter>
     </I18nextProvider>

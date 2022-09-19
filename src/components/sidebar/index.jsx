@@ -99,8 +99,6 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
   };
 
   return (
-    // <Col xs={24} md={collapsed ? 2 : 3}>
-
     <aside
       className={`fixed z-[2] top-0 bottom-0 left-0  bg-[#0d0c0f] duration-300 ease-in-out ${
         !isToggle ? "w-[270px]" : "w-[100px]"
@@ -117,8 +115,8 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
           />
         ) : (
           <StyledMenu
-            defaultSelectedKeys={[location.pathname]}
             mode="inline"
+            defaultSelectedKeys={[location.pathname]}
             inlineCollapsed={isToggle}
             items={items}
             onSelect={handleChangeCurrentMenu}

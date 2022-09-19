@@ -23,6 +23,7 @@ const WatchMovieTv = () => {
     handleGetListKeywords,
     handleGetRecommendationMovie,
     handleGetListReviews,
+    handleGetTrailer,
     listCastsMovie,
     listKeywordsMovie,
     listReviewsMovie,
@@ -42,6 +43,10 @@ const WatchMovieTv = () => {
       api_key: process.env.REACT_APP_API_KEY,
       language: locale,
       append_to_response: "videos",
+    });
+    handleGetTrailer(idDetail, "movie", {
+      api_key: process.env.REACT_APP_API_KEY,
+      language: locale,
     });
 
     handleGetSimilarMovie(idDetail, {
@@ -84,7 +89,7 @@ const WatchMovieTv = () => {
             />
 
             {/* xem phim */}
-            <div className="my-10 mx-4 overflow-hidden">
+            {/* <div className="my-10 mx-4 overflow-hidden">
               {currentUrl && (
                 <Iframe
                   id="movie-id"
@@ -94,7 +99,7 @@ const WatchMovieTv = () => {
                   allowFullScreen
                 ></Iframe>
               )}
-            </div>
+            </div> */}
 
             {/* recommendation */}
             <div className="px-4">

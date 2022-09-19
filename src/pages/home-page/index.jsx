@@ -1,8 +1,11 @@
+import { UserContext } from "contexts";
 import { useHomePage } from "hooks/use-homepage";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
 const HomePage = () => {
+  const stateContext = useContext(UserContext);
+  const { globalLocale, setGlobalLocale } = stateContext;
   const { handleGetMovie, handleGetListTrending } = useHomePage();
   useEffect(() => {
     const getDataApi = async () => {
@@ -33,7 +36,7 @@ const HomePage = () => {
       });
     };
     getDataApi();
-  }, []);
+  }, [stateContext]);
   return (
     <div className="py-8">
       <Outlet />

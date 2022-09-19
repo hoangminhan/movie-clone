@@ -19,7 +19,7 @@ export const ComponentSlider = React.memo(
       <div className={`${title ? "mt-[64px]" : "mt-[128px]"}`}>
         <div>
           <p className="text-white uppercase font-[600] tracking-[2px] mb-4">
-            {t(`${title}`)}
+            {t(`${title ? title : ""}`)}
           </p>
         </div>
         <Swiper

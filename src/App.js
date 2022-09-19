@@ -4,8 +4,9 @@ import RouteList from "routes";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./App.less";
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 import { useEffect } from "react";
+import { UserContext } from "contexts";
 
 const Wrapper = ({ children }) => {
   const location = useLocation();
@@ -19,8 +20,6 @@ const Wrapper = ({ children }) => {
 };
 
 function App() {
-  console.log("appp");
-
   let mainContent = useRoutes(RouteList);
 
   useEffect(() => {
