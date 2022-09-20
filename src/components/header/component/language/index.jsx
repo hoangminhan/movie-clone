@@ -13,7 +13,7 @@ export const LanguageProject = () => {
   return (
     <Tooltip title={t("Click to change language")}>
       <div
-        className="cursor-pointer"
+        className="flex cursor-pointer"
         onClick={() => {
           let newLocale = globalLocale === "vi-VN" ? "en-US" : "vi-VN";
           setGlobalLocale(newLocale);
@@ -21,11 +21,15 @@ export const LanguageProject = () => {
           sessionStorage.setItem("currentLocale", newLocale);
         }}
       >
-        <ImageCustom
-          data-aos="fade-right"
-          src={globalLocale === "vi-VN" ? iconImg.flagVn : iconImg.flagUs}
-          width="25px"
-        />
+        <div className="cursor-pointer flex">
+          <ImageCustom
+            src={globalLocale === "vi-VN" ? iconImg.flagVn : iconImg.flagUs}
+            width="25px"
+          />
+        </div>
+        <p className="text-[18px] ml-2 text-white">
+          {globalLocale === "vi-VN" ? "Tiếng Việt" : "English"}
+        </p>
       </div>
     </Tooltip>
   );

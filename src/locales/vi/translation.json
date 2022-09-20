@@ -36,6 +36,13 @@
     "Genres":"Thể loại",
     "Cast":"Diễn viên",
     "Keywords":"Từ khóa",
-    "Recommendations":"Đề xuất"
+    "Recommendations":"Đề xuất",
+    "Login":"Đăng nhập",
+    "Login with":"Đăng nhập với",
+    "Username":"Tên đăng nhập",
+    "Password":"Mật khẩu",
+    "Login to Your Account":"Đăng nhập vào tài khoản của bạn",
+    "Or login with email account":"Hoặc đăng nhập bằng tài khoản email"
+
 
  }

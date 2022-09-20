@@ -63,7 +63,8 @@ export const BodyWatch = ({
               <p className="my-4 underline">Trailer:</p>
               <ReactPlayer
                 url={embedMovieTrailer(infoTrailerMovie?.key)}
-                width="100%"
+                style={{ margin: "0 auto" }}
+                width="80%"
                 height={500}
                 controls
               />

@@ -81,7 +81,6 @@ const WatchMovieTv = () => {
     };
     handleGetData();
   }, [idDetail]);
-  const navigate = useNavigate();
   return (
     <div>
       <Row className="mr-[350px] h-full">
