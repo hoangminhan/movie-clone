@@ -5,6 +5,7 @@ import { lazy } from "react";
 const NotFound = lazy(() => import("./pages/not-found"));
 const HomePage = lazy(() => import("./pages/home-page/index"));
 const LoginPage = lazy(() => import("./pages/login-page"));
+const RegisterPage = lazy(() => import("./pages/register-page"));
 const WatchMovieTv = lazy(() => import("./pages/watch-movie-tv"));
 
 //  const RouteList = [
@@ -60,6 +61,10 @@ let RouteList = [
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
   },
   {
     path: "/movie/:idDetail",

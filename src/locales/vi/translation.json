@@ -42,7 +42,15 @@
     "Username":"Tên đăng nhập",
     "Password":"Mật khẩu",
     "Login to Your Account":"Đăng nhập vào tài khoản của bạn",
-    "Or login with email account":"Hoặc đăng nhập bằng tài khoản email"
+    "Or login with email account":"Hoặc đăng nhập bằng tài khoản email",
+    "Register Account":"Đăng ký tài khoản",
+    "Register with":"Đăng ký với",
+    "Or register with email account":"Hoặc đăng ký với tài khoản email",
+    "First name":"Họ",
+    "Last name":"Tên",
+    "Confirm Password":"Xác nhận mật khẩu",
+    "Register":"Đăng ký",
+    "Already have an account":"Đã có tài khoản"
 
 
  }

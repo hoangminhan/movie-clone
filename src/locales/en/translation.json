@@ -18,7 +18,7 @@
     "Privacy":"Privacy",
     "Contact us":"Contact us",
     "Click to change language":"Click to change language",
-    "Watch now":"Watch now",
+    "Watch now":"Watch",
     "Similar":"Similar",
     "Play":"Play",
     "Like":"Like",
@@ -39,6 +39,16 @@
     "Login with":"Login with",
     "Username":"Username",
     "Password":"Password",
+  
     "Login to Your Account":"Login to Your Account",
-    "Or login with email account":"Or login with email account"
+    "Or login with email account":"Or login with email account",
+    "Register Account":"Register Account",
+    "Register with":"Register with",
+    "Or register with email account":"Or register with email account",
+    "First name":"First name",
+    "Last name":"Last name",
+    "Confirm Password":"Confirm Password",
+    "Register":"Register",
+    "Already have an account":"Already have an account"
+    
 }
