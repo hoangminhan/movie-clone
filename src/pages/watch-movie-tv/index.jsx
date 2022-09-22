@@ -6,11 +6,20 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Col, Progress, Row, Skeleton, Spin, Tooltip } from "antd";
-import { ButtonAddList, ComponentSlider, ImageCustom } from "components";
+import ReactLoading from "react-loading";
+
+import {
+  ButtonAddList,
+  ComponentSlider,
+  ImageCustom,
+  LoadingSuspense,
+} from "components";
+import { reducerClearSimilarMovie } from "features";
 import { useHomePage } from "hooks/use-homepage";
 import { useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Iframe from "react-iframe";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { embedMovie, formatNumber, getImage } from "utils";
@@ -42,10 +51,27 @@ const WatchMovieTv = () => {
   };
   const [isLoadingDetail, setIsLoadingDetail] = useState(true);
   const [isLoadMore, setIsLoadMore] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const dispatch = useDispatch();
 
-  const handleLoadMoreSimilar = () => {
-    console.log("hello");
-    setIsLoadMore(!isLoadMore);
+  const executeScroll = () => {
+    const elementToScroll = document.getElementById("similar-movie");
+    elementToScroll.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
+  const handleLoadMoreSimilar = async () => {
+    setIsLoadMore(true);
+    const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
+
+    await handleGetSimilarMovie(idDetail, {
+      api_key: process.env.REACT_APP_API_KEY,
+      language: locale,
+      page: currentPage + 1,
+    });
+    setCurrentPage((page) => page + 1);
+    setIsLoadMore(false);
   };
 
   //   get data detail movie
@@ -53,6 +79,7 @@ const WatchMovieTv = () => {
     const handleGetData = async () => {
       const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
       setIsLoadingDetail(true);
+      dispatch(reducerClearSimilarMovie());
       await handleGetDetailMovie(idDetail, {
         api_key: process.env.REACT_APP_API_KEY,
         language: locale,
@@ -61,10 +88,12 @@ const WatchMovieTv = () => {
       await handleGetTrailer(idDetail, "movie", {
         api_key: process.env.REACT_APP_API_KEY,
       });
+      executeScroll();
 
       await handleGetSimilarMovie(idDetail, {
         api_key: process.env.REACT_APP_API_KEY,
         language: locale,
+        page: currentPage,
       });
       setIsLoadingDetail(false);
       handleGetRecommendationMovie(idDetail, {
@@ -108,7 +137,7 @@ const WatchMovieTv = () => {
             />
 
             {/* xem phim */}
-            <div className="my-10 mx-4 overflow-hidden">
+            {/* <div className="my-10 mx-4 overflow-hidden">
               {currentUrl && (
                 <Iframe
                   id="movie-id"
@@ -118,7 +147,7 @@ const WatchMovieTv = () => {
                   allowFullScreen
                 ></Iframe>
               )}
-            </div>
+            </div> */}
 
             <div className="flex justify-start mr-6">
               <div className="ml-[50px] mr-[32px] group relative w-[50px] h-[50px] cursor-pointer duration-300">
@@ -166,12 +195,13 @@ const WatchMovieTv = () => {
         </Col>
       </Row>
       <div className="bg-black p-4 border-l-[#ccc] border-l-[1px] border-l-solid fixed z-[2] h-full overflow-y-auto top-0 right-0 w-[350px] scroll-smooth no-scrollbar">
-        <div className="">
-          <p className="text-white mb-8 uppercase">{t("Similar")}</p>
+        <div>
+          <p id="similar-movie" className="text-white mb-8 uppercase">
+            {t("Similar")}
+          </p>
           <Skeleton active loading={isLoadingDetail} paragraph={{ rows: 30 }}>
             <div className="flex flex-col gap-5">
               {listSimilarMovie?.map((similarContent, index) => {
-                console.log(similarContent.id);
                 return (
                   <Link key={index} to={`/movie/${similarContent.id}`}>
                     <div
@@ -210,17 +240,22 @@ const WatchMovieTv = () => {
           </Skeleton>
 
           <div className="my-8 text-center">
-            <button
-              className={`bg-[#ccc] min-w-[150px] px-2 py-2 rounded-lg cursor-pointer text-white text-[18px] ${
-                isLoadMore && "cursor-not-allowed pointer-events-none	"
-              } ${!isLoadMore ? "hover:scale-110 duration-150" : ""}`}
-              onClick={() => {
-                handleLoadMoreSimilar();
-                console.log("click");
-              }}
-            >
-              {!isLoadMore ? t("Load more") : <Spin />}
-            </button>
+            {isLoadMore ? (
+              <div className="flex justify-center">
+                <ReactLoading type="bubbles" color="white" height={40} />
+              </div>
+            ) : (
+              <button
+                className={`bg-primary min-w-[150px] px-2 py-2 rounded-lg cursor-pointer text-white text-[18px] ${
+                  isLoadMore && "cursor-not-allowed pointer-events-none	"
+                } ${!isLoadMore ? "hover:scale-110 duration-150" : ""}`}
+                onClick={() => {
+                  handleLoadMoreSimilar();
+                }}
+              >
+                {t("Load more")}
+              </button>
+            )}
           </div>
         </div>
       </div>

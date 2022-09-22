@@ -13,7 +13,6 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("scroll");
     window.scrollTo({
       top: 0,
       behavior: "smooth",

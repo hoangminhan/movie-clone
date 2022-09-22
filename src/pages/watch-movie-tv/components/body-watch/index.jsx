@@ -10,6 +10,7 @@ import { t } from "i18next";
 import React from "react";
 import Iframe from "react-iframe";
 import ReactPlayer from "react-player";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { embedMovieTrailer, formatNumber, getImage } from "utils";
 
@@ -90,28 +91,30 @@ export const BodyWatch = ({
             <div className="flex flex-wrap gap-x-4 gap-y-6 my-4 pl-4">
               {listCastsMovie.map((cast, index) => {
                 return (
-                  <div className="flex w-[250px] gap-2">
-                    <Skeleton loading={isLoadingDetail} active avatar>
-                      <div className="max-w-[65px] w-full h-[65px]">
-                        <img
-                          className="object-cover rounded-[50%] h-[65px] w-[65px]"
-                          src={getImage(cast.profile_path, "w185")}
-                          alt=""
-                        />
-                      </div>
-                      <div className="grow-[1] flex flex-col text-[16px]">
-                        <Tooltip title={cast.name}>
-                          <p className="text-primary line-clamp-1">
-                            {cast.name}
+                  <Link key={index} to={`/cast/${cast.id}`}>
+                    <div className="flex w-[250px] gap-2">
+                      <Skeleton loading={isLoadingDetail} active avatar>
+                        <div className="max-w-[65px] w-full h-[65px]">
+                          <img
+                            className="object-cover rounded-[50%] h-[65px] w-[65px]"
+                            src={getImage(cast.profile_path, "w185")}
+                            alt=""
+                          />
+                        </div>
+                        <div className="grow-[1] flex flex-col text-[16px]">
+                          <Tooltip title={cast.name}>
+                            <p className="text-primary line-clamp-1">
+                              {cast.name}
+                            </p>
+                          </Tooltip>
+                          <p className="line-clamp-2">
+                            <span className="mr-1">as</span>
+                            {cast.character}
                           </p>
-                        </Tooltip>
-                        <p className="line-clamp-2">
-                          <span className="mr-1">as</span>
-                          {cast.character}
-                        </p>
-                      </div>
-                    </Skeleton>
-                  </div>
+                        </div>
+                      </Skeleton>
+                    </div>
+                  </Link>
                 );
               })}
             </div>

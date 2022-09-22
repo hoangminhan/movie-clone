@@ -4,9 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 export const useModal = () => {
   const resultModal = useSelector((state) => state.storeModal);
-  console.log({ resultModal });
   const dispatch = useDispatch();
-  //   toggle Modal
 
   const handleToggleModal = React.useCallback((data) =>
     dispatch(openModalCustom(data), [dispatch])

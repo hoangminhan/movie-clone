@@ -71,8 +71,7 @@ const RegisterPage = () => {
         </p>
 
         <div>
-          <p className="text-center mt-4 text-[#fff]">{t("Register with")}</p>
-          <div className="flex justify-center gap-4 mt-3">
+          <div className="flex justify-center gap-5 mt-3">
             <p className="w-[50px] h-[50px] bg-[#fff] rounded-full flex items-center justify-center cursor-pointer hover:scale-110 duration-200">
               <img src={iconImg.googleImg} alt="" />
             </p>
@@ -191,7 +190,7 @@ const RegisterPage = () => {
               ]}
               style={{ flex: "1" }}
             >
-              <StyleInputPassword placeholder="password" />
+              <StyleInputPassword placeholder="Password" />
             </Form.Item>
             <Form.Item
               label={
@@ -214,7 +213,7 @@ const RegisterPage = () => {
               ]}
               style={{ flex: "1" }}
             >
-              <StyleInputPassword placeholder={t("confirm password")} />
+              <StyleInputPassword placeholder={t("Confirm Password")} />
             </Form.Item>
 
             <button
@@ -239,7 +238,7 @@ const RegisterPage = () => {
       </div>
 
       {/* language */}
-      <div className="absolute top-[2%] left-[3%]">
+      <div className="absolute top-[2%] right-[3%]">
         <LanguageProject />
       </div>
     </div>

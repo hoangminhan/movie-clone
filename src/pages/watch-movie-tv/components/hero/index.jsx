@@ -10,7 +10,6 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
   const { isLoading } = useHomePage();
   const executeScroll = () => {
     const elementToScroll = document.getElementById("movie-id");
-    console.log(elementToScroll.current);
     elementToScroll.scrollIntoView({
       behavior: "smooth",
     });
@@ -64,7 +63,6 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
           <div
             className="absolute bottom-3 right-3"
             onClick={() => {
-              console.log("xem");
               executeScroll();
 
               handleChangeUrl(embedMovie(dataDetail.id));

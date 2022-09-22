@@ -38,6 +38,11 @@ const initialState = {
 export const movieSlice = createSlice({
   name: "movie",
   initialState,
+  reducers: {
+    reducerClearSimilarMovie: (state, action) => {
+      state.listSimilarMovie = [];
+    },
+  },
   extraReducers: {
     // handle get list movie
     [handleGetListMovie.pending]: (state, action) => {
@@ -129,7 +134,10 @@ export const movieSlice = createSlice({
     },
     [getSimilarMovie.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.listSimilarMovie = action.payload.results;
+      state.listSimilarMovie = [
+        ...state.listSimilarMovie,
+        ...action.payload.results,
+      ];
     },
     [getSimilarMovie.rejected]: (state, action) => {
       state.isLoading = false;
@@ -157,6 +165,7 @@ export const movieSlice = createSlice({
     [getCastsMovie.rejected]: (state, action) => {
       state.isLoading = false;
     },
+
     // get list keywords of movie
     [getKeywords.pending]: (state, action) => {
       state.isLoading = true;
@@ -183,4 +192,5 @@ export const movieSlice = createSlice({
   },
 });
 const { reducer, actions } = movieSlice;
+export const { reducerClearSimilarMovie } = actions;
 export default reducer;

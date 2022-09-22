@@ -10,7 +10,6 @@ export const DefaultLayout = ({ children, showTab = false }) => {
     !!sessionStorage.getItem("isToggleMenu") || false
   );
   const handleToggleMenu = (data) => {
-    console.log(data);
     setToggleMenu(data);
   };
   useLayoutEffect(() => {

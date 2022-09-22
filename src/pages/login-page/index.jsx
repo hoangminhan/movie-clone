@@ -18,12 +18,9 @@ const StyleInput = styled(Input)`
   &.ant-input:focus {
     border: none;
   }
-  /* &.ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input {
-    background-color: #555353;
+  &.ant-select-selection__placeholder {
+    color: blue;
   }
-  .ant-input {
-    background-color: #555353 !important; */
-  /* } */
 `;
 const StyleInputPassword = styled(Input.Password)`
   &.ant-input-affix-wrapper {
@@ -71,8 +68,7 @@ const LoginPage = () => {
         </p>
 
         <div>
-          <p className="text-center mt-8 text-[#fff]">{t("Login with")}</p>
-          <div className="flex justify-center gap-2 mt-3">
+          <div className="flex justify-center gap-5 mt-3">
             <p className="w-[50px] h-[50px] bg-[#fff] rounded-full flex items-center justify-center cursor-pointer hover:scale-110 duration-200">
               <img src={iconImg.googleImg} alt="" />
             </p>
@@ -141,7 +137,7 @@ const LoginPage = () => {
                 },
               ]}
             >
-              <StyleInputPassword placeholder="...." />
+              <StyleInputPassword placeholder={t("Password")} />
             </Form.Item>
 
             <button
@@ -166,7 +162,7 @@ const LoginPage = () => {
       </div>
 
       {/* language */}
-      <div className="absolute top-[2%] left-[3%]">
+      <div className="absolute top-[2%] right-[3%]">
         <LanguageProject />
       </div>
     </div>

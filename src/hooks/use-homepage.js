@@ -1,5 +1,6 @@
 import {
   getCastsMovie,
+  getDetailCast,
   getDetailMovie,
   getKeywords,
   getListReviews,
@@ -114,6 +115,7 @@ export const useHomePage = () => {
     };
     return dispatch(getCastsMovie(payload));
   };
+
   const handleGetListKeywords = (id, params) => {
     const payload = {
       id,
@@ -149,6 +151,7 @@ export const useHomePage = () => {
     handleGetListTrending,
     handleGetTrailer,
     handleGetListCasts,
+    // handleGetDetailCasts,
     handleGetSimilarMovie,
     handleGetRecommendationMovie,
     handleGetListKeywords,

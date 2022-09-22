@@ -28,6 +28,7 @@ export const apiMovie = {
     const url = `movie/${id}/credits`;
     return axiosClient.get(url, { params });
   },
+
   // get key words
   getKeywords: (id, params) => {
     const url = `movie/${id}/keywords`;

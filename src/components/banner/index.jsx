@@ -82,7 +82,6 @@ export const Banner = () => {
     });
     const newResultSimilarMovie = unwrapResult(resultSimilarMovie);
     const { results: dataSimilar } = newResultSimilarMovie;
-    console.log({ results });
 
     if (results?.length) {
       setCurrentUrl(results[results.length - 1].key);
@@ -242,7 +241,6 @@ export const Banner = () => {
                     className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2
                   ease-in-out delay-250 hover:scale-110 duration-300 hidden  group-hover:block"
                     onClick={() => {
-                      console.log("click", slider.id);
                       navigate(`movie/${slider.id}`);
                     }}
                   >
