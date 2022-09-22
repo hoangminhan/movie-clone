@@ -5,7 +5,7 @@ import {
   faThumbTack,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Col, Progress, Row, Skeleton, Tooltip } from "antd";
+import { Col, Progress, Row, Skeleton, Spin, Tooltip } from "antd";
 import { ButtonAddList, ComponentSlider, ImageCustom } from "components";
 import { useHomePage } from "hooks/use-homepage";
 import { useLayoutEffect, useState } from "react";
@@ -41,6 +41,12 @@ const WatchMovieTv = () => {
     setCurrentUrl(newUrl);
   };
   const [isLoadingDetail, setIsLoadingDetail] = useState(true);
+  const [isLoadMore, setIsLoadMore] = useState(false);
+
+  const handleLoadMoreSimilar = () => {
+    console.log("hello");
+    setIsLoadMore(!isLoadMore);
+  };
 
   //   get data detail movie
   useLayoutEffect(() => {
@@ -202,6 +208,20 @@ const WatchMovieTv = () => {
               })}
             </div>
           </Skeleton>
+
+          <div className="my-8 text-center">
+            <button
+              className={`bg-[#ccc] min-w-[150px] px-2 py-2 rounded-lg cursor-pointer text-white text-[18px] ${
+                isLoadMore && "cursor-not-allowed pointer-events-none	"
+              } ${!isLoadMore ? "hover:scale-110 duration-150" : ""}`}
+              onClick={() => {
+                handleLoadMoreSimilar();
+                console.log("click");
+              }}
+            >
+              {!isLoadMore ? t("Load more") : <Spin />}
+            </button>
+          </div>
         </div>
       </div>
     </div>

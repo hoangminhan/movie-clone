@@ -15,8 +15,9 @@ import { t } from "i18next";
 import { ModalTrailer } from "modal/components";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Navigation, Pagination } from "swiper";
+import { Autoplay, Navigation, Pagination } from "swiper";
 import { formatNumber, getImage, handleOpenNotification } from "utils";
+import { useModal } from "hooks";
 
 export const Banner = () => {
   const {
@@ -35,6 +36,8 @@ export const Banner = () => {
   const [listType, setListType] = useState();
   const [currentActiveIndex, setCurrentActiveIndex] = useState(0);
   const navigate = useNavigate();
+  const { resultModal, handleToggleAutoBanner } = useModal();
+  const { stopSlider } = resultModal;
   // get type movie
   const handleGetTypeMovie = (listId, listType) => {
     let newList = [];
@@ -48,7 +51,6 @@ export const Banner = () => {
     return newList;
   };
   const handleCloseModal = (data) => {
-    console.log(data);
     setVisibleModal(data);
   };
 
@@ -104,19 +106,19 @@ export const Banner = () => {
       //     width: 1000,
       //   },
       // });
-      // handleToggleAutoBanner(true);
+      handleToggleAutoBanner(true);
     } else {
       handleOpenNotification("error", "", "Trailer is unavailable");
     }
   };
 
-  // useEffect(() => {
-  //   if (stopSlider) {
-  //     swiperRef.current.swiper.autoplay.stop();
-  //   } else {
-  //     swiperRef.current.swiper.autoplay.start();
-  //   }
-  // }, [stopSlider]);
+  useEffect(() => {
+    if (stopSlider) {
+      swiperRef.current.swiper.autoplay.stop();
+    } else {
+      swiperRef.current.swiper.autoplay.start();
+    }
+  }, [stopSlider]);
 
   useEffect(() => {
     if (listTrending?.length) {
@@ -141,7 +143,7 @@ export const Banner = () => {
   return (
     <>
       <div
-        // onMouseEnter={() => swiperRef.current.swiper.autoplay.start()}
+        onMouseEnter={() => swiperRef.current.swiper.autoplay.start()}
         className="max-h-[450px]"
       >
         <Swiper
@@ -153,8 +155,8 @@ export const Banner = () => {
           className="banner-wrapper"
           pagination={false}
           navigation={true}
-          // modules={[Autoplay, Pagination, Navigation]}
-          modules={[Pagination, Navigation]}
+          modules={[Autoplay, Pagination, Navigation]}
+          // modules={[Pagination, Navigation]}
           onSlideChange={(event) => {
             setCurrentActiveIndex(event.activeIndex);
             setListType("");
