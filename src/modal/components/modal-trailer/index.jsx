@@ -186,16 +186,19 @@ export const ModalTrailer = ({
             </Col>
             <Col span={12}>
               <div>
-                <p className="line-clamp-2">
+                <div className="flex">
                   <span className="text-[16px] mr-2">{t("Cast")}:</span>
-                  <span>
+                  <p className="line-clamp-2">
                     {listCastsMovie?.map((cast, index) => {
-                      return index < listCastsMovie.length - 1
-                        ? `${cast.name},  `
-                        : cast.name;
+                      return index < listCastsMovie.length - 1 ? (
+                        <Link to={`cast/${cast.id}`}>{`${cast.name},  `}</Link>
+                      ) : (
+                        // cast.name
+                        <Link to={`cast/${cast.id}`}>{`${cast.name}`}</Link>
+                      );
                     })}
-                  </span>
-                </p>
+                  </p>
+                </div>
                 <p className="mt-2">
                   <span className="text-[16px] mr-2">{t("Genres")}:</span>
                   <span>

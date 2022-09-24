@@ -5,7 +5,6 @@ import { Outlet, useLocation } from "react-router-dom";
 
 const HomePage = () => {
   const stateContext = useContext(UserContext);
-  const { globalLocale, setGlobalLocale } = stateContext;
   const { handleGetMovie, handleGetListTrending } = useHomePage();
 
   useEffect(() => {

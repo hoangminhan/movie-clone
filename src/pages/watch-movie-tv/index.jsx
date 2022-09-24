@@ -109,13 +109,14 @@ const WatchMovieTv = () => {
       });
       handleGetListReviews(idDetail, {
         api_key: process.env.REACT_APP_API_KEY,
-        language: locale,
+        // language: locale,
         page: 1,
       });
       setCurrentUrl(embedMovie(idDetail));
     };
     handleGetData();
   }, [idDetail]);
+  console.log({ listReviewsMovie });
   return (
     <div>
       <Row className="mr-[350px] h-full">

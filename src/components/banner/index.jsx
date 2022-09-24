@@ -20,6 +20,7 @@ import { formatNumber, getImage, handleOpenNotification } from "utils";
 import { useModal } from "hooks";
 
 export const Banner = () => {
+  console.log("banner");
   const {
     listTrending,
     handleGetTrailer,

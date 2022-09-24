@@ -13,7 +13,7 @@ import { formatNumber, getImage } from "utils";
 import "./style.scss";
 
 export const ComponentSlider = React.memo(
-  ({ dataPopular, children, title }) => {
+  ({ dataPopular, children, title, slidesPerGroup = "4" }) => {
     const navigate = useNavigate();
     return (
       <div className={`${title ? "mt-[64px]" : "mt-[128px]"}`}>
@@ -25,7 +25,7 @@ export const ComponentSlider = React.memo(
         <Swiper
           slidesPerView={7.3}
           spaceBetween={30}
-          slidesPerGroup={4}
+          // slidesPerGroup={4}
           loop={true}
           loopFillGroupWithBlank={true}
           navigation={true}

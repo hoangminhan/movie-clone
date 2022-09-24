@@ -50,7 +50,16 @@
     "Last name":"Tên",
     "Confirm Password":"Xác nhận mật khẩu",
     "Register":"Đăng ký",
-    "Already have an account":"Đã có tài khoản"
+    "Already have an account":"Đã có tài khoản",
+    "Personal info":"Thông tin cá nhân",
+    "Homepage":"Homepage",
+    "Birthday":"Ngày sinh",
+    "Place of birthday":"Nơi sinh",
+    "Gender":"Giới tính",
+    "Biography":"Tiểu sử",
+    "Read more":"Read more",
+    "Read less":"Read less",
+    "Known For":"Được biết đến"
 
 
  }

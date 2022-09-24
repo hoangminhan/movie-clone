@@ -61,7 +61,7 @@ export const useHomePage = () => {
   }, []);
 
   // get list trending all||movie || tv || person
-  const handleGetListTrending = (params, type, time) => {
+  const handleGetListTrending = (params, type, time = "week") => {
     const payload = {
       params,
       type,

@@ -49,6 +49,18 @@
     "Last name":"Last name",
     "Confirm Password":"Confirm Password",
     "Register":"Register",
-    "Already have an account":"Already have an account"
+    "Already have an account":"Already have an account",
+    "Personal info":"Personal info",
+    "Homepage":"Homepage",
+    "Birthday":"Birthday",
+    "Place of birthday":"Place of birthday",
+    "Gender":"Gender",
+    "Biography":"Biography",
+    "Read more":"Read more",
+    "Read less":"Read less",
+    "Known For":"Known for"
+
+
+
     
 }
