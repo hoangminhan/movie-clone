@@ -6,6 +6,7 @@ const NotFound = lazy(() => import("./pages/not-found"));
 const HomePage = lazy(() => import("./pages/home-page/index"));
 const LoginPage = lazy(() => import("./pages/login-page"));
 const RegisterPage = lazy(() => import("./pages/register-page"));
+const PeoplePage = lazy(() => import("./pages/people-page"));
 const CastPage = lazy(() => import("./pages/cast-page"));
 const WatchMovieTv = lazy(() => import("./pages/watch-movie-tv"));
 
@@ -53,9 +54,11 @@ let RouteList = [
       },
       {
         element: <TabTvShow />,
+        path: "/tv-show",
       },
       {
-        element: <TabSeries />,
+        element: <PeoplePage />,
+        path: "/people",
       },
     ],
   },
@@ -67,6 +70,10 @@ let RouteList = [
     path: "/register",
     element: <RegisterPage />,
   },
+  // {
+  //   path: "/people",
+  //   element: <PeoplePage />,
+  // },
   {
     path: "/cast/:idCast",
     element: (

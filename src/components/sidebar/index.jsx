@@ -10,10 +10,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { faClock, faCompass } from "@fortawesome/free-regular-svg-icons";
-import { faUserTie } from "@fortawesome/free-solid-svg-icons";
+import {
+  faRightFromBracket,
+  faRightToBracket,
+  faUserTie,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style.scss";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 // styled
 const StyledMenu = styled(Menu)`
@@ -69,6 +74,7 @@ function getItem(label, key, icon, children, title) {
 }
 
 export const Sidebar = ({ isToggle, handleToggleMenu }) => {
+  const [isLogin, setIsLogin] = useState(true);
   const { t } = useTranslation();
   const items = [
     getItem("Home", "/", <HomeOutlined />),
@@ -79,6 +85,11 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
     getItem(t("Settings"), "/settings", <SettingOutlined />, [
       getItem(t("Profile"), "account", <FontAwesomeIcon icon={faUserTie} />),
     ]),
+    getItem(
+      `${isLogin ? t("Logout") : t("Login")}`,
+      `${isLogin ? "/login" : "/login"}`,
+      <FontAwesomeIcon icon={isLogin ? faRightFromBracket : faRightToBracket} />
+    ),
   ];
   let navigate = useNavigate();
   const location = useLocation();

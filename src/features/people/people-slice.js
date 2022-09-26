@@ -3,6 +3,7 @@ import {
   getCastTranslation,
   getDetailCast,
   getMovieOfCast,
+  getPopularPeople,
   getSocialNetwork,
 } from "./api-thunk";
 
@@ -11,17 +12,39 @@ const initialState = {
   dataSocialNetwork: {},
   listMovieOfCast: [],
   dataCastTranslate: {},
+  listPopularPeople: [],
+  detailPopular: {
+    totalPage: 1,
+    page: 1,
+  },
   isLoadingPeople: false,
 };
 export const PeopleSlice = createSlice({
   name: "people",
   initialState,
   extraReducers: {
+    [getPopularPeople.pending]: (state, action) => {
+      state.isLoadingPeople = true;
+    },
+    [getPopularPeople.fulfilled]: (state, action) => {
+      const { page, results, total_pages } = action.payload;
+      state.detailPopular = {
+        ...state.detailPopular,
+        page,
+        totalPage: total_pages,
+      };
+
+      state.listPopularPeople = [...results];
+      state.isLoadingPeople = true;
+    },
+    [getPopularPeople.rejected]: (state, action) => {
+      state.isLoadingPeople = true;
+    },
     [getDetailCast.pending]: (state, action) => {
       state.isLoadingPeople = true;
     },
     [getDetailCast.fulfilled]: (state, action) => {
-      state.dataDetailCast = { ...action.payload };
+      state.listPopularPeople = { ...action.payload };
       state.isLoadingPeople = true;
     },
     [getDetailCast.rejected]: (state, action) => {

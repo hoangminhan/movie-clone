@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Tabs } from "antd";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -29,27 +29,35 @@ const StyledTabs = styled(Tabs)`
 `;
 
 export const Menu = () => {
-  const currentTab = sessionStorage.getItem("currentTab") || "/";
+  const [currentTab, setCurrentTab] = useState(
+    sessionStorage.getItem("currentTab") || "/"
+  );
   const navigate = useNavigate();
+
   const handleChangeCurrentTab = (data) => {
+    console.log({ data });
     sessionStorage.setItem("currentTab", data);
+    setCurrentTab(data);
 
     if (data === "/") {
       navigate(`/`);
+    } else if (data === "tab-people") {
+      navigate("/people");
     } else {
-      navigate(`/${data}`);
+      navigate("/tv-show");
     }
   };
   return (
     <nav className="basis-1/5">
       <StyledTabs
         defaultActiveKey={currentTab}
+        activeKey={currentTab}
         animated
         onChange={handleChangeCurrentTab}
       >
         <TabPane key={"/"} tab={"Movie"}></TabPane>
         <TabPane key={"tab-tv-show"} tab={"Tv Show"}></TabPane>
-        <TabPane key={"tab-series"} tab={"Series"}></TabPane>
+        <TabPane key={"tab-people"} tab={"People"}></TabPane>
       </StyledTabs>
     </nav>
   );

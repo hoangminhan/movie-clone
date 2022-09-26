@@ -1,6 +1,11 @@
 import axiosClient from "./axios-client";
 
 export const apiPeople = {
+  // popular people
+  getPopularPeople: (params) => {
+    const url = `person/popular`;
+    return axiosClient.get(url, { params });
+  },
   getDetailCast: (id, params) => {
     const url = `person/${id}`;
     return axiosClient.get(url, { params });

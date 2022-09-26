@@ -2,6 +2,7 @@ import {
   getCastTranslation,
   getDetailCast,
   getMovieOfCast,
+  getPopularPeople,
   getSocialNetwork,
 } from "features";
 
@@ -15,8 +16,13 @@ export const UsePeople = () => {
     dataSocialNetwork,
     listMovieOfCast,
     dataCastTranslate,
+    listPopularPeople,
+    detailPopular,
   } = resultPeople;
 
+  const handleGetListCastPopular = (params) => {
+    return dispatch(getPopularPeople(params));
+  };
   const handleGetDetailCasts = (id, params) => {
     const payload = {
       id,
@@ -51,9 +57,12 @@ export const UsePeople = () => {
     dataSocialNetwork,
     listMovieOfCast,
     dataCastTranslate,
+    listPopularPeople,
+    detailPopular,
     handleGetDetailCasts,
     handleGetSocialNetwork,
     handleGetMovieOfCast,
     handleGetDataTranslateCast,
+    handleGetListCastPopular,
   };
 };
