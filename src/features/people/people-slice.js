@@ -13,7 +13,7 @@ const initialState = {
   listMovieOfCast: [],
   dataCastTranslate: {},
   listPopularPeople: [],
-  detailPopular: {
+  detailListPeople: {
     totalPage: 1,
     page: 1,
   },
@@ -28,13 +28,15 @@ export const PeopleSlice = createSlice({
     },
     [getPopularPeople.fulfilled]: (state, action) => {
       const { page, results, total_pages } = action.payload;
-      state.detailPopular = {
-        ...state.detailPopular,
+      state.detailListPeople = {
+        ...state.detailListPeople,
         page,
         totalPage: total_pages,
       };
 
-      state.listPopularPeople = [...results];
+      state.listPopularPeople = [
+        ...results.filter((item) => item.profile_path),
+      ];
       state.isLoadingPeople = true;
     },
     [getPopularPeople.rejected]: (state, action) => {
@@ -44,7 +46,7 @@ export const PeopleSlice = createSlice({
       state.isLoadingPeople = true;
     },
     [getDetailCast.fulfilled]: (state, action) => {
-      state.listPopularPeople = { ...action.payload };
+      state.dataDetailCast = { ...action.payload };
       state.isLoadingPeople = true;
     },
     [getDetailCast.rejected]: (state, action) => {

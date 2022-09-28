@@ -17,7 +17,7 @@ export const UsePeople = () => {
     listMovieOfCast,
     dataCastTranslate,
     listPopularPeople,
-    detailPopular,
+    detailListPeople,
   } = resultPeople;
 
   const handleGetListCastPopular = (params) => {
@@ -58,7 +58,7 @@ export const UsePeople = () => {
     listMovieOfCast,
     dataCastTranslate,
     listPopularPeople,
-    detailPopular,
+    detailListPeople,
     handleGetDetailCasts,
     handleGetSocialNetwork,
     handleGetMovieOfCast,

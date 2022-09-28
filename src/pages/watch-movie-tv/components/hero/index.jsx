@@ -39,7 +39,7 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
 
           {/* name phim */}
           <div className="absolute  left-[30%] bottom-[20%] max-w-[500px] ">
-            <p className="text-white text-[40px] font-medium drop-shadow-2xl shadow-[red] line-clamp-2  p-5 ml-3 pr-0  leading-10">
+            <p className="text-white text-[40px] font-medium drop-shadow-2xl shadow-[red] line-clamp-2  p-5 ml-3 pr-0  leading-10 stroke-text">
               {dataDetail?.title
                 ? dataDetail?.title
                 : dataDetail?.original_title}
@@ -51,7 +51,7 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
             {dataDetail?.genres?.map((genre, index) => {
               return (
                 <Tooltip title={genre.name} key={index}>
-                  <p className="max-w-[140px] line-clamp-1 py-1 px-3 border-solid border-white border-[1px] mr-3 rounded-3xl text-white text-[16px] uppercase cursor-pointer hover:scale-110 duration-150">
+                  <p className="max-w-[140px] line-clamp-1 py-1 px-3 border-solid border-white border-[1px] mr-3 rounded-3xl text-white text-[16px] uppercase cursor-pointer hover:scale-110 duration-150 stroke-text-sm">
                     {genre.name}
                   </p>
                 </Tooltip>
