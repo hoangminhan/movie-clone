@@ -116,7 +116,6 @@ const WatchMovieTv = () => {
     };
     handleGetData();
   }, [idDetail]);
-  console.log({ listReviewsMovie });
   return (
     <div>
       <Row className="mr-[350px] h-full">

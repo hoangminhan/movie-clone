@@ -3,6 +3,7 @@ import {
   getDetailCast,
   getDetailMovie,
   getKeywords,
+  getListGenresMovie,
   getListReviews,
   getListTrending,
   getRecommendationMovie,
@@ -34,6 +35,7 @@ export const useHomePage = () => {
     listRecommendationMovie,
     infoTrailerMovie,
     dataDetail,
+    listGenresMovie,
   } = resultMovie;
 
   const handleGetTypeAction = (payload) => {
@@ -130,6 +132,9 @@ export const useHomePage = () => {
     };
     return dispatch(getListReviews(payload));
   };
+  const handleGetListGenresMovie = (params) => {
+    return dispatch(getListGenresMovie(params));
+  };
 
   return {
     listMovie,
@@ -146,6 +151,7 @@ export const useHomePage = () => {
     listRecommendationMovie,
     infoTrailerMovie,
     dataDetail,
+    listGenresMovie,
     handleGetDetailMovie,
     handleGetMovie,
     handleGetListTrending,
@@ -156,5 +162,6 @@ export const useHomePage = () => {
     handleGetRecommendationMovie,
     handleGetListKeywords,
     handleGetListReviews,
+    handleGetListGenresMovie,
   };
 };

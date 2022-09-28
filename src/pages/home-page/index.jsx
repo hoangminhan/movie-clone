@@ -5,7 +5,11 @@ import { Outlet, useLocation } from "react-router-dom";
 
 const HomePage = () => {
   const stateContext = useContext(UserContext);
-  const { handleGetMovie, handleGetListTrending } = useHomePage();
+  const {
+    handleGetMovie,
+    handleGetListTrending,
+    handleGetListGenresMovie,
+  } = useHomePage();
 
   useEffect(() => {
     const getDataApi = async () => {
@@ -31,6 +35,10 @@ const HomePage = () => {
       });
       await handleGetMovie("upcoming", {
         page: 1,
+        api_key: process.env.REACT_APP_API_KEY,
+        language: locale,
+      });
+      await handleGetListGenresMovie({
         api_key: process.env.REACT_APP_API_KEY,
         language: locale,
       });

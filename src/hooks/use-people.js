@@ -3,6 +3,7 @@ import {
   getDetailCast,
   getMovieOfCast,
   getPopularPeople,
+  getSearchPeople,
   getSocialNetwork,
 } from "features";
 
@@ -22,6 +23,10 @@ export const UsePeople = () => {
 
   const handleGetListCastPopular = (params) => {
     return dispatch(getPopularPeople(params));
+  };
+  // search
+  const handleGetSearchPeople = (params) => {
+    return dispatch(getSearchPeople(params));
   };
   const handleGetDetailCasts = (id, params) => {
     const payload = {
@@ -64,5 +69,6 @@ export const UsePeople = () => {
     handleGetMovieOfCast,
     handleGetDataTranslateCast,
     handleGetListCastPopular,
+    handleGetSearchPeople,
   };
 };

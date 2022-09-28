@@ -6,6 +6,10 @@ export const apiPeople = {
     const url = `person/popular`;
     return axiosClient.get(url, { params });
   },
+  getSearchPeople: (params) => {
+    const url = `search/person`;
+    return axiosClient.get(url, { params });
+  },
   getDetailCast: (id, params) => {
     const url = `person/${id}`;
     return axiosClient.get(url, { params });

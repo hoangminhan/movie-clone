@@ -109,3 +109,11 @@ export const getListReviews = createAsyncThunk(
     return response;
   }
 );
+// get list geners movie
+export const getListGenresMovie = createAsyncThunk(
+  "list-genres-movie",
+  async (params) => {
+    const response = await apiMovie.getListGenresMovie(params);
+    return response;
+  }
+);

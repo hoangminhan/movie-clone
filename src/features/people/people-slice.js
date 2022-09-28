@@ -4,6 +4,7 @@ import {
   getDetailCast,
   getMovieOfCast,
   getPopularPeople,
+  getSearchPeople,
   getSocialNetwork,
 } from "./api-thunk";
 
@@ -40,6 +41,28 @@ export const PeopleSlice = createSlice({
       state.isLoadingPeople = true;
     },
     [getPopularPeople.rejected]: (state, action) => {
+      state.isLoadingPeople = true;
+    },
+    // search
+    [getSearchPeople.pending]: (state, action) => {
+      state.isLoadingPeople = true;
+    },
+    [getSearchPeople.fulfilled]: (state, action) => {
+      console.log(action.payload);
+      const { page, results, total_pages } = action.payload;
+      state.detailListPeople = {
+        ...state.detailListPeople,
+        page,
+        totalPage: total_pages,
+      };
+
+      state.listPopularPeople = [
+        ...results.filter((item) => item.profile_path),
+      ];
+
+      state.isLoadingPeople = true;
+    },
+    [getSearchPeople.rejected]: (state, action) => {
       state.isLoadingPeople = true;
     },
     [getDetailCast.pending]: (state, action) => {

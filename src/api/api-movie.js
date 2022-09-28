@@ -39,4 +39,8 @@ export const apiMovie = {
     const url = `movie/${id}/reviews`;
     return axiosClient.get(url, { params });
   },
+  getListGenresMovie: (params) => {
+    const url = "genre/movie/list";
+    return axiosClient.get(url, { params });
+  },
 };

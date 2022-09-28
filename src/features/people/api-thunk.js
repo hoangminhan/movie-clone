@@ -9,6 +9,14 @@ export const getPopularPeople = createAsyncThunk(
     return response;
   }
 );
+// get search cast
+export const getSearchPeople = createAsyncThunk(
+  "person-search",
+  async (params) => {
+    const response = await apiPeople.getSearchPeople(params);
+    return response;
+  }
+);
 // get detail cast
 export const getDetailCast = createAsyncThunk(
   "detail-casts",
