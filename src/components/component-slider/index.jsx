@@ -23,7 +23,7 @@ export const ComponentSlider = React.memo(
           </p>
         </div>
         <Swiper
-          slidesPerView={7.3}
+          slidesPerView={6.3}
           spaceBetween={30}
           // slidesPerGroup={4}
           loop={true}

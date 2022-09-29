@@ -1,43 +1,48 @@
 import { Collapse, Select } from "antd";
+import { t } from "i18next";
 import React from "react";
 
 const { Panel } = Collapse;
 const { Option } = Select;
 
 const filterOption = [
-  { name: "Popularity Descending", value: 0 },
-  { name: "Popularity Ascending", value: 1 },
-  { name: "Rating Descending", value: 2 },
-  { name: "Rating Ascending", value: 3 },
-  { name: "Release date Descending", value: 4 },
-  { name: "Release date Ascending", value: 5 },
-  { name: "Title (A-Z)", value: 6 },
-  { name: "Title (Z-A)", value: 7 },
+  { name: "Popularity Descending", value: "popularity.desc" },
+  { name: "Popularity Ascending", value: "popularity.asc" },
+  { name: "Rating Descending", value: "vote_count.desc" },
+  { name: "Rating Ascending", value: "vote_count.asc" },
+  { name: "Release date Descending", value: "release_date.desc" },
+  { name: "Release date Ascending", value: "release_date.asc" },
+  { name: "Title (A-Z)", value: "original_title.asc" },
+  { name: "Title (Z-A)", value: "original_title.desc" },
 ];
 
-export const Filter = ({ listGenresMovie }) => {
+export const Filter = ({ listGenresMovie, handleFilter }) => {
   console.log({ listGenresMovie });
-  const onChange = (key) => {
-    console.log(key);
+
+  const handleSelectSort = (data) => {
+    console.log({ data });
+    handleFilter(data);
   };
   return (
     <div>
       <div className="rounded-lg overflow-hidden">
         <Collapse
           defaultActiveKey={["1"]}
-          onChange={onChange}
+          // onChange={onChange}
           expandIconPosition="end"
         >
           <Panel
             header={
               <div className="">
-                <p className="text-black text-[20px] font-medium">Sort</p>
+                <p className="text-black text-[20px] font-medium">
+                  {t("Sort")}
+                </p>
               </div>
             }
             key="1"
           >
             <div className="text-[red]">
-              <p className="text-black text-[18px]">Sort Results By</p>
+              <p className="text-black text-[18px]">{t("Sort Results By")}</p>
               <div className="mt-2">
                 <Select
                   defaultValue={filterOption[0].value}
@@ -45,10 +50,11 @@ export const Filter = ({ listGenresMovie }) => {
                     width: "100%",
                   }}
                   //   onChange={handleChange}
+                  onSelect={handleSelectSort}
                 >
-                  {filterOption.map((option) => (
+                  {filterOption?.map((option) => (
                     <Option key={option.value} value={option.value}>
-                      {option.name}
+                      {t(`${option.name}`)}
                     </Option>
                   ))}
                 </Select>
@@ -60,26 +66,28 @@ export const Filter = ({ listGenresMovie }) => {
       <div className="mt-5 rounded-lg overflow-hidden">
         <Collapse
           defaultActiveKey={["1"]}
-          onChange={onChange}
+          // onChange={onChange}
           expandIconPosition="end"
         >
           <Panel
             header={
               <div className="">
-                <p className="text-black text-[20px] font-medium">Filters</p>
+                <p className="text-black text-[20px] font-medium">
+                  {t("Filters")}
+                </p>
               </div>
             }
             key="1"
           >
             <div className="">
-              <p className="text-black mb-4 text-[18px]">Genres</p>
-              <div className="max-h-[150px] overflow-y-scroll flex flex-wrap gap-1">
-                {listGenresMovie.map((genres, index) => (
+              <p className="text-black mb-4 text-[18px]">{t("Genres")}</p>
+              <div className="max-h-[150px] overflow-y-scroll flex flex-wrap gap-2 scroll-b scroll-custom">
+                {listGenresMovie?.map((genres, index) => (
                   <p
                     key={genres.id}
-                    className="text-black rounded-md px-2 bg-slate-500 cursor-pointer"
+                    className="text-black rounded-md px-2 bg-slate-500 cursor-pointer line-clamp-1"
                   >
-                    {genres.name}
+                    {genres.name.replace("Phim", "")}
                   </p>
                 ))}
               </div>

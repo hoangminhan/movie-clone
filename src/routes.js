@@ -7,6 +7,7 @@ const HomePage = lazy(() => import("./pages/home-page/index"));
 const LoginPage = lazy(() => import("./pages/login-page"));
 const RegisterPage = lazy(() => import("./pages/register-page"));
 const PeoplePage = lazy(() => import("./pages/people-page"));
+const DiscoveryPage = lazy(() => import("./pages/discovery-page"));
 const CastPage = lazy(() => import("./pages/cast-page"));
 const WatchMovieTv = lazy(() => import("./pages/watch-movie-tv"));
 
@@ -70,10 +71,14 @@ let RouteList = [
     path: "/register",
     element: <RegisterPage />,
   },
-  // {
-  //   path: "/people",
-  //   element: <PeoplePage />,
-  // },
+  {
+    path: "/discovery",
+    element: (
+      <DefaultLayout showTab>
+        <DiscoveryPage />
+      </DefaultLayout>
+    ),
+  },
   {
     path: "/cast/:idCast",
     element: (

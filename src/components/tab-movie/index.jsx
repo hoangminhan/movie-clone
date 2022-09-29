@@ -15,15 +15,12 @@ export const TabMovie = React.memo(() => {
   return (
     <>
       <Row gutter={[12, 12]}>
-        <Col span={20}>
+        <Col span={24}>
           <Banner />
           <ComponentSlider dataPopular={listMovie} />
           <ComponentSlider dataPopular={listMovieUpComing} title="Up Coming" />
           <ComponentSlider dataPopular={listTrending} title="Trending" />
           <ComponentSlider dataPopular={listMovieTopRated} title="Top Rated" />
-        </Col>
-        <Col span={4}>
-          <Filter listGenresMovie={listGenresMovie} />
         </Col>
       </Row>
     </>
