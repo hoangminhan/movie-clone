@@ -2,6 +2,7 @@ import {
   getCastsMovie,
   getDetailCast,
   getDetailMovie,
+  getDiscoverMovie,
   getKeywords,
   getListGenresMovie,
   getListReviews,
@@ -36,6 +37,7 @@ export const useHomePage = () => {
     infoTrailerMovie,
     dataDetail,
     listGenresMovie,
+    dataDiscoverMovie,
   } = resultMovie;
 
   const handleGetTypeAction = (payload) => {
@@ -89,6 +91,7 @@ export const useHomePage = () => {
     };
     return dispatch(getSimilarMovie(payload));
   };
+
   // recommmendation movie
   const handleGetRecommendationMovie = (id, params) => {
     const payload = {
@@ -110,6 +113,7 @@ export const useHomePage = () => {
       return dispatch(getTrailerTvShow(payload));
     }
   };
+
   const handleGetListCasts = (id, params) => {
     const payload = {
       id,
@@ -125,6 +129,7 @@ export const useHomePage = () => {
     };
     return dispatch(getKeywords(payload));
   };
+
   const handleGetListReviews = (id, params) => {
     const payload = {
       id,
@@ -132,8 +137,13 @@ export const useHomePage = () => {
     };
     return dispatch(getListReviews(payload));
   };
+
   const handleGetListGenresMovie = (params) => {
     return dispatch(getListGenresMovie(params));
+  };
+  // get dicover
+  const handleGetDiscoverMovie = (params) => {
+    return dispatch(getDiscoverMovie(params));
   };
 
   return {
@@ -152,6 +162,7 @@ export const useHomePage = () => {
     infoTrailerMovie,
     dataDetail,
     listGenresMovie,
+    dataDiscoverMovie,
     handleGetDetailMovie,
     handleGetMovie,
     handleGetListTrending,
@@ -163,5 +174,6 @@ export const useHomePage = () => {
     handleGetListKeywords,
     handleGetListReviews,
     handleGetListGenresMovie,
+    handleGetDiscoverMovie,
   };
 };

@@ -1,6 +1,9 @@
 import { Collapse, Select } from "antd";
 import { t } from "i18next";
 import React from "react";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import styled from "styled-components";
 
 const { Panel } = Collapse;
 const { Option } = Select;
@@ -15,18 +18,51 @@ const filterOption = [
   { name: "Title (A-Z)", value: "original_title.asc" },
   { name: "Title (Z-A)", value: "original_title.desc" },
 ];
+const StyledCollapse = styled(Collapse)`
+  &.ant-collapse {
+    background-color: #333335;
+    border-color: #333335;
+  }
+  .ant-collapse-content > .ant-collapse-content-box {
+    background-color: #333335;
+  }
+  &.ant-collapse > .ant-collapse-item {
+    border-bottom: none;
+  }
+`;
 
-export const Filter = ({ listGenresMovie, handleFilter }) => {
+const handleCheckActiveGenres = (Genres, datacheck) => {
+  console.log({ Genres, datacheck });
+  console.log("Genres.includes(datacheck)", Genres.includes(datacheck));
+  const newGenres = Genres.map((str) => {
+    return Number(str);
+  });
+  console.log(newGenres);
+  return newGenres.includes(+datacheck);
+};
+
+export const Filter = ({
+  listGenresMovie,
+  handleSelectSort,
+  filters,
+  handleChangeFilterGenres,
+  handleDeleteFilter,
+}) => {
   console.log({ listGenresMovie });
+  const [isVisibleSelect, setIsVisibleSelect] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams({});
+  const [listGenres, setListGenres] = useState(
+    filters?.with_genres?.length > 0 ? [...filters.with_genres] : []
+  );
+  console.log({ listGenres });
 
-  const handleSelectSort = (data) => {
-    console.log({ data });
-    handleFilter(data);
+  const handleSelectSortDiscover = (data) => {
+    handleSelectSort(data);
   };
   return (
     <div>
-      <div className="rounded-lg overflow-hidden">
-        <Collapse
+      <div className="rounded-lg overflow-hidden bg-[#333335]">
+        <StyledCollapse
           defaultActiveKey={["1"]}
           // onChange={onChange}
           expandIconPosition="end"
@@ -34,7 +70,7 @@ export const Filter = ({ listGenresMovie, handleFilter }) => {
           <Panel
             header={
               <div className="">
-                <p className="text-black text-[20px] font-medium">
+                <p className="text-white text-[20px] font-medium">
                   {t("Sort")}
                 </p>
               </div>
@@ -42,15 +78,14 @@ export const Filter = ({ listGenresMovie, handleFilter }) => {
             key="1"
           >
             <div className="text-[red]">
-              <p className="text-black text-[18px]">{t("Sort Results By")}</p>
+              <p className="text-white text-[18px]">{t("Sort Results By")}</p>
               <div className="mt-2">
                 <Select
-                  defaultValue={filterOption[0].value}
+                  defaultValue={filters.sort_by}
                   style={{
                     width: "100%",
                   }}
-                  //   onChange={handleChange}
-                  onSelect={handleSelectSort}
+                  onChange={handleSelectSortDiscover}
                 >
                   {filterOption?.map((option) => (
                     <Option key={option.value} value={option.value}>
@@ -61,10 +96,10 @@ export const Filter = ({ listGenresMovie, handleFilter }) => {
               </div>
             </div>
           </Panel>
-        </Collapse>
+        </StyledCollapse>
       </div>
       <div className="mt-5 rounded-lg overflow-hidden">
-        <Collapse
+        <StyledCollapse
           defaultActiveKey={["1"]}
           // onChange={onChange}
           expandIconPosition="end"
@@ -72,7 +107,7 @@ export const Filter = ({ listGenresMovie, handleFilter }) => {
           <Panel
             header={
               <div className="">
-                <p className="text-black text-[20px] font-medium">
+                <p className="text-white text-[20px] font-medium">
                   {t("Filters")}
                 </p>
               </div>
@@ -80,12 +115,43 @@ export const Filter = ({ listGenresMovie, handleFilter }) => {
             key="1"
           >
             <div className="">
-              <p className="text-black mb-4 text-[18px]">{t("Genres")}</p>
+              <p className="text-white mb-4 text-[18px]">{t("Genres")}</p>
               <div className="max-h-[150px] overflow-y-scroll flex flex-wrap gap-2 scroll-b scroll-custom">
                 {listGenresMovie?.map((genres, index) => (
                   <p
                     key={genres.id}
-                    className="text-black rounded-md px-2 bg-slate-500 cursor-pointer line-clamp-1"
+                    className={`text-white rounded-md px-2 bg-slate-500 cursor-pointer line-clamp-1 hover:bg-[#01b4e4] hover:text-white
+                    ${
+                      handleCheckActiveGenres(listGenres, genres.id)
+                        ? "bg-[#01b4e4]"
+                        : ""
+                    }
+                    `}
+                    onClick={() => {
+                      if (listGenres.length === 0) {
+                        setListGenres([genres.id]);
+                        handleChangeFilterGenres(genres.id);
+                      } else {
+                        const newGenres = listGenres.map((str) => {
+                          return Number(str);
+                        });
+                        if (newGenres.includes(genres.id)) {
+                          setListGenres((PreState) => {
+                            console.log(PreState);
+                            const newState = PreState.map((str) => {
+                              return Number(str);
+                            });
+                            return newState.filter(
+                              (item) => item !== genres.id
+                            );
+                          });
+                          handleDeleteFilter(genres.id);
+                        } else {
+                          setListGenres([...listGenres, genres.id]);
+                          handleChangeFilterGenres(genres.id);
+                        }
+                      }
+                    }}
                   >
                     {genres.name.replace("Phim", "")}
                   </p>
@@ -93,7 +159,7 @@ export const Filter = ({ listGenresMovie, handleFilter }) => {
               </div>
             </div>
           </Panel>
-        </Collapse>
+        </StyledCollapse>
       </div>
     </div>
   );

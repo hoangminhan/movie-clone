@@ -5,6 +5,7 @@ import facebookImg from "./facebook.png";
 import facebookContact from "./facebook_contact.png";
 import instagramImg from "./instagram.png";
 import twitterkImg from "./twitter.png";
+import Img404 from "./404.jpg";
 import videoBacground from "./videos/movie-bacground.mp4";
 import trailerMovie from "./videos/trailer-movie.mp4";
 const iconImg = {
@@ -17,5 +18,6 @@ const iconImg = {
   instagramImg,
   twitterkImg,
   facebookImg,
+  Img404,
 };
 export default iconImg;

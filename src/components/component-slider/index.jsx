@@ -14,7 +14,6 @@ import "./style.scss";
 
 export const ComponentSlider = React.memo(
   ({ dataPopular, children, title, slidesPerGroup = "4" }) => {
-    const navigate = useNavigate();
     return (
       <div className={`${title ? "mt-[64px]" : "mt-[128px]"}`}>
         <div>
@@ -23,7 +22,7 @@ export const ComponentSlider = React.memo(
           </p>
         </div>
         <Swiper
-          slidesPerView={6.3}
+          slidesPerView={7.3}
           spaceBetween={30}
           // slidesPerGroup={4}
           loop={true}

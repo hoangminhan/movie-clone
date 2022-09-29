@@ -9,7 +9,6 @@ export const TabMovie = React.memo(() => {
     listTrending,
     listMovieTopRated,
     listMovieUpComing,
-    listGenresMovie,
   } = useHomePage();
 
   return (

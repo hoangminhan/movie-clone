@@ -1,9 +1,10 @@
 import { Avatar, Button } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 export const Profile = () => {
+  const [t] = useTranslation();
   const isLogin = localStorage.getItem("accessToken") || "";
   return isLogin ? (
     <Avatar
@@ -14,7 +15,7 @@ export const Profile = () => {
   ) : (
     <Link to="/login">
       <p className="px-3  bg-primary rounded-3xl hover:scale-110 duration-200 flex items-center justify-center">
-        <button className="text-white text-[20px]">Login</button>
+        <button className="text-white text-[20px]">{t("Login")}</button>
       </p>
     </Link>
   );

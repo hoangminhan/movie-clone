@@ -26,7 +26,7 @@ export const DefaultLayout = ({ children, showTab = false }) => {
         }`}
       >
         <section
-          className={`${
+          className={`px-[24px] ${
             pathname === "/" ||
             pathname === "/tv-show" ||
             pathname === "/people"

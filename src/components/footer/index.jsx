@@ -9,14 +9,17 @@ import { Col, Row } from "antd";
 // import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 
 export const Footer = ({ toggleMenu }) => {
+  const location = useLocation();
+  const { pathname } = location;
   const { t } = useTranslation();
   return (
     <div
-      className={`left-0 right-0 mr-[350px] h-[260px] max-h-[260px] bg-[#1c1c1e] border-t-[1px] border-[#ccc] duration-300 ease-in-out ${
+      className={`left-0 right-0 h-[260px] max-h-[260px] bg-[#1c1c1e] border-t-[1px] border-[#ccc] duration-300 ease-in-out ${
         !toggleMenu ? "pl-[310px]" : "pl-[130px]"
-      }`}
+      } ${pathname === "/movie" ? "mr-[350px]" : ""}`}
     >
       <div className="pt-[64px] flex gap-8 text-white text-[30px] cursor-pointer ">
         <FontAwesomeIcon icon={faFacebookF} className="hover:text-[#ccc]" />

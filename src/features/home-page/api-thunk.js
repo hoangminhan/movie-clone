@@ -1,4 +1,4 @@
-import { apiMovie, apiTrending, ApiTvShow } from "api";
+import { apiDiscovery, apiMovie, apiTrending, ApiTvShow } from "api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const handleGetListMovie = createAsyncThunk(
@@ -114,6 +114,14 @@ export const getListGenresMovie = createAsyncThunk(
   "list-genres-movie",
   async (params) => {
     const response = await apiMovie.getListGenresMovie(params);
+    return response;
+  }
+);
+// get list discover movie
+export const getDiscoverMovie = createAsyncThunk(
+  "list-discover-movie",
+  async (params) => {
+    const response = await apiDiscovery.getDiscoverMovie(params);
     return response;
   }
 );

@@ -3,6 +3,7 @@ import {
   getCastsMovie,
   getDetail,
   getDetailMovie,
+  getDiscoverMovie,
   getKeywords,
   getListGenresMovie,
   getListReviews,
@@ -25,6 +26,7 @@ const initialState = {
   listReviewsMovie: {},
   infoTrailerMovie: {},
   listGenresMovie: [],
+  dataDiscoverMovie: {},
   isLoading: false,
   detail: {
     currentPage: 1,
@@ -200,6 +202,20 @@ export const movieSlice = createSlice({
       state.isLoading = false;
     },
     [getListGenresMovie.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    // list discover movie
+    [getDiscoverMovie.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [getDiscoverMovie.fulfilled]: (state, action) => {
+      const { results } = action.payload;
+      // const newResult = results.filter((item) => item.poster_path);
+      // state.dataDiscoverMovie = { ...action.payload, results: [...newResult] };
+      state.dataDiscoverMovie = { ...action.payload };
+      state.isLoading = false;
+    },
+    [getDiscoverMovie.rejected]: (state, action) => {
       state.isLoading = false;
     },
   },

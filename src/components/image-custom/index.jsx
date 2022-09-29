@@ -12,7 +12,7 @@ export const ImageCustom = ({
 }) => {
   return (
     <LazyLoadImage
-      className="w-full"
+      className="h-[100%]"
       {...props}
       src={src}
       alt={alt}
