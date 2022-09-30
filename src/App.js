@@ -7,8 +7,13 @@ import "./App.less";
 import { useContext, useLayoutEffect } from "react";
 import { useEffect } from "react";
 import { UserContext } from "contexts";
+import { ConfigProvider } from "antd";
+import viVN from "antd/es/locale/vi_VN";
+import enUS from "antd/es/locale/en_US";
 
 function App() {
+  const stateContext = useContext(UserContext);
+  const { globalLocale, setGlobalLocale } = stateContext;
   let mainContent = useRoutes(RouteList);
   const location = useLocation();
 
@@ -27,8 +32,9 @@ function App() {
   }, []);
 
   return (
-    <div className="text-2xl text-[#989898] font-poppin">
-      {/* <Routes>
+    <ConfigProvider locale={globalLocale === "vi-VN" ? viVN : enUS}>
+      <div className="text-2xl text-[#989898] font-poppin">
+        {/* <Routes>
         {RouteList.map((item, index) => {
           let Page = item.component;
           const checkLayout = item.layout;
@@ -58,8 +64,9 @@ function App() {
           );
         })}
       </Routes> */}
-      {mainContent}
-    </div>
+        {mainContent}
+      </div>
+    </ConfigProvider>
   );
 }
 

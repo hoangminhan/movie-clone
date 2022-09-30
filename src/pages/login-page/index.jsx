@@ -43,13 +43,9 @@ const StyleInputPassword = styled(Input.Password)`
 
 const LoginPage = () => {
   const [t] = useTranslation();
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
+  const onFinish = (values) => {};
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
+  const onFinishFailed = (errorInfo) => {};
   return (
     <div>
       <video

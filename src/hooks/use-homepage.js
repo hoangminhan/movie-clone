@@ -1,10 +1,12 @@
 import {
   getCastsMovie,
   getDetailCast,
+  getDetailKeyword,
   getDetailMovie,
   getDiscoverMovie,
   getKeywords,
   getListGenresMovie,
+  getListMovieKeyword,
   getListReviews,
   getListTrending,
   getRecommendationMovie,
@@ -38,6 +40,8 @@ export const useHomePage = () => {
     dataDetail,
     listGenresMovie,
     dataDiscoverMovie,
+    listMovieKeyword,
+    dataDetailKeyword,
   } = resultMovie;
 
   const handleGetTypeAction = (payload) => {
@@ -129,6 +133,22 @@ export const useHomePage = () => {
     };
     return dispatch(getKeywords(payload));
   };
+  // list movie keyword
+  const handleGetListMovieKeyword = (id, params) => {
+    const payload = {
+      id,
+      params,
+    };
+    return dispatch(getListMovieKeyword(payload));
+  };
+  // detail keyword
+  const handleGetDetailKeyword = (id, params) => {
+    const payload = {
+      id,
+      params,
+    };
+    return dispatch(getDetailKeyword(payload));
+  };
 
   const handleGetListReviews = (id, params) => {
     const payload = {
@@ -163,6 +183,8 @@ export const useHomePage = () => {
     dataDetail,
     listGenresMovie,
     dataDiscoverMovie,
+    listMovieKeyword,
+    dataDetailKeyword,
     handleGetDetailMovie,
     handleGetMovie,
     handleGetListTrending,
@@ -175,5 +197,7 @@ export const useHomePage = () => {
     handleGetListReviews,
     handleGetListGenresMovie,
     handleGetDiscoverMovie,
+    handleGetListMovieKeyword,
+    handleGetDetailKeyword,
   };
 };

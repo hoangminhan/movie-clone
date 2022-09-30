@@ -1,6 +1,6 @@
 import { store } from "app/store";
 import { LoadingSuspense } from "components";
-import { Suspense } from "react";
+import { Suspense, useContext } from "react";
 import ReactDOM from "react-dom/client";
 import { I18nextProvider } from "react-i18next";
 import { Provider } from "react-redux";

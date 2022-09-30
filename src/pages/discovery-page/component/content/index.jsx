@@ -84,7 +84,7 @@ export const ContentDiscovery = ({
                       className="hover:scale-110 duration-200 cursor-pointer relative rounded-b-lg rounded-tl-lg overflow-hidden"
                     >
                       <Link to={`/movie/${itemMovie.id}`}>
-                        <div>
+                        <div className="h-[100%] flex flex-col">
                           <ImageCustom
                             src={
                               !getImage(itemMovie.poster_path, "w185").includes(
@@ -95,7 +95,7 @@ export const ContentDiscovery = ({
                             }
                             width="185px"
                             height="100%"
-                            className="rounded-b-lg"
+                            className="rounded-b-lg grow-[1]"
                           />
                           <Tooltip title={itemMovie.title}>
                             <p className="pt-2 text-center text-[18px] max-w-[185px] bg-[#1c1c1e] line-clamp-1">

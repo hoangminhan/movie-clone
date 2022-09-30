@@ -1,4 +1,10 @@
-import { apiDiscovery, apiMovie, apiTrending, ApiTvShow } from "api";
+import {
+  apiDiscovery,
+  apiKeyword,
+  apiMovie,
+  apiTrending,
+  ApiTvShow,
+} from "api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const handleGetListMovie = createAsyncThunk(
@@ -85,6 +91,24 @@ export const getCastsMovie = createAsyncThunk(
   async (payload) => {
     const { id, params } = payload;
     const response = await apiMovie.getCastsMovie(id, params);
+    return response;
+  }
+);
+// keyword
+export const getListMovieKeyword = createAsyncThunk(
+  "list-movie-keyword",
+  async (payload) => {
+    const { id, params } = payload;
+    const response = await apiKeyword.getListMovieKeyword(id, params);
+    return response;
+  }
+);
+// detail keyword
+export const getDetailKeyword = createAsyncThunk(
+  "detail-keyword",
+  async (payload) => {
+    const { id, params } = payload;
+    const response = await apiKeyword.getDetailKeyword(id, params);
     return response;
   }
 );

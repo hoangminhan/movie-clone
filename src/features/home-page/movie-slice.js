@@ -2,10 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   getCastsMovie,
   getDetail,
+  getDetailKeyword,
   getDetailMovie,
   getDiscoverMovie,
   getKeywords,
   getListGenresMovie,
+  getListMovieKeyword,
   getListReviews,
   getListTrending,
   getRecommendationMovie,
@@ -27,6 +29,8 @@ const initialState = {
   infoTrailerMovie: {},
   listGenresMovie: [],
   dataDiscoverMovie: {},
+  listMovieKeyword: {},
+  dataDetailKeyword: {},
   isLoading: false,
   detail: {
     currentPage: 1,
@@ -216,6 +220,28 @@ export const movieSlice = createSlice({
       state.isLoading = false;
     },
     [getDiscoverMovie.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    // list  movie keyword
+    [getListMovieKeyword.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [getListMovieKeyword.fulfilled]: (state, action) => {
+      state.listMovieKeyword = { ...action.payload };
+      state.isLoading = false;
+    },
+    [getListMovieKeyword.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    // list  detail keyword
+    [getDetailKeyword.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [getDetailKeyword.fulfilled]: (state, action) => {
+      state.dataDetailKeyword = { ...action.payload };
+      state.isLoading = false;
+    },
+    [getDetailKeyword.rejected]: (state, action) => {
       state.isLoading = false;
     },
   },

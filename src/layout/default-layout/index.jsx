@@ -2,7 +2,7 @@ import { Footer, Header, Sidebar } from "components";
 import { useLayoutEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-export const DefaultLayout = ({ children, showTab = false }) => {
+export const DefaultLayout = ({ children, showTab = false, page }) => {
   const location = useLocation();
   const { pathname } = location;
   const [toggleMenu, setToggleMenu] = useState(
@@ -34,7 +34,7 @@ export const DefaultLayout = ({ children, showTab = false }) => {
               : ""
           }`}
         >
-          {showTab && <Header />}
+          {<Header page={page} />}
           {children}
         </section>
       </div>

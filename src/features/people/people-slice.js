@@ -48,7 +48,6 @@ export const PeopleSlice = createSlice({
       state.isLoadingPeople = true;
     },
     [getSearchPeople.fulfilled]: (state, action) => {
-      console.log(action.payload);
       const { page, results, total_pages } = action.payload;
       state.detailListPeople = {
         ...state.detailListPeople,

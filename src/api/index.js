@@ -6,3 +6,4 @@ export * from "./api-discovery";
 export * from "./api-trendning";
 
 export * from "./api-people";
+export * from "./api-keyword";

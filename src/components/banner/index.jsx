@@ -200,14 +200,17 @@ export const Banner = () => {
                     {/* genres */}
                     {listType?.length ? (
                       <div className="mt-7 flex gap-3">
-                        {listType?.map((item, index) => (
-                          <p
-                            key={index}
-                            className="bg-zinc-900  px-2 border-[#ccc] backdrop-opacity-5 text-[18px] border-[1px] border-solid rounded-xl"
-                          >
-                            <span className="text-[#dcd4d4]">{item}</span>
-                          </p>
-                        ))}
+                        {listType?.map((item, index) => {
+                          console.log({ item });
+                          return (
+                            <p
+                              key={index}
+                              className="bg-zinc-900  px-2 border-[#ccc] backdrop-opacity-5 text-[18px] border-[1px] border-solid rounded-xl"
+                            >
+                              <span className="text-[#dcd4d4]">{item}</span>
+                            </p>
+                          );
+                        })}
                       </div>
                     ) : (
                       ""

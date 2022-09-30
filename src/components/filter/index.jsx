@@ -1,5 +1,6 @@
-import { Collapse, Select } from "antd";
+import { Collapse, DatePicker, Select } from "antd";
 import { t } from "i18next";
+import moment from "moment";
 import React from "react";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -13,10 +14,10 @@ const filterOption = [
   { name: "Popularity Ascending", value: "popularity.asc" },
   { name: "Rating Descending", value: "vote_count.desc" },
   { name: "Rating Ascending", value: "vote_count.asc" },
-  { name: "Release date Descending", value: "release_date.desc" },
-  { name: "Release date Ascending", value: "release_date.asc" },
-  { name: "Title (A-Z)", value: "original_title.asc" },
-  { name: "Title (Z-A)", value: "original_title.desc" },
+  // { name: "Release date Descending", value: "release_date.desc" },
+  // { name: "Release date Ascending", value: "release_date.asc" },
+  // { name: "Title (A-Z)", value: "original_title.asc" },
+  // { name: "Title (Z-A)", value: "original_title.desc" },
 ];
 const StyledCollapse = styled(Collapse)`
   &.ant-collapse {
@@ -32,12 +33,9 @@ const StyledCollapse = styled(Collapse)`
 `;
 
 const handleCheckActiveGenres = (Genres, datacheck) => {
-  console.log({ Genres, datacheck });
-  console.log("Genres.includes(datacheck)", Genres.includes(datacheck));
   const newGenres = Genres.map((str) => {
     return Number(str);
   });
-  console.log(newGenres);
   return newGenres.includes(+datacheck);
 };
 
@@ -47,14 +45,14 @@ export const Filter = ({
   filters,
   handleChangeFilterGenres,
   handleDeleteFilter,
+  handleChangeFilterDate,
+  handelClearFilter,
 }) => {
-  console.log({ listGenresMovie });
   const [isVisibleSelect, setIsVisibleSelect] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams({});
   const [listGenres, setListGenres] = useState(
     filters?.with_genres?.length > 0 ? [...filters.with_genres] : []
   );
-  console.log({ listGenres });
 
   const handleSelectSortDiscover = (data) => {
     handleSelectSort(data);
@@ -81,7 +79,7 @@ export const Filter = ({
               <p className="text-white text-[18px]">{t("Sort Results By")}</p>
               <div className="mt-2">
                 <Select
-                  defaultValue={filters.sort_by}
+                  value={filters.sort_by}
                   style={{
                     width: "100%",
                   }}
@@ -114,6 +112,7 @@ export const Filter = ({
             }
             key="1"
           >
+            {/* genres */}
             <div className="">
               <p className="text-white mb-4 text-[18px]">{t("Genres")}</p>
               <div className="max-h-[150px] overflow-y-scroll flex flex-wrap gap-2 scroll-b scroll-custom">
@@ -137,7 +136,6 @@ export const Filter = ({
                         });
                         if (newGenres.includes(genres.id)) {
                           setListGenres((PreState) => {
-                            console.log(PreState);
                             const newState = PreState.map((str) => {
                               return Number(str);
                             });
@@ -157,6 +155,53 @@ export const Filter = ({
                   </p>
                 ))}
               </div>
+            </div>
+            {/* search all releases */}
+            <div className="mt-5 ">
+              <p className="text-white mb-4 text-[18px]">
+                {t("Search all releases")}
+              </p>
+              <div>
+                <p className="mb-1">{t("From date:")}</p>
+                <div>
+                  <DatePicker
+                    style={{ width: "100%" }}
+                    onChange={(date, dateString) => {
+                      handleChangeFilterDate(dateString, "from");
+                    }}
+                    format="YYYY-MM-DD"
+                    allowClear={false}
+                  />
+                </div>
+              </div>
+              <div className="mt-3">
+                <p className="mb-1">{t("To date:")}</p>
+                <div>
+                  <DatePicker
+                    style={{ width: "100%" }}
+                    onChange={(date, dateString) => {
+                      handleChangeFilterDate(dateString, "to");
+                    }}
+                    defaultPickerValue={moment(new Date(), "YYYY-MM-DD")}
+                    defaultValue={moment(new Date(), "YYYY-MM-DD")}
+                    format="YYYY-MM-DD"
+                    allowClear={false}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* clear filter */}
+
+            <div className="mt-4 w-[full]">
+              <button
+                className="text-white bg-primary w-[100%] h-[30px] rounded-md cursor-pointer"
+                onClick={() => {
+                  handelClearFilter();
+                }}
+              >
+                {t("Clear")}
+              </button>
             </div>
           </Panel>
         </StyledCollapse>

@@ -121,7 +121,7 @@ const PeoplePage = () => {
           {listPopularPeople.map((people, index) => {
             return (
               <Link to={`/cast/${people.id}`} key={index}>
-                <div className="rounded-lg overflow-hidden">
+                <div className="rounded-lg overflow-hidden hover:scale-110 duration-200">
                   <Card
                     hoverable
                     style={{

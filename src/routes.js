@@ -8,6 +8,7 @@ const LoginPage = lazy(() => import("./pages/login-page"));
 const RegisterPage = lazy(() => import("./pages/register-page"));
 const PeoplePage = lazy(() => import("./pages/people-page"));
 const DiscoveryPage = lazy(() => import("./pages/discovery-page"));
+const KeywordPage = lazy(() => import("./pages/keyword-page"));
 const CastPage = lazy(() => import("./pages/cast-page"));
 const WatchMovieTv = lazy(() => import("./pages/watch-movie-tv"));
 
@@ -74,8 +75,16 @@ let RouteList = [
   {
     path: "/discovery",
     element: (
-      <DefaultLayout showTab>
+      <DefaultLayout page="discovery">
         <DiscoveryPage />
+      </DefaultLayout>
+    ),
+  },
+  {
+    path: "/keyword/:idKeyword/movie",
+    element: (
+      <DefaultLayout page="keyword">
+        <KeywordPage />
       </DefaultLayout>
     ),
   },

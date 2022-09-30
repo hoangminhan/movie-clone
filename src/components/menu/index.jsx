@@ -35,7 +35,6 @@ export const Menu = () => {
   const navigate = useNavigate();
 
   const handleChangeCurrentTab = (data) => {
-    console.log({ data });
     sessionStorage.setItem("currentTab", data);
     setCurrentTab(data);
 

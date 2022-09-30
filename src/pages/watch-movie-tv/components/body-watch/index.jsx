@@ -122,11 +122,22 @@ export const BodyWatch = ({
             {/* key words */}
             <div className="flex flex-wrap gap-2 text-[14px] text-yellow-200 mt-8">
               <p className="text-[18px]">{t("Keywords")}:</p>
-              {listKeywordsMovie.map((keyword) => (
-                <Tooltip key={keyword.id} title={keyword.name}>
-                  <p className="underline cursor-pointer">{keyword.name}</p>
-                </Tooltip>
-              ))}
+              {listKeywordsMovie.map((keyword) => {
+                const nameKeyword = keyword.name;
+                console.log({ keyword });
+                return (
+                  <Tooltip key={keyword.id} title={keyword.name}>
+                    <Link
+                      to={{
+                        pathname: `/keyword/${keyword.id}/movie`,
+                      }}
+                      state={{ nameKeyword } ? nameKeyword : "sdasdsd"}
+                    >
+                      <p className="underline cursor-pointer">{keyword.name}</p>
+                    </Link>
+                  </Tooltip>
+                );
+              })}
             </div>
           </div>
         ) : (

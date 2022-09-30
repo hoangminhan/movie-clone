@@ -35,7 +35,6 @@ const CastPage = () => {
   const executeOnClick = (isExpandedCurrent) => {
     setIsExpand(isExpandedCurrent);
   };
-  console.log({ dataDetailCast, dataSocialNetwork, listMovieOfCast });
 
   useLayoutEffect(() => {
     const getData = async () => {
