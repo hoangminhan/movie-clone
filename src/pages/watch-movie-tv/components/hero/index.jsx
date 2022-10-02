@@ -4,6 +4,7 @@ import { Skeleton, Tooltip } from "antd";
 import { ButtonAddList, ImageCustom } from "components";
 import { useHomePage } from "hooks/use-homepage";
 import { t } from "i18next";
+import { Link } from "react-router-dom";
 import { embedMovie, getImage } from "utils";
 
 export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
@@ -51,9 +52,14 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
             {dataDetail?.genres?.map((genre, index) => {
               return (
                 <Tooltip title={genre.name} key={index}>
-                  <p className="max-w-[140px] line-clamp-1 py-1 px-3 border-solid border-white border-[1px] mr-3 rounded-3xl text-white text-[16px] uppercase cursor-pointer hover:scale-110 duration-150 stroke-text-sm">
-                    {genre.name}
-                  </p>
+                  <Link
+                    to={`/genres/${genre.id}-${genre.name}/movie`}
+                    state={{ genreName: genre.name }}
+                  >
+                    <p className="max-w-[140px] line-clamp-1 py-1 px-3 border-solid border-white border-[1px] mr-3 rounded-3xl text-white text-[16px] uppercase cursor-pointer hover:scale-110 duration-150 stroke-text-sm">
+                      {genre.name}
+                    </p>
+                  </Link>
                 </Tooltip>
               );
             })}

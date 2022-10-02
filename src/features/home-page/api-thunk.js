@@ -1,5 +1,6 @@
 import {
   apiDiscovery,
+  apiGenres,
   apiKeyword,
   apiMovie,
   apiTrending,
@@ -138,6 +139,16 @@ export const getListGenresMovie = createAsyncThunk(
   "list-genres-movie",
   async (params) => {
     const response = await apiMovie.getListGenresMovie(params);
+    return response;
+  }
+);
+// get list  movie of geners
+export const getListMovieOfGenres = createAsyncThunk(
+  "list-movie-of-genres",
+  async (payload) => {
+    const { id, params } = payload;
+
+    const response = await apiGenres.getListMovieOfGenres(id, params);
     return response;
   }
 );

@@ -49,14 +49,23 @@ export const BodyWatch = ({
               {dataDetail?.overview && dataDetail.overview}
             </p>
             {/* genres */}
-            <p className="text-[18px]">
+
+            <div className="text-[18px] flex items-center">
               <span className="mr-2">{t("Genres")}:</span>
               {dataDetail?.genres?.map((genre, index) => {
-                return index < dataDetail.genres.length - 1
-                  ? `${genre.name},  `
-                  : genre.name;
+                return (
+                  <div key={index} className="cursor-pointer">
+                    <Link to={`/genres/${genre.id}-${genre.name}/movie`}>
+                      {index < dataDetail.genres.length - 1 ? (
+                        <span>{genre.name},&nbsp;</span>
+                      ) : (
+                        <span>{genre.name}</span>
+                      )}
+                    </Link>
+                  </div>
+                );
               })}
-            </p>
+            </div>
 
             {/* trailer */}
 

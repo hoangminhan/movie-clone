@@ -14,7 +14,7 @@ import { useHomePage } from "hooks/use-homepage";
 import { t } from "i18next";
 import { ModalTrailer } from "modal/components";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Autoplay, Navigation, Pagination } from "swiper";
 import { formatNumber, getImage, handleOpenNotification } from "utils";
 import { useModal } from "hooks";
@@ -44,7 +44,7 @@ export const Banner = () => {
     listType.forEach((type, index) => {
       listId.forEach((item) => {
         if (type.id === item) {
-          newList.push(type.name);
+          newList.push({ name: type.name, id: type.id });
         }
       });
     });
@@ -201,14 +201,17 @@ export const Banner = () => {
                     {listType?.length ? (
                       <div className="mt-7 flex gap-3">
                         {listType?.map((item, index) => {
-                          console.log({ item });
                           return (
-                            <p
+                            <Link
+                              to={`/genres/${item.id}-${item.name}/movie`}
                               key={index}
-                              className="bg-zinc-900  px-2 border-[#ccc] backdrop-opacity-5 text-[18px] border-[1px] border-solid rounded-xl"
                             >
-                              <span className="text-[#dcd4d4]">{item}</span>
-                            </p>
+                              <p className="bg-zinc-900  px-2 border-[#ccc] backdrop-opacity-5 text-[18px] border-[1px] border-solid rounded-xl cursor-pointer">
+                                <span className="text-[#dcd4d4]">
+                                  {item.name}
+                                </span>
+                              </p>
+                            </Link>
                           );
                         })}
                       </div>

@@ -12,6 +12,8 @@ export const Header = ({ page }) => {
         return "Keyword";
       case "discovery":
         return <p>FIND FILMS THAT BEST FIT YOU</p>;
+      case "genres":
+        return "Genres";
       default:
         return <Menu />;
     }

@@ -8,6 +8,7 @@ import {
   getKeywords,
   getListGenresMovie,
   getListMovieKeyword,
+  getListMovieOfGenres,
   getListReviews,
   getListTrending,
   getRecommendationMovie,
@@ -31,6 +32,7 @@ const initialState = {
   dataDiscoverMovie: {},
   listMovieKeyword: {},
   dataDetailKeyword: {},
+  listMovieOfGenres: {},
   isLoading: false,
   detail: {
     currentPage: 1,
@@ -242,6 +244,17 @@ export const movieSlice = createSlice({
       state.isLoading = false;
     },
     [getDetailKeyword.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    // list movie of genres
+    [getListMovieOfGenres.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [getListMovieOfGenres.fulfilled]: (state, action) => {
+      state.listMovieOfGenres = { ...action.payload };
+      state.isLoading = false;
+    },
+    [getListMovieOfGenres.rejected]: (state, action) => {
       state.isLoading = false;
     },
   },

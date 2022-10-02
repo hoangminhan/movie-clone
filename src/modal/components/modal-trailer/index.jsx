@@ -199,16 +199,24 @@ export const ModalTrailer = ({
                     })}
                   </p>
                 </div>
-                <p className="mt-2">
+                <div className="mt-2 flex">
                   <span className="text-[16px] mr-2">{t("Genres")}:</span>
-                  <span>
+                  <div className="flex">
                     {dataDetail?.genres?.map((genre, index) => {
-                      return index < dataDetail.genres.length - 1
-                        ? `${genre.name},  `
-                        : genre.name;
+                      return (
+                        <div key={index} className="flex">
+                          <Link to={`/genres/${genre.id}/movie`}>
+                            {index < dataDetail.genres.length - 1 ? (
+                              <span>{genre.name},&nbsp; </span>
+                            ) : (
+                              <span>{genre.name}</span>
+                            )}
+                          </Link>
+                        </div>
+                      );
                     })}
-                  </span>
-                </p>
+                  </div>
+                </div>
                 <p className="mt-2">
                   <span className="text-[16px] mr-2">
                     {t("Production companies")}:
