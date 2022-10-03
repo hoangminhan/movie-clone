@@ -14,6 +14,8 @@ export const Header = ({ page }) => {
         return <p>FIND FILMS THAT BEST FIT YOU</p>;
       case "genres":
         return "Genres";
+      case "movie":
+        return "Detail movie";
       default:
         return <Menu />;
     }

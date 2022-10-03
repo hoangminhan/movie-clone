@@ -133,7 +133,6 @@ export const BodyWatch = ({
               <p className="text-[18px]">{t("Keywords")}:</p>
               {listKeywordsMovie.map((keyword) => {
                 const nameKeyword = keyword.name;
-                console.log({ keyword });
                 return (
                   <Tooltip key={keyword.id} title={keyword.name}>
                     <Link

@@ -8,7 +8,8 @@ import i18n from "translation/i18n";
 
 export const LanguageProject = () => {
   const stateContext = useContext(UserContext);
-  const { globalLocale, setGlobalLocale } = stateContext;
+  const { localeGlobal } = stateContext;
+  const [globalLocale, setGlobalLocale] = localeGlobal;
 
   return (
     <Tooltip title={t("Click to change language")}>

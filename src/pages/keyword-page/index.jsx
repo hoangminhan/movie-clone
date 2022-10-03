@@ -58,13 +58,10 @@ const KeywordPage = () => {
   const stateContext = useContext(UserContext);
 
   const { results, total_pages, page, total_results } = listMovieKeyword;
-  console.log({ listMovieKeyword });
-  console.log({ total_pages });
   const [visibleModal, setVisibleModal] = useState(false);
   const [dataModal, setDataModal] = useState({});
 
   const handleToggleModal = (result) => {
-    console.log({ result });
     setVisibleModal(true);
     setDataModal(result);
   };

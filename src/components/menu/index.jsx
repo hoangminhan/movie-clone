@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Tabs } from "antd";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "contexts";
 
 const { TabPane } = Tabs;
 
@@ -29,14 +31,18 @@ const StyledTabs = styled(Tabs)`
 `;
 
 export const Menu = () => {
-  const [currentTab, setCurrentTab] = useState(
-    sessionStorage.getItem("currentTab") || "/"
-  );
+  const stateContext = useContext(UserContext);
+  const { currentTabGlobal } = stateContext;
+  const [tabGlobal, setTabGlobal] = currentTabGlobal;
+  console.log({ tabGlobal });
+  const [currentTab, setCurrentTab] = useState(tabGlobal || "/");
+  console.log({ currentTab });
   const navigate = useNavigate();
 
   const handleChangeCurrentTab = (data) => {
     sessionStorage.setItem("currentTab", data);
     setCurrentTab(data);
+    setTabGlobal(data);
 
     if (data === "/") {
       navigate(`/`);

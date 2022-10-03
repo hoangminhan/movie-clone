@@ -81,10 +81,11 @@ export const useHomePage = () => {
   };
 
   // get detail movie
-  const handleGetDetailMovie = (id, params) => {
+  const handleGetDetailMovie = (id, params, type) => {
     const payload = {
       id,
       params,
+      type,
     };
     return dispatch(getDetailMovie(payload));
   };

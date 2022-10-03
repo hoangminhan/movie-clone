@@ -137,7 +137,7 @@ const WatchMovieTv = () => {
             />
 
             {/* xem phim */}
-            <div className="my-10 mx-4 overflow-hidden">
+            {/* <div className="my-10 mx-4 overflow-hidden">
               {currentUrl && (
                 <Iframe
                   id="movie-id"
@@ -147,7 +147,7 @@ const WatchMovieTv = () => {
                   allowFullScreen
                 ></Iframe>
               )}
-            </div>
+            </div> */}
 
             <div className="flex justify-start mr-6">
               <div className="ml-[50px] mr-[32px] group relative w-[50px] h-[50px] cursor-pointer duration-300">

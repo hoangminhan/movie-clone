@@ -5,9 +5,12 @@ export const UserProviderContext = ({ children }) => {
   const [globalLocale, setGlobalLocale] = useState(
     sessionStorage.getItem("currentLocale") || "vi-VN"
   );
+  const [tabGlobal, setTabGlobal] = useState(
+    sessionStorage.getItem("currentTab") || "/"
+  );
   const stateContext = {
-    globalLocale,
-    setGlobalLocale,
+    localeGlobal: [globalLocale, setGlobalLocale],
+    currentTabGlobal: [tabGlobal, setTabGlobal],
   };
 
   return (

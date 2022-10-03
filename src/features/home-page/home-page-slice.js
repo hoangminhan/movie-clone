@@ -120,6 +120,7 @@ export const movieSlice = createSlice({
       state.isLoading = true;
     },
     [getDetailMovie.fulfilled]: (state, action) => {
+      console.log("......", action.payload);
       state.isLoading = false;
       state.dataDetail = action.payload;
     },

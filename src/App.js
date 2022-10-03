@@ -13,7 +13,8 @@ import enUS from "antd/es/locale/en_US";
 
 function App() {
   const stateContext = useContext(UserContext);
-  const { globalLocale, setGlobalLocale } = stateContext;
+  const { localeGlobal } = stateContext;
+  const [globalLocale, setGlobalLocale] = localeGlobal;
   let mainContent = useRoutes(RouteList);
   const location = useLocation();
 

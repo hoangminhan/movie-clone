@@ -108,7 +108,7 @@ let RouteList = [
   {
     path: "/movie/:idDetail",
     element: (
-      <DefaultLayout>
+      <DefaultLayout page="movie" showMenu={false}>
         <WatchMovieTv />
       </DefaultLayout>
     ),

@@ -2,7 +2,12 @@ import { Footer, Header, Sidebar } from "components";
 import { useLayoutEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-export const DefaultLayout = ({ children, showTab = false, page }) => {
+export const DefaultLayout = ({
+  children,
+  showTab = false,
+  page,
+  showMenu = true,
+}) => {
   const location = useLocation();
   const { pathname } = location;
   const [toggleMenu, setToggleMenu] = useState(
@@ -17,6 +22,7 @@ export const DefaultLayout = ({ children, showTab = false, page }) => {
       setToggleMenu(sessionStorage.getItem("isToggleMenu"));
     }
   }, []);
+
   return (
     <div className="bg-[#1c1c1e]">
       <Sidebar isToggle={toggleMenu} handleToggleMenu={handleToggleMenu} />
@@ -34,7 +40,7 @@ export const DefaultLayout = ({ children, showTab = false, page }) => {
               : ""
           }`}
         >
-          {<Header page={page} />}
+          {showMenu && <Header page={page} showMenu={showMenu} />}
           {children}
         </section>
       </div>

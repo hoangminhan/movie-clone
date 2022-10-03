@@ -71,7 +71,13 @@ export const ContentDiscovery = ({
       <StyledTabs defaultActiveKey={currentTab} onChange={handleChangeTab}>
         <StyledTabs.TabPane tab="Movie" key="1">
           {/* content tab movie */}
-          <Skeleton active loading={isLoadingDiscover} paragraph={{ rows: 20 }}>
+          {isLoadingDiscover ? (
+            <Skeleton
+              active
+              loading={isLoadingDiscover}
+              paragraph={{ rows: 20 }}
+            ></Skeleton>
+          ) : (
             <div className="mt-5 flex flex-wrap gap-x-10 gap-y-10">
               {resultDiscover?.map((itemMovie, index) => {
                 return (
@@ -121,7 +127,7 @@ export const ContentDiscovery = ({
                 );
               })}
             </div>
-          </Skeleton>
+          )}
 
           <div className="flex justify-center mt-6">
             {total_pages ? (

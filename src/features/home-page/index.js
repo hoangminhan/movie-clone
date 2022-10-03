@@ -1,2 +1,2 @@
 export * from "./api-thunk";
-export * from "./movie-slice";
+export * from "./home-page-slice";

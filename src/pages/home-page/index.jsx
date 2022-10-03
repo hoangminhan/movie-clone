@@ -9,9 +9,10 @@ const HomePage = () => {
 
   useEffect(() => {
     const getDataApi = async () => {
+      const currentTab = sessionStorage.getItem("currentTab") || "/";
       const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
 
-      const type = "movie";
+      const type = currentTab === "/" ? "movie" : "tv";
       await handleGetListTrending(
         {
           api_key: process.env.REACT_APP_API_KEY,

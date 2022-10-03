@@ -26,7 +26,6 @@ const GenresPage = () => {
     return id.split("-")[0];
   });
   const nameGenre = id.split("-")[1];
-  console.log(idGenres);
   const stateContext = useContext(UserContext);
   const locale = sessionStorage.getItem("currentLocale");
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -61,7 +60,6 @@ const GenresPage = () => {
 
   useEffect(() => {
     if (isClick) {
-      console.log("hehe");
       setTimeout(() => {
         executeScroll();
       }, 200);
@@ -85,7 +83,6 @@ const GenresPage = () => {
     };
     getData();
   }, [stateContext, filters]);
-  console.log(listMovieOfGenres);
   return (
     <>
       <div className="my-5 flex justify-between items-center">

@@ -9,13 +9,14 @@ export const TabMovie = React.memo(() => {
     listTrending,
     listMovieTopRated,
     listMovieUpComing,
+    isLoading,
   } = useHomePage();
 
   return (
     <>
       <Row gutter={[12, 12]}>
         <Col span={24}>
-          <Banner />
+          <Banner listTrending={listTrending} isLoading={isLoading} />
           <ComponentSlider dataPopular={listMovie} />
           <ComponentSlider dataPopular={listMovieUpComing} title="Up Coming" />
           <ComponentSlider dataPopular={listTrending} title="Trending" />

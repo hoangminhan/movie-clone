@@ -46,9 +46,9 @@ export const getListTrending = createAsyncThunk(
 export const getDetailMovie = createAsyncThunk(
   "detail-type",
   async (payload) => {
-    const { id, params } = payload;
-    const response = await apiMovie.getDetailMovie(id, params);
-    return response;
+    const { id, params, type } = payload;
+    if (type === "movie") return await apiMovie.getDetailMovie(id, params);
+    return await ApiTvShow.getDetailTv(id, params);
   }
 );
 export const getTrailerMovie = createAsyncThunk(
