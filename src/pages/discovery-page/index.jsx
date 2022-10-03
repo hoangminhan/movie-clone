@@ -41,6 +41,7 @@ const DiscoveryPage = () => {
     dataDiscoverMovie,
     handleGetListGenresMovie,
     handleGetDiscoverMovie,
+    isLoading,
   } = useHomePage();
 
   const handleChangeCurrentTab = (tab) => {
@@ -139,7 +140,7 @@ const DiscoveryPage = () => {
             handleChangePage={handleChangePage}
             dataDiscoverMovie={dataDiscoverMovie}
             filters={filters}
-            isLoadingDiscover={isLoadingDiscover}
+            isLoadingDiscover={isLoading}
           />
         </Col>
         <Col span={4}>

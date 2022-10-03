@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Empty, Pagination, Skeleton, Tabs, Tooltip } from "antd";
 import iconImg from "assets";
 import { ImageCustom } from "components";
+import { useHomePage } from "hooks/use-homepage";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -70,70 +71,57 @@ export const ContentDiscovery = ({
       <StyledTabs defaultActiveKey={currentTab} onChange={handleChangeTab}>
         <StyledTabs.TabPane tab="Movie" key="1">
           {/* content tab movie */}
-          {resultDiscover?.length > 0 ? (
-            <Skeleton
-              active
-              loading={isLoadingDiscover}
-              paragraph={{ rows: 20 }}
-            >
-              <div className="mt-5 flex flex-wrap gap-x-10 gap-y-10">
-                {resultDiscover?.map((itemMovie, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="hover:scale-110 duration-200 cursor-pointer relative rounded-b-lg rounded-tl-lg overflow-hidden"
-                    >
-                      <Link to={`/movie/${itemMovie.id}`}>
-                        <div className="h-[100%] flex flex-col">
-                          <ImageCustom
-                            src={
-                              !getImage(itemMovie.poster_path, "w185").includes(
-                                "null"
-                              )
-                                ? getImage(itemMovie.poster_path, "w185")
-                                : iconImg.Img404
-                            }
-                            width="185px"
-                            height="100%"
-                            className="rounded-b-lg grow-[1]"
-                          />
-                          <Tooltip title={itemMovie.title}>
-                            <p className="pt-2 text-center text-[18px] max-w-[185px] bg-[#1c1c1e] line-clamp-1">
-                              {itemMovie.title}
-                            </p>
-                          </Tooltip>
-                        </div>
-                      </Link>
-                      {/* rate */}
-                      <div className="absolute top-[-8px] right-[0px] text-[13px]">
-                        <Badge.Ribbon
-                          color="#1890ff"
-                          text={
-                            <p className="rounded-[10px] leading-6">
-                              {formatNumber(itemMovie.vote_average, 10)}
-                              <span className="inline-block ml-1">
-                                <FontAwesomeIcon
-                                  icon={faStar}
-                                  className="text-white"
-                                />
-                              </span>
-                            </p>
+          <Skeleton active loading={isLoadingDiscover} paragraph={{ rows: 20 }}>
+            <div className="mt-5 flex flex-wrap gap-x-10 gap-y-10">
+              {resultDiscover?.map((itemMovie, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="hover:scale-110 duration-200 cursor-pointer relative rounded-b-lg rounded-tl-lg overflow-hidden"
+                  >
+                    <Link to={`/movie/${itemMovie.id}`}>
+                      <div className="h-[100%] flex flex-col">
+                        <ImageCustom
+                          src={
+                            !getImage(itemMovie.poster_path, "w185").includes(
+                              "null"
+                            )
+                              ? getImage(itemMovie.poster_path, "w185")
+                              : iconImg.Img404
                           }
-                        ></Badge.Ribbon>
+                          width="185px"
+                          height="100%"
+                          className="rounded-b-lg grow-[1]"
+                        />
+                        <Tooltip title={itemMovie.title}>
+                          <p className="pt-2 text-center text-[18px] max-w-[185px] bg-[#1c1c1e] line-clamp-1">
+                            {itemMovie.title}
+                          </p>
+                        </Tooltip>
                       </div>
+                    </Link>
+                    {/* rate */}
+                    <div className="absolute top-[-8px] right-[0px] text-[13px]">
+                      <Badge.Ribbon
+                        color="#1890ff"
+                        text={
+                          <p className="rounded-[10px] leading-6">
+                            {formatNumber(itemMovie.vote_average, 10)}
+                            <span className="inline-block ml-1">
+                              <FontAwesomeIcon
+                                icon={faStar}
+                                className="text-white"
+                              />
+                            </span>
+                          </p>
+                        }
+                      ></Badge.Ribbon>
                     </div>
-                  );
-                })}
-              </div>
-            </Skeleton>
-          ) : (
-            <div
-              className="h-[400px] flex items-center
-            justify-center"
-            >
-              <Empty className="text-white text-[20px]" />
+                  </div>
+                );
+              })}
             </div>
-          )}
+          </Skeleton>
 
           <div className="flex justify-center mt-6">
             {total_pages ? (

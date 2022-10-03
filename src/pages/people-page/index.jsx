@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { getImage } from "utils";
 import { UserContext } from "contexts";
 import { useRef } from "react";
+import { ImageCustom } from "components";
 const { Meta } = Card;
 
 const StyledPagination = styled(Pagination)`
@@ -122,20 +123,13 @@ const PeoplePage = () => {
             return (
               <Link to={`/cast/${people.id}`} key={index}>
                 <div className="rounded-lg overflow-hidden hover:scale-110 duration-200">
-                  <Card
-                    hoverable
-                    style={{
-                      width: 180,
-                    }}
-                    cover={
-                      <img
-                        alt="people"
-                        src={getImage(people.profile_path, "w185")}
-                      />
-                    }
-                  >
-                    <Meta title={people.name} className="justify-center" />
-                  </Card>
+                  <ImageCustom
+                    alt="people"
+                    src={getImage(people.profile_path, "w185")}
+                  />
+                  <p className="text-[18px] text-center line-clamp-1">
+                    {people.name}
+                  </p>
                 </div>
               </Link>
             );

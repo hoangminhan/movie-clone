@@ -18,6 +18,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Autoplay, Navigation, Pagination } from "swiper";
 import { formatNumber, getImage, handleOpenNotification } from "utils";
 import { useModal } from "hooks";
+import { Badge } from "antd";
 
 export const Banner = () => {
   const {
@@ -172,11 +173,29 @@ export const Banner = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-[#0b0b0bd9] to-transparent "></div>
                   {/* vote_average */}
-                  <div className="flex justify-center items-center rounded-2xl text-red absolute top-[4%] right-[2%] bg-primary py-[3px] px-3 text-[18px]">
+                  <div className="flex justify-center items-center rounded-[8px] text-red absolute top-[4%] right-[2%] bg-primary px-3 text-[18px]">
                     <p className="text-white m-0 pr-1 text-[16px]">
                       {formatNumber(slider.vote_average, 10)}
                     </p>
                     <FontAwesomeIcon icon={faStar} className="text-white" />
+                  </div>
+
+                  <div className="absolute top-[-8px] right-[0px] text-[13px]">
+                    {/* <Badge.Ribbon
+                      size="large"
+                      color="#1890ff"
+                      text={
+                        <p className="rounded-[10px]  m-0 leading-6">
+                          {formatNumber(slider.vote_average, 10)}
+                          <span className="inline-block ml-1">
+                            <FontAwesomeIcon
+                              icon={faStar}
+                              className="text-white"
+                            />
+                          </span>
+                        </p>
+                      }
+                    ></Badge.Ribbon> */}
                   </div>
                   {/* title */}
                   <div className="absolute top-[40%] left-[5%] -translate-y-1/2">
