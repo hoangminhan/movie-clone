@@ -53,9 +53,13 @@ export const SimilarContent = ({ dataSimilar }) => {
             "
                 >
                   <p className="line-clamp-2">
-                    {similar.title ? similar.title : similar.original_title}
+                    {similar.title ? similar.title : similar.name}
                   </p>
-                  <p className="">{similar.release_date}</p>
+                  <p className="">
+                    {similar.release_date
+                      ? similar.release_date
+                      : similar.first_air_date}
+                  </p>
                 </div>
               </div>
             </Link>

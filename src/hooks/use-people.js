@@ -49,10 +49,11 @@ export const UsePeople = () => {
     };
     return dispatch(getSocialNetwork(payload));
   };
-  const handleGetMovieOfCast = (id, params) => {
+  const handleGetMovieOfCast = (id, params, type) => {
     const payload = {
       id,
       params,
+      type,
     };
     return dispatch(getMovieOfCast(payload));
   };

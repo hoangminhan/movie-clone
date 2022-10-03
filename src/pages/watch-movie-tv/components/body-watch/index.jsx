@@ -5,9 +5,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Progress, Skeleton, Tooltip } from "antd";
+import iconImg from "assets";
 import { ButtonAddList } from "components";
-import { t } from "i18next";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import Iframe from "react-iframe";
 import ReactPlayer from "react-player";
 import { Link } from "react-router-dom";
@@ -27,6 +28,8 @@ export const BodyWatch = ({
   infoTrailerMovie,
   isLoadingDetail,
 }) => {
+  console.log({ dataDetail, listKeywordsMovie });
+  const [t] = useTranslation();
   return (
     <>
       <div className="mt-[128px] px-4 text-[#fff]">
@@ -51,11 +54,15 @@ export const BodyWatch = ({
             {/* genres */}
 
             <div className="text-[18px] flex items-center">
-              <span className="mr-2">{t("Genres")}:</span>
+              <span className="mr-2 text-[24px]">{t("Genres")}:</span>
               {dataDetail?.genres?.map((genre, index) => {
+                const currentType =
+                  sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
                 return (
                   <div key={index} className="cursor-pointer">
-                    <Link to={`/genres/${genre.id}-${genre.name}/movie`}>
+                    <Link
+                      to={`/genres/${genre.id}-${genre.name}/${currentType}`}
+                    >
                       {index < dataDetail.genres.length - 1 ? (
                         <span>{genre.name},&nbsp;</span>
                       ) : (
@@ -82,7 +89,7 @@ export const BodyWatch = ({
 
             {/* rating */}
             <div className="flex items-center gap-4 mt-9">
-              <p className="text-white text-[18px]">{t("Rating")}:</p>
+              <p className="text-white text-[24px]">{t("Rating")}:</p>
               <StyledProgress
                 format={(percent, successPercent) => {
                   return <span className="text-white">{percent / 10}</span>;
@@ -96,17 +103,30 @@ export const BodyWatch = ({
             </div>
             {/* casts */}
 
-            <h3 className="text-white text-[18px] mt-6">{t("Cast")}:</h3>
+            <h3 className="text-white text-[24px] mt-6">
+              {t("Cast")}: &nbsp;
+              {!listCastsMovie?.length && (
+                <span className="text-[16px]">{t("Updating")}...</span>
+              )}
+            </h3>
             <div className="flex flex-wrap gap-x-4 gap-y-6 my-4 pl-4">
               {listCastsMovie.map((cast, index) => {
+                const currentType =
+                  sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
                 return (
-                  <Link key={index} to={`/cast/${cast.id}`}>
+                  <Link key={index} to={`/cast/${cast.id}/${currentType}`}>
                     <div className="flex w-[250px] gap-2">
                       <Skeleton loading={isLoadingDetail} active avatar>
                         <div className="max-w-[65px] w-full h-[65px]">
                           <img
                             className="object-cover rounded-[50%] h-[65px] w-[65px]"
-                            src={getImage(cast.profile_path, "w185")}
+                            src={
+                              getImage(cast.profile_path, "w185").includes(
+                                "null"
+                              )
+                                ? iconImg.Img404
+                                : getImage(cast.profile_path, "w185")
+                            }
                             alt=""
                           />
                         </div>
@@ -130,14 +150,16 @@ export const BodyWatch = ({
 
             {/* key words */}
             <div className="flex flex-wrap gap-2 text-[14px] text-yellow-200 mt-8">
-              <p className="text-[18px]">{t("Keywords")}:</p>
+              <p className="text-[24px]">{t("Keywords")}:</p>
               {listKeywordsMovie.map((keyword) => {
+                const currentType =
+                  sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
                 const nameKeyword = keyword.name;
                 return (
                   <Tooltip key={keyword.id} title={keyword.name}>
                     <Link
                       to={{
-                        pathname: `/keyword/${keyword.id}/movie`,
+                        pathname: `/keyword/${keyword.id}/${currentType}`,
                       }}
                       state={{ nameKeyword } ? nameKeyword : "sdasdsd"}
                     >
@@ -146,6 +168,9 @@ export const BodyWatch = ({
                   </Tooltip>
                 );
               })}
+              {!listKeywordsMovie?.length && (
+                <span className="text-[16px]">{t("Updating")}...</span>
+              )}
             </div>
           </div>
         ) : (

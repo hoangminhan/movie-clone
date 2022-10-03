@@ -82,7 +82,7 @@ let RouteList = [
     ),
   },
   {
-    path: "/keyword/:idKeyword/movie",
+    path: "/keyword/:idKeyword/:type",
     element: (
       <DefaultLayout page="keyword">
         <KeywordPage />
@@ -90,7 +90,7 @@ let RouteList = [
     ),
   },
   {
-    path: "/genres/:id/movie",
+    path: "/genres/:id/:type",
     element: (
       <DefaultLayout page="genres">
         <GenresPage />
@@ -98,7 +98,7 @@ let RouteList = [
     ),
   },
   {
-    path: "/cast/:idCast",
+    path: "/cast/:idCast/:type",
     element: (
       <DefaultLayout>
         <CastPage />
@@ -106,7 +106,7 @@ let RouteList = [
     ),
   },
   {
-    path: "/movie/:idDetail",
+    path: "/:type/:idDetail",
     element: (
       <DefaultLayout page="movie" showMenu={false}>
         <WatchMovieTv />

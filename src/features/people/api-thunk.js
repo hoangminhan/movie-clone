@@ -48,8 +48,13 @@ export const getSocialNetwork = createAsyncThunk(
 export const getMovieOfCast = createAsyncThunk(
   "movie-of-cast",
   async (payload) => {
-    const { id, params } = payload;
-    const response = await apiPeople.getMovieOfCast(id, params);
-    return response;
+    const { id, params, type } = payload;
+    console.log({ type });
+
+    if (type === "movie") {
+      return await apiPeople.getMovieOfCast(id, params);
+    } else {
+      return await apiPeople.getTvOfCast(id, params);
+    }
   }
 );

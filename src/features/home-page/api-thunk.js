@@ -9,28 +9,37 @@ import {
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const handleGetListMovie = createAsyncThunk(
-  "movie-list",
+  "tv-movie-list",
   async (payload) => {
-    const { type, params } = payload;
-    const response = await apiMovie.getListMovie(type, params);
-    return response;
+    const { type, params, typeFilm } = payload;
+    if (typeFilm === "movie") {
+      return await apiMovie.getListMovie(type, params);
+    } else {
+      return await ApiTvShow.getListTv(type, params);
+    }
   }
 );
 // get list top rated
 export const handleGetListMovieTopRated = createAsyncThunk(
   "movie-list-top-rated",
   async (payload) => {
-    const { type, params } = payload;
-    const response = await apiMovie.getListMovie(type, params);
-    return response;
+    const { type, params, typeFilm } = payload;
+    if (typeFilm === "movie") {
+      return await apiMovie.getListMovie(type, params);
+    } else {
+      return await ApiTvShow.getListTv(type, params);
+    }
   }
 );
 export const handleGetListMovieUpComming = createAsyncThunk(
   "movie-list-upComing",
   async (payload) => {
-    const { type, params } = payload;
-    const response = await apiMovie.getListMovie(type, params);
-    return response;
+    const { type, params, typeFilm } = payload;
+    if (typeFilm === "movie") {
+      return await apiMovie.getListMovie(type, params);
+    } else {
+      return await ApiTvShow.getListTv("on_the_air", params);
+    }
   }
 );
 // get list trending
@@ -52,11 +61,14 @@ export const getDetailMovie = createAsyncThunk(
   }
 );
 export const getTrailerMovie = createAsyncThunk(
-  "trailer-movie",
+  "trailer-movie-show",
   async (payload) => {
-    const { id, params } = payload;
-    const response = await apiMovie.getTrailerMovie(id, params);
-    return response;
+    const { id, params, type } = payload;
+    if (type === "movie") {
+      return await apiMovie.getTrailerMovie(id, params);
+    } else {
+      return await ApiTvShow.getTrailerTv(id, params);
+    }
   }
 );
 export const getTrailerTvShow = createAsyncThunk(
@@ -69,35 +81,55 @@ export const getTrailerTvShow = createAsyncThunk(
 );
 // similar content movie
 export const getSimilarMovie = createAsyncThunk(
-  "similar-movie",
+  "similar-movie-tv",
   async (payload) => {
-    const { id, params } = payload;
-    const response = await apiMovie.getSimilarMovie(id, params);
-    return response;
+    const { id, params, type } = payload;
+    if (type === "movie") {
+      return await apiMovie.getSimilarMovie(id, params);
+    } else return await ApiTvShow.getSimilarTv(id, params);
   }
 );
 // recommendation content movie
 export const getRecommendationMovie = createAsyncThunk(
-  "recommendation-movie",
+  "recommendation-movie-tv",
   async (payload) => {
-    const { id, params } = payload;
-    const response = await apiMovie.getRecommendationMovies(id, params);
-    return response;
+    const { id, params, type } = payload;
+    if (type === "movie") {
+      return await apiMovie.getRecommendationMovies(id, params);
+    } else {
+      return await ApiTvShow.getRecommendationTv(id, params);
+    }
   }
 );
 // get casts movie
 
 export const getCastsMovie = createAsyncThunk(
-  "casts-movie",
+  "casts-movie-tv",
   async (payload) => {
-    const { id, params } = payload;
-    const response = await apiMovie.getCastsMovie(id, params);
-    return response;
+    const { id, params, type } = payload;
+    if (type === "movie") {
+      return await apiMovie.getCastsMovie(id, params);
+    } else return await ApiTvShow.getCastsTv(id, params);
   }
 );
+
+// get keywords
+
+export const getKeywords = createAsyncThunk(
+  "keywords-movie-tv",
+  async (payload) => {
+    const { id, params, type } = payload;
+    if (type === "movie") {
+      return await apiMovie.getKeywords(id, params);
+    } else {
+      return await ApiTvShow.getKeywords(id, params);
+    }
+  }
+);
+
 // keyword
 export const getListMovieKeyword = createAsyncThunk(
-  "list-movie-keyword",
+  "list-movie-tv-keyword",
   async (payload) => {
     const { id, params } = payload;
     const response = await apiKeyword.getListMovieKeyword(id, params);
@@ -114,16 +146,6 @@ export const getDetailKeyword = createAsyncThunk(
   }
 );
 
-// get keywords
-
-export const getKeywords = createAsyncThunk(
-  "keywords-movie",
-  async (payload) => {
-    const { id, params } = payload;
-    const response = await apiMovie.getKeywords(id, params);
-    return response;
-  }
-);
 // get list review
 
 export const getListReviews = createAsyncThunk(

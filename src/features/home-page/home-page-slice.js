@@ -182,8 +182,8 @@ export const movieSlice = createSlice({
       state.isLoading = true;
     },
     [getKeywords.fulfilled]: (state, action) => {
-      const { keywords } = action.payload;
-      state.listKeywordsMovie = [...keywords];
+      const { keywords, results } = action.payload;
+      state.listKeywordsMovie = keywords ? [...keywords] : [...results];
       state.isLoading = false;
     },
     [getKeywords.rejected]: (state, action) => {

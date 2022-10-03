@@ -28,4 +28,9 @@ export const apiPeople = {
     const url = `person/${id}/movie_credits`;
     return axiosClient.get(url, { params });
   },
+  // tv cast
+  getTvOfCast: (id, params) => {
+    const url = `person/${id}/tv_credits`;
+    return axiosClient.get(url, { params });
+  },
 };

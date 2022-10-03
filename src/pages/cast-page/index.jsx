@@ -41,6 +41,9 @@ const CastPage = () => {
       setIsLoading(true);
       const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
 
+      const currentType =
+        sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
+
       await handleGetDetailCasts(idCast, {
         api_key: process.env.REACT_APP_API_KEY,
         // language: locale,
@@ -53,10 +56,14 @@ const CastPage = () => {
         api_key: process.env.REACT_APP_API_KEY,
         language: locale,
       });
-      await handleGetMovieOfCast(idCast, {
-        api_key: process.env.REACT_APP_API_KEY,
-        language: locale,
-      });
+      await handleGetMovieOfCast(
+        idCast,
+        {
+          api_key: process.env.REACT_APP_API_KEY,
+          language: locale,
+        },
+        currentType
+      );
 
       setIsLoading(false);
     };

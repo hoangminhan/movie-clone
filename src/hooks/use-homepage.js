@@ -47,24 +47,25 @@ export const useHomePage = () => {
   } = resultMovie;
 
   const handleGetTypeAction = (payload) => {
-    const { type } = payload;
+    const { type, typeFilm } = payload;
     switch (type) {
       case "popular":
-        return dispatch(handleGetListMovie(payload));
+        return dispatch(handleGetListMovie(payload, typeFilm));
       case "top_rated":
-        return dispatch(handleGetListMovieTopRated(payload));
+        return dispatch(handleGetListMovieTopRated(payload, typeFilm));
       case "upcoming":
-        return dispatch(handleGetListMovieUpComming(payload));
+        return dispatch(handleGetListMovieUpComming(payload, typeFilm));
       default:
-        return dispatch(handleGetListMovie(payload));
+        return dispatch(handleGetListMovie(payload, typeFilm));
     }
   };
 
   // get list movie lastest || now playing || popular || top rated || upcoming
-  const handleGetMovie = React.useCallback((type, params) => {
+  const handleGetMovie = React.useCallback((type, params, typeFilm) => {
     const payload = {
       type,
       params,
+      typeFilm,
     };
     handleGetTypeAction(payload);
     // return dispatch(handleGetListMovie(payload));
@@ -91,19 +92,21 @@ export const useHomePage = () => {
   };
 
   // similar movie
-  const handleGetSimilarMovie = (id, params) => {
+  const handleGetSimilarMovie = (id, params, type) => {
     const payload = {
       id,
       params,
+      type,
     };
     return dispatch(getSimilarMovie(payload));
   };
 
   // recommmendation movie
-  const handleGetRecommendationMovie = (id, params) => {
+  const handleGetRecommendationMovie = (id, params, type) => {
     const payload = {
       id,
       params,
+      type,
     };
     return dispatch(getRecommendationMovie(payload));
   };
@@ -113,26 +116,25 @@ export const useHomePage = () => {
     const payload = {
       id,
       params,
+      type,
     };
-    if (type === "movie") {
-      return dispatch(getTrailerMovie(payload));
-    } else if (type === "tv") {
-      return dispatch(getTrailerTvShow(payload));
-    }
+    return dispatch(getTrailerMovie(payload));
   };
 
-  const handleGetListCasts = (id, params) => {
+  const handleGetListCasts = (id, params, type) => {
     const payload = {
       id,
       params,
+      type,
     };
     return dispatch(getCastsMovie(payload));
   };
 
-  const handleGetListKeywords = (id, params) => {
+  const handleGetListKeywords = (id, params, type) => {
     const payload = {
       id,
       params,
+      type,
     };
     return dispatch(getKeywords(payload));
   };
@@ -144,6 +146,7 @@ export const useHomePage = () => {
     };
     return dispatch(getListMovieKeyword(payload));
   };
+
   // detail keyword
   const handleGetDetailKeyword = (id, params) => {
     const payload = {

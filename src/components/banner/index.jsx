@@ -56,11 +56,17 @@ export const Banner = ({ listTrending, isLoading }) => {
 
   // handle click trailer
   const handleClickTrailer = async (slider) => {
+    const currentType =
+      sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
     const currentLocale = sessionStorage.getItem("currentLocale") || "vi-VN";
     const { id: idMovie, media_type: type } = slider;
-    handleGetListCasts(idMovie, {
-      api_key: process.env.REACT_APP_API_KEY,
-    });
+    handleGetListCasts(
+      idMovie,
+      {
+        api_key: process.env.REACT_APP_API_KEY,
+      },
+      currentType
+    );
     const resultAction = await handleGetTrailer(idMovie, type, {
       api_key: process.env.REACT_APP_API_KEY,
     });
@@ -68,8 +74,6 @@ export const Banner = ({ listTrending, isLoading }) => {
     const { results } = newResult;
 
     // get data detail movie to send modal
-    const currentType =
-      sessionStorage.getItem("currentTab") === "/" ? "movie" : "pv";
 
     const resultDetailMovie = await handleGetDetailMovie(
       idMovie,
@@ -82,13 +86,16 @@ export const Banner = ({ listTrending, isLoading }) => {
     );
 
     const newResultDetailMovie = unwrapResult(resultDetailMovie);
-    console.log({ newResultDetailMovie });
 
     // get data Similar Movie
-    const resultSimilarMovie = await handleGetSimilarMovie(idMovie, {
-      api_key: process.env.REACT_APP_API_KEY,
-      language: currentLocale,
-    });
+    const resultSimilarMovie = await handleGetSimilarMovie(
+      idMovie,
+      {
+        api_key: process.env.REACT_APP_API_KEY,
+        language: currentLocale,
+      },
+      currentType
+    );
     const newResultSimilarMovie = unwrapResult(resultSimilarMovie);
     const { results: dataSimilar } = newResultSimilarMovie;
 
@@ -120,13 +127,13 @@ export const Banner = ({ listTrending, isLoading }) => {
     }
   };
 
-  useEffect(() => {
-    if (stopSlider) {
-      swiperRef.current.swiper.autoplay.stop();
-    } else {
-      swiperRef.current.swiper.autoplay.start();
-    }
-  }, [stopSlider]);
+  // useEffect(() => {
+  //   if (stopSlider) {
+  //     swiperRef.current.swiper.autoplay.stop();
+  //   } else {
+  //     swiperRef.current.swiper.autoplay.start();
+  //   }
+  // }, [stopSlider]);
   console.log({ dataDetail });
 
   useEffect(() => {
@@ -157,49 +164,46 @@ export const Banner = ({ listTrending, isLoading }) => {
 
   return (
     <>
-      {isLoading ? (
-        <Skeleton active paragraph={{ rows: 20 }} />
-      ) : (
-        <div
-          onMouseEnter={() => swiperRef.current.swiper.autoplay.start()}
-          className="max-h-[450px]"
+      <div
+        // onMouseEnter={() => swiperRef.current.swiper.autoplay.start()}
+        className="max-h-[450px]"
+      >
+        <Swiper
+          ref={swiperRef}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+          }}
+          className="banner-wrapper"
+          pagination={false}
+          navigation={true}
+          // modules={[Autoplay, Pagination, Navigation]}
+          modules={[Pagination, Navigation]}
+          onSlideChange={(event) => {
+            setCurrentActiveIndex(event.activeIndex);
+            setListType("");
+          }}
         >
-          <Swiper
-            ref={swiperRef}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
-            className="banner-wrapper"
-            pagination={false}
-            navigation={true}
-            modules={[Autoplay, Pagination, Navigation]}
-            // modules={[Pagination, Navigation]}
-            onSlideChange={(event) => {
-              setCurrentActiveIndex(event.activeIndex);
-              setListType("");
-            }}
-          >
-            {listTrending?.map((slider, index) => {
-              return (
-                <SwiperSlide key={index}>
-                  <div className="group relative">
-                    <img
-                      src={getImage(slider.backdrop_path, "w1280")}
-                      alt=""
-                      className="max-h-[600px] object-cover w-full"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#0b0b0bd9] to-transparent "></div>
-                    {/* vote_average */}
-                    <div className="flex justify-center items-center rounded-[8px] text-red absolute top-[4%] right-[2%] bg-primary px-3 text-[18px]">
-                      <p className="text-white m-0 pr-1 text-[16px]">
-                        {formatNumber(slider.vote_average, 10)}
-                      </p>
-                      <FontAwesomeIcon icon={faStar} className="text-white" />
-                    </div>
+          {listTrending?.map((slider, index) => {
+            return (
+              <SwiperSlide key={index}>
+                <div className="group relative">
+                  <img
+                    src={getImage(slider.backdrop_path, "w1280")}
+                    alt=""
+                    className="max-h-[600px] object-cover w-full"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#0b0b0bd9] to-transparent "></div>
+                  {/* vote_average */}
+                  <div className="flex justify-center items-center rounded-[8px] text-red absolute top-[4%] right-[2%] bg-primary px-3 text-[18px]">
+                    <p className="text-white m-0 pr-1 text-[16px]">
+                      {formatNumber(slider.vote_average, 10)}
+                    </p>
+                    <FontAwesomeIcon icon={faStar} className="text-white" />
+                  </div>
 
-                    <div className="absolute top-[-8px] right-[0px] text-[13px]">
-                      {/* <Badge.Ribbon
+                  <div className="absolute top-[-8px] right-[0px] text-[13px]">
+                    {/* <Badge.Ribbon
                       size="large"
                       color="#1890ff"
                       text={
@@ -214,60 +218,64 @@ export const Banner = ({ listTrending, isLoading }) => {
                         </p>
                       }
                     ></Badge.Ribbon> */}
-                    </div>
-                    {/* title */}
-                    <div className="absolute top-[40%] left-[5%] -translate-y-1/2">
-                      <h2 className="flex text-[32px] text-primary max-w-[500px]">
-                        {slider.title ? slider.title : slider.original_name}
-                      </h2>
+                  </div>
+                  {/* title */}
+                  <div className="absolute top-[40%] left-[5%] -translate-y-1/2">
+                    <h2 className="flex text-[32px] text-primary max-w-[500px]">
+                      {slider.title ? slider.title : slider.original_name}
+                    </h2>
 
-                      <div>
-                        <p className="flex mt-[32px] ">
-                          {t("First air day")}:{" "}
-                          <span className="pl-[12px]">
-                            {slider.release_date
-                              ? slider.release_date
-                              : slider.first_air_date}
-                          </span>
-                        </p>
-                        <div className="text-left max-w-[500px] flex text-base line-clamp-3">
-                          <p className="stroke-[red]">{slider.overview}</p>
-                        </div>
+                    <div>
+                      <p className="flex mt-[32px] ">
+                        {t("First air day")}:{" "}
+                        <span className="pl-[12px]">
+                          {slider.release_date
+                            ? slider.release_date
+                            : slider.first_air_date}
+                        </span>
+                      </p>
+                      <div className="text-left max-w-[500px] flex text-base line-clamp-3">
+                        <p className="stroke-[red]">{slider.overview}</p>
                       </div>
-                      {/* genres */}
-                      {listType?.length ? (
-                        <div className="mt-7 flex gap-3">
-                          {listType?.map((item, index) => {
-                            return (
-                              <Link
-                                to={`/genres/${item.id}-${item.name}/movie`}
-                                key={index}
-                              >
-                                <p className="bg-zinc-900  px-2 border-[#ccc] backdrop-opacity-5 text-[18px] border-[1px] border-solid rounded-xl cursor-pointer">
-                                  <span className="text-[#dcd4d4]">
-                                    {item.name}
-                                  </span>
-                                </p>
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      ) : (
-                        ""
-                      )}
+                    </div>
+                    {/* genres */}
+                    {listType?.length ? (
+                      <div className="mt-7 flex gap-3">
+                        {listType?.map((item, index) => {
+                          const currentType =
+                            sessionStorage.getItem("currentTab") === "/"
+                              ? "movie"
+                              : "tv";
+                          return (
+                            <Link
+                              to={`/genres/${item.id}-${item.name}/${currentType}`}
+                              key={index}
+                            >
+                              <p className="bg-zinc-900  px-2 border-[#ccc] backdrop-opacity-5 text-[18px] border-[1px] border-solid rounded-xl cursor-pointer">
+                                <span className="text-[#dcd4d4]">
+                                  {item.name}
+                                </span>
+                              </p>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      ""
+                    )}
 
-                      {/* trailer */}
-                      <div className="absolute bottom-[-72px] mt-[32px] flex gap-4">
-                        <div
-                          className=" ease-in-out delay-250 hover:scale-110 duration-300"
-                          onClick={() => {
-                            handleClickTrailer(slider);
-                          }}
-                        >
-                          <ButtomCustom nameIcon="iconPlay" />
-                        </div>
-                        {/* play */}
-                        {/* <div
+                    {/* trailer */}
+                    <div className="absolute bottom-[-72px] mt-[32px] flex gap-4">
+                      <div
+                        className=" ease-in-out delay-250 hover:scale-110 duration-300"
+                        onClick={() => {
+                          handleClickTrailer(slider);
+                        }}
+                      >
+                        <ButtomCustom nameIcon="iconPlay" />
+                      </div>
+                      {/* play */}
+                      {/* <div
                       className="ease-in-out delay-250 hover:scale-110 duration-300"
                       onClick={() => {
                         navigate(`movie/${slider.id}`);
@@ -275,31 +283,34 @@ export const Banner = ({ listTrending, isLoading }) => {
                     >
                       <ButtomCustom nameIcon="iconPlay" title="Play" />
                     </div> */}
-                      </div>
                     </div>
+                  </div>
 
-                    {/* button play */}
+                  {/* button play */}
 
-                    <div
-                      className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2
+                  <div
+                    className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2
                   ease-in-out delay-250 hover:scale-110 duration-300 hidden  group-hover:block"
-                      onClick={() => {
-                        navigate(`movie/${slider.id}`);
-                      }}
-                    >
-                      <ButtonPlay size="large" sizeImg="30px" />
-                      {/* <FontAwesomeIcon
+                    onClick={() => {
+                      const currentType =
+                        sessionStorage.getItem("currentTab") === "/"
+                          ? "movie"
+                          : "tv";
+                      navigate(`/${currentType}/${slider.id}`);
+                    }}
+                  >
+                    <ButtonPlay size="large" sizeImg="30px" />
+                    {/* <FontAwesomeIcon
                     icon={faCaretRight}
                     className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2"
                   /> */}
-                    </div>
                   </div>
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
-        </div>
-      )}
+                </div>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </div>
 
       <ModalTrailer
         visibleModal={visibleModal}

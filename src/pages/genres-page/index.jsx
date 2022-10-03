@@ -15,6 +15,7 @@ import {
 import {
   Link,
   useLocation,
+  useNavigate,
   useParams,
   useSearchParams,
 } from "react-router-dom";
@@ -42,6 +43,7 @@ const GenresPage = () => {
   const [quanlityItem, setQuanlityItem] = useState(20);
   const [isClick, setIsClick] = useState(false);
   const isShowMore = quanlityItem < item_count ? true : false;
+  const navigate = useNavigate();
 
   const executeScroll = () => {
     const elementToScroll = document.getElementById("button-show");
@@ -100,41 +102,53 @@ const GenresPage = () => {
         ) : (
           <div className="flex flex-wrap gap-6">
             {dataGenres?.map((item, index) => {
+              console.log({ item });
               return (
                 index < quanlityItem && (
-                  <Link key={index} to={`/movie/${item.id}`}>
-                    <div className="max-w-[185px] hover:scale-110 duration-200 cursor-pointer relative">
-                      <ImageCustom
-                        src={
-                          getImage(item.poster_path, "w185").includes("null")
-                            ? iconImg.Img404
-                            : getImage(item.poster_path, "w185")
+                  // <Link key={index} to={`/movie/${item.id}`}>
+                  <div
+                    key={index}
+                    className="max-w-[185px] hover:scale-110 duration-200 cursor-pointer relative"
+                    onClick={() => {
+                      const type =
+                        item?.media_type === "movie" ? "movie" : "tv";
+                      sessionStorage.setItem(
+                        "currentTab",
+                        type === "movie" ? "/" : "tab-tv-show"
+                      );
+                      navigate(`/${type}/${item.id}`);
+                    }}
+                  >
+                    <ImageCustom
+                      src={
+                        getImage(item.poster_path, "w185").includes("null")
+                          ? iconImg.Img404
+                          : getImage(item.poster_path, "w185")
+                      }
+                      className="rounded-md"
+                    />
+                    <Tooltip title={item?.title}>
+                      <p className="text-[16px] line-clamp-1 text-center">
+                        {item?.title}
+                      </p>
+                    </Tooltip>
+                    <div className="absolute top-[-8px] right-[0px] text-[13px]">
+                      <Badge.Ribbon
+                        color="#1890ff"
+                        text={
+                          <p className="rounded-[10px]  m-0 leading-6">
+                            {formatNumber(item.vote_average, 10)}
+                            <span className="inline-block ml-1">
+                              <FontAwesomeIcon
+                                icon={faStar}
+                                className="text-white"
+                              />
+                            </span>
+                          </p>
                         }
-                        className="rounded-md"
-                      />
-                      <Tooltip title={item?.title}>
-                        <p className="text-[16px] line-clamp-1 text-center">
-                          {item?.title}
-                        </p>
-                      </Tooltip>
-                      <div className="absolute top-[-8px] right-[0px] text-[13px]">
-                        <Badge.Ribbon
-                          color="#1890ff"
-                          text={
-                            <p className="rounded-[10px]  m-0 leading-6">
-                              {formatNumber(item.vote_average, 10)}
-                              <span className="inline-block ml-1">
-                                <FontAwesomeIcon
-                                  icon={faStar}
-                                  className="text-white"
-                                />
-                              </span>
-                            </p>
-                          }
-                        ></Badge.Ribbon>
-                      </div>
+                      ></Badge.Ribbon>
                     </div>
-                  </Link>
+                  </div>
                 )
               );
             })}

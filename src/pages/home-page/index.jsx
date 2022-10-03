@@ -20,21 +20,33 @@ const HomePage = () => {
         },
         type
       );
-      await handleGetMovie("popular", {
-        page: 1,
-        api_key: process.env.REACT_APP_API_KEY,
-        language: locale,
-      });
-      await handleGetMovie("top_rated", {
-        page: 1,
-        api_key: process.env.REACT_APP_API_KEY,
-        language: locale,
-      });
-      await handleGetMovie("upcoming", {
-        page: 1,
-        api_key: process.env.REACT_APP_API_KEY,
-        language: locale,
-      });
+      await handleGetMovie(
+        "popular",
+        {
+          page: 1,
+          api_key: process.env.REACT_APP_API_KEY,
+          language: locale,
+        },
+        type
+      );
+      await handleGetMovie(
+        "top_rated",
+        {
+          page: 1,
+          api_key: process.env.REACT_APP_API_KEY,
+          language: locale,
+        },
+        type
+      );
+      await handleGetMovie(
+        "upcoming",
+        {
+          page: 1,
+          api_key: process.env.REACT_APP_API_KEY,
+          language: locale,
+        },
+        type
+      );
     };
     getDataApi();
   }, [stateContext]);

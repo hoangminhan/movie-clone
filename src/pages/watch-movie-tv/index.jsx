@@ -5,7 +5,7 @@ import {
   faThumbTack,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Col, Progress, Row, Skeleton, Spin, Tooltip } from "antd";
+import { Col, Empty, Progress, Row, Skeleton, Spin, Tooltip } from "antd";
 import ReactLoading from "react-loading";
 
 import {
@@ -64,12 +64,19 @@ const WatchMovieTv = () => {
   const handleLoadMoreSimilar = async () => {
     setIsLoadMore(true);
     const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
+    // check tv or movie
+    const type = sessionStorage.getItem("currentTab") || "/";
+    const currentType = type === "/" ? "movie" : "pv";
 
-    await handleGetSimilarMovie(idDetail, {
-      api_key: process.env.REACT_APP_API_KEY,
-      language: locale,
-      page: currentPage + 1,
-    });
+    await handleGetSimilarMovie(
+      idDetail,
+      {
+        api_key: process.env.REACT_APP_API_KEY,
+        language: locale,
+        page: currentPage + 1,
+      },
+      currentType
+    );
     setCurrentPage((page) => page + 1);
     setIsLoadMore(false);
   };
@@ -80,33 +87,56 @@ const WatchMovieTv = () => {
       const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
       setIsLoadingDetail(true);
       dispatch(reducerClearSimilarMovie());
-      await handleGetDetailMovie(idDetail, {
-        api_key: process.env.REACT_APP_API_KEY,
-        language: locale,
-        append_to_response: "videos",
-      });
-      await handleGetTrailer(idDetail, "movie", {
+      const type = sessionStorage.getItem("currentTab") || "/";
+      const currentType = type === "/" ? "movie" : "tv";
+
+      await handleGetDetailMovie(
+        idDetail,
+        {
+          api_key: process.env.REACT_APP_API_KEY,
+          language: locale,
+          append_to_response: "videos",
+        },
+        currentType
+      );
+      await handleGetTrailer(idDetail, currentType, {
         api_key: process.env.REACT_APP_API_KEY,
       });
       executeScroll();
 
-      await handleGetSimilarMovie(idDetail, {
-        api_key: process.env.REACT_APP_API_KEY,
-        language: locale,
-        page: currentPage,
-      });
+      await handleGetSimilarMovie(
+        idDetail,
+        {
+          api_key: process.env.REACT_APP_API_KEY,
+          language: locale,
+          page: currentPage,
+        },
+        currentType
+      );
       setIsLoadingDetail(false);
-      handleGetRecommendationMovie(idDetail, {
-        api_key: process.env.REACT_APP_API_KEY,
-        language: locale,
-      });
-      handleGetListCasts(idDetail, {
-        api_key: process.env.REACT_APP_API_KEY,
-        language: locale,
-      });
-      handleGetListKeywords(idDetail, {
-        api_key: process.env.REACT_APP_API_KEY,
-      });
+      handleGetRecommendationMovie(
+        idDetail,
+        {
+          api_key: process.env.REACT_APP_API_KEY,
+          language: locale,
+        },
+        currentType
+      );
+      handleGetListCasts(
+        idDetail,
+        {
+          api_key: process.env.REACT_APP_API_KEY,
+          language: locale,
+        },
+        currentType
+      );
+      handleGetListKeywords(
+        idDetail,
+        {
+          api_key: process.env.REACT_APP_API_KEY,
+        },
+        currentType
+      );
       handleGetListReviews(idDetail, {
         api_key: process.env.REACT_APP_API_KEY,
         // language: locale,
@@ -149,7 +179,7 @@ const WatchMovieTv = () => {
               )}
             </div> */}
 
-            <div className="flex justify-start mr-6">
+            <div className="flex justify-start mr-6 mt-[24px]">
               <div className="ml-[50px] mr-[32px] group relative w-[50px] h-[50px] cursor-pointer duration-300">
                 <div className="absolute z-[2]">
                   <Tooltip title={t("Like")}>
@@ -195,68 +225,81 @@ const WatchMovieTv = () => {
         </Col>
       </Row>
       <div className="bg-black p-4 border-l-[#ccc] border-l-[1px] border-l-solid fixed z-[2] h-full overflow-y-auto top-0 right-0 w-[350px] scroll-smooth no-scrollbar">
-        <div>
-          <p id="similar-movie" className="text-white mb-8 uppercase">
+        <div className="h-[100%]">
+          <p id="similar-movie" className="text-white mt-6 mb-8 uppercase">
             {t("Similar")}
           </p>
-          <Skeleton active loading={isLoadingDetail} paragraph={{ rows: 30 }}>
-            <div className="flex flex-col gap-5">
-              {listSimilarMovie?.map((similarContent, index) => {
-                return (
-                  <Link key={index} to={`/movie/${similarContent.id}`}>
-                    <div
-                      className="group flex gap-4 text-[#fff] cursor-pointer hover:brightness-125
+          {listSimilarMovie?.length ? (
+            <Skeleton active loading={isLoadingDetail} paragraph={{ rows: 30 }}>
+              <div className="flex flex-col gap-5">
+                {listSimilarMovie?.map((similarContent, index) => {
+                  return (
+                    <Link key={index} to={`/movie/${similarContent.id}`}>
+                      <div
+                        className="group flex gap-4 text-[#fff] cursor-pointer hover:brightness-125
                   
                   "
-                      onClick={() => {
-                        // navigate(`movie/${similarContent.id}`);
-                      }}
-                    >
-                      <div className="max-w-[100px] w-full group-hover:scale-110 duration-200 delay-150">
-                        <ImageCustom
-                          src={getImage(similarContent.poster_path, "w154")}
-                          className="w-[154px] object-contain rounded-lg rounded-global"
-                        />
+                        onClick={() => {
+                          // navigate(`movie/${similarContent.id}`);
+                        }}
+                      >
+                        <div className="max-w-[100px] w-full group-hover:scale-110 duration-200 delay-150">
+                          <ImageCustom
+                            src={getImage(similarContent.poster_path, "w154")}
+                            className="w-[154px] object-contain rounded-lg rounded-global"
+                          />
+                        </div>
+                        <div className="grow">
+                          <p className="text-[18px] line-clamp-2">
+                            {similarContent.title
+                              ? similarContent.title
+                              : similarContent.name}
+                          </p>
+                          <p className="text-[15px] text-[#ccc]">
+                            {similarContent.release_date
+                              ? similarContent.release_date
+                              : similarContent.first_air_date}
+                          </p>
+                          <p className="text-[16px] text-yellow-400">
+                            {formatNumber(similarContent.vote_average, 10)}{" "}
+                            &nbsp;
+                            <FontAwesomeIcon icon={faStar} color="yellow" />
+                          </p>
+                        </div>
                       </div>
-                      <div className="grow">
-                        <p className="text-[18px] line-clamp-2">
-                          {similarContent.title
-                            ? similarContent.title
-                            : similarContent.original_title}
-                        </p>
-                        <p className="text-[15px] text-[#ccc]">
-                          {similarContent.release_date}
-                        </p>
-                        <p className="text-[16px] text-yellow-400">
-                          {formatNumber(similarContent.vote_average, 10)} &nbsp;
-                          <FontAwesomeIcon icon={faStar} color="yellow" />
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </Skeleton>
-
-          <div className="my-8 text-center">
-            {isLoadMore ? (
-              <div className="flex justify-center">
-                <ReactLoading type="bubbles" color="white" height={40} />
+                    </Link>
+                  );
+                })}
               </div>
-            ) : (
-              <button
-                className={`bg-primary min-w-[150px] px-2 py-2 rounded-lg cursor-pointer text-white text-[18px] ${
-                  isLoadMore && "cursor-not-allowed pointer-events-none	"
-                } ${!isLoadMore ? "hover:scale-110 duration-150" : ""}`}
-                onClick={() => {
-                  handleLoadMoreSimilar();
-                }}
-              >
-                {t("Load more")}
-              </button>
-            )}
-          </div>
+            </Skeleton>
+          ) : (
+            <div className="h-[100%] flex items-center justify-center">
+              <Empty />
+            </div>
+          )}
+
+          {listSimilarMovie?.length ? (
+            <div className="my-8 text-center">
+              {isLoadMore ? (
+                <div className="flex justify-center">
+                  <ReactLoading type="bubbles" color="white" height={40} />
+                </div>
+              ) : (
+                <button
+                  className={`bg-primary min-w-[150px] px-2 py-2 rounded-lg cursor-pointer text-white text-[18px] ${
+                    isLoadMore && "cursor-not-allowed pointer-events-none	"
+                  } ${!isLoadMore ? "hover:scale-110 duration-150" : ""}`}
+                  onClick={() => {
+                    handleLoadMoreSimilar();
+                  }}
+                >
+                  {t("Load more")}
+                </button>
+              )}
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>

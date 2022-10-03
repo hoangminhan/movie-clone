@@ -26,6 +26,8 @@ export const ModalTrailer = ({
 }) => {
   const { handleGetDetailMovie, listCastsMovie } = useHomePage();
   const [isLoading, setIsLoading] = useState(false);
+  const currentType =
+    sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
 
   return (
     <Modal
@@ -82,7 +84,7 @@ export const ModalTrailer = ({
         <div className="mt-[32px] text-white text-[16px] ">
           <Row>
             <div className="mb-8">
-              <Link to={`movie/${dataDetail.id}`}>
+              <Link to={`/${currentType}/${dataDetail.id}`}>
                 <ButtomCustom title="Play" nameIcon="iconPlay" />
               </Link>
             </div>
@@ -190,11 +192,19 @@ export const ModalTrailer = ({
                   <span className="text-[16px] mr-2">{t("Cast")}:</span>
                   <p className="line-clamp-2">
                     {listCastsMovie?.map((cast, index) => {
+                      const currentType =
+                        sessionStorage.getItem("currentTab") === "/"
+                          ? "movie"
+                          : "tv";
                       return index < listCastsMovie.length - 1 ? (
-                        <Link to={`cast/${cast.id}`}>{`${cast.name},  `}</Link>
+                        <Link
+                          to={`/cast/${cast.id}/${currentType}`}
+                        >{`${cast.name},  `}</Link>
                       ) : (
                         // cast.name
-                        <Link to={`cast/${cast.id}`}>{`${cast.name}`}</Link>
+                        <Link
+                          to={`/cast/${cast.id}/${currentType}`}
+                        >{`${cast.name}`}</Link>
                       );
                     })}
                   </p>
@@ -203,9 +213,13 @@ export const ModalTrailer = ({
                   <span className="text-[16px] mr-2">{t("Genres")}:</span>
                   <div className="flex">
                     {dataDetail?.genres?.map((genre, index) => {
+                      const currentType =
+                        sessionStorage.getItem("currentTab") === "/"
+                          ? "movie"
+                          : "tv";
                       return (
                         <div key={index} className="flex">
-                          <Link to={`/genres/${genre.id}/movie`}>
+                          <Link to={`/genres/${genre.id}/${currentType}`}>
                             {index < dataDetail.genres.length - 1 ? (
                               <span>{genre.name},&nbsp; </span>
                             ) : (
