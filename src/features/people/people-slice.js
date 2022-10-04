@@ -6,12 +6,14 @@ import {
   getPopularPeople,
   getSearchPeople,
   getSocialNetwork,
+  getTvShowOfCast,
 } from "./api-thunk";
 
 const initialState = {
   dataDetailCast: {},
   dataSocialNetwork: {},
   listMovieOfCast: [],
+  listTvShowOfCast: [],
   dataCastTranslate: {},
   listPopularPeople: [],
   detailListPeople: {
@@ -108,6 +110,17 @@ export const PeopleSlice = createSlice({
       state.isLoadingPeople = true;
     },
     [getMovieOfCast.rejected]: (state, action) => {
+      state.isLoadingPeople = true;
+    },
+    // get tv show of cast
+    [getTvShowOfCast.pending]: (state, action) => {
+      state.isLoadingPeople = true;
+    },
+    [getTvShowOfCast.fulfilled]: (state, action) => {
+      state.listTvShowOfCast = [...action.payload.cast];
+      state.isLoadingPeople = true;
+    },
+    [getTvShowOfCast.rejected]: (state, action) => {
       state.isLoadingPeople = true;
     },
   },

@@ -120,10 +120,8 @@ const PeoplePage = () => {
       ) : (
         <div className="flex flex-wrap gap-10">
           {listPopularPeople.map((people, index) => {
-            const currentType =
-              sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
             return (
-              <Link to={`/cast/${people.id}/${currentType}`} key={index}>
+              <Link to={`/cast/${people.id}`} key={index}>
                 <div className="rounded-lg overflow-hidden hover:scale-110 duration-200">
                   <ImageCustom
                     alt="people"

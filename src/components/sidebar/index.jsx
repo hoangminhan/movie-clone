@@ -18,7 +18,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style.scss";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "contexts";
 
 // styled
 const StyledMenu = styled(Menu)`
@@ -94,6 +95,10 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
   let navigate = useNavigate();
   const location = useLocation();
 
+  const stateContext = useContext(UserContext);
+  const { currentTabGlobal } = stateContext;
+  const [tabGlobal, setTabGlobal] = currentTabGlobal;
+
   //  check full sidebar
   const handleChangeStatusMenu = (event) => {
     handleToggleMenu(!isToggle);
@@ -106,6 +111,8 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
     selectedKeys,
     domEvent,
   }) => {
+    setTabGlobal("/");
+    sessionStorage.setItem("currentTab", "/");
     navigate(key);
   };
 

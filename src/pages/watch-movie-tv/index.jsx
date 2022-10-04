@@ -25,11 +25,16 @@ import {
 } from "components";
 import { reducerClearSimilarMovie } from "features";
 import { useHomePage } from "hooks/use-homepage";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Iframe from "react-iframe";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import styled from "styled-components";
 import {
   embedMovie,
@@ -96,12 +101,23 @@ const WatchMovieTv = () => {
       });
     }
   };
+  const [searchParams, setSearchParams] = useSearchParams({});
 
   const [season, setSeason] = useState({
     numberSearson: 1,
-    currentSeason: 1,
-    currentEpisode: 1,
+    currentSeason: searchParams.get("currentSeason") || 1,
+    currentEpisode: searchParams.get("currentEpisode") || 1,
   });
+
+  useEffect(() => {
+    const type = sessionStorage.getItem("currentTab") || "/";
+    const currentType = type === "tv" ? "tv" : "movie";
+    if (currentType === "tv") {
+      setSearchParams({
+        ...season,
+      });
+    }
+  }, [season]);
 
   const stateContext = useContext(UserContext);
   const { currentTabGlobal } = stateContext;
@@ -126,8 +142,6 @@ const WatchMovieTv = () => {
     setCurrentPage((page) => page + 1);
     setIsLoadMore(false);
   };
-
-  console.log(handleRenderSeason(season.numberSearson)?.length);
 
   // scroll
 
@@ -230,13 +244,11 @@ const WatchMovieTv = () => {
         // language: locale,
         page: 1,
       });
+      console.log({ season });
       setCurrentUrl(
         currentType === "movie"
           ? embedMovie(idDetail)
-          : embedTV(idDetail, season.currentSeason, season.numberSearson)
-      );
-      console.log(
-        embedTV(idDetail, season.currentSeason, season.numberSearson)
+          : embedTV(idDetail, season.currentSeason, season.currentEpisode)
       );
     };
     handleGetData();
@@ -270,13 +282,14 @@ const WatchMovieTv = () => {
                 tabGlobal === "/"
                   ? infoTrailerMovie
                   : dataEposideTv?.videos?.results[0] ||
-                    dataSeasonTv?.videos?.results[0]
+                    dataSeasonTv?.videos?.results[0] ||
+                    dataDetail?.videos?.results[0]
               }
             />
 
             {/* xem phim */}
             <div className="my-10 mx-4 overflow-hidden">
-              {currentUrl && (
+              {/* {currentUrl && (
                 <Iframe
                   id="movie-id"
                   src={currentUrl}
@@ -284,22 +297,28 @@ const WatchMovieTv = () => {
                   width="100%"
                   allowFullScreen
                 ></Iframe>
-              )}
+              )} */}
             </div>
 
             {/* eposide tv */}
-            <div className="flex flex-col justify-end items-end px-[24px]">
-              <p className="italic font-bold">
-                Episode <span className="italic">{season.currentEpisode}</span>
-              </p>
-              <div className="flex">
-                <p>
-                  Season <span>{season.currentSeason}</span>
+
+            {tabGlobal === "/" ? (
+              ""
+            ) : (
+              <div className="flex flex-col justify-end items-end px-[24px]">
+                <p className="italic font-bold">
+                  Episode{" "}
+                  <span className="italic">{season.currentEpisode}</span>
                 </p>
-                &nbsp; - Episode{" "}
-                <span className="ml-1">{season.currentEpisode}</span>{" "}
+                <div className="flex">
+                  <p>
+                    Season <span>{season.currentSeason}</span>
+                  </p>
+                  &nbsp; - Episode{" "}
+                  <span className="ml-1">{season.currentEpisode}</span>{" "}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* season */}
             {handleRenderSeason(season.numberSearson)?.length === 1 ? (
@@ -319,7 +338,11 @@ const WatchMovieTv = () => {
                         if (season.currentSeason === +item) {
                           message.warning(`Bạn đang ở Season ${item}`);
                         } else {
-                          setSeason({ ...season, currentSeason: +item });
+                          setSeason({
+                            ...season,
+                            currentSeason: +item,
+                            currentEpisode: 1,
+                          });
                           handleScrollToTop();
                         }
                       }}
@@ -361,6 +384,7 @@ const WatchMovieTv = () => {
             {/* recommendation */}
             <div className="px-4">
               <ComponentSlider
+                type={tabGlobal === "/" ? "movie" : "tv"}
                 dataPopular={listRecommendationMovie}
                 title="Recommendations"
               />

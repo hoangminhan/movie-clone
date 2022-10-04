@@ -22,15 +22,21 @@ export const TabTvShow = () => {
           ) : (
             <Col span={24}>
               <Banner listTrending={listTrending} />
-              <ComponentSlider dataPopular={listMovie} />
+              <ComponentSlider dataPopular={listMovie} type="tv" />
               <ComponentSlider
                 dataPopular={listMovieUpComing}
                 title="Up Coming"
+                type="tv"
               />
-              <ComponentSlider dataPopular={listTrending} title="Trending" />
+              <ComponentSlider
+                dataPopular={listTrending}
+                title="Trending"
+                type="tv"
+              />
               <ComponentSlider
                 dataPopular={listMovieTopRated}
                 title="Top Rated"
+                type="tv"
               />
             </Col>
           )}

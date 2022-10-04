@@ -36,7 +36,9 @@ export const Menu = () => {
   const stateContext = useContext(UserContext);
   const { currentTabGlobal } = stateContext;
   const [tabGlobal, setTabGlobal] = currentTabGlobal;
-  const [currentTab, setCurrentTab] = useState(tabGlobal || "/");
+  console.log({ tabGlobal });
+  const [currentTab, setCurrentTab] = useState(tabGlobal);
+  console.log(currentTab);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

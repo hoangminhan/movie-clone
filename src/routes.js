@@ -82,7 +82,7 @@ let RouteList = [
     ),
   },
   {
-    path: "/keyword/:idKeyword/:type",
+    path: "/keyword/:idKeyword",
     element: (
       <DefaultLayout page="keyword">
         <KeywordPage />
@@ -98,7 +98,7 @@ let RouteList = [
     ),
   },
   {
-    path: "/cast/:idCast/:type",
+    path: "/cast/:idCast",
     element: (
       <DefaultLayout>
         <CastPage />

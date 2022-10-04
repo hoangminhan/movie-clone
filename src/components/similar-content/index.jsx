@@ -11,8 +11,10 @@ export const SimilarContent = ({ dataSimilar }) => {
     <>
       <div className="flex flex-wrap gap-12 justify-center">
         {dataSimilar?.map((similar, index) => {
+          const currentType =
+            sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
           return (
-            <Link key={index} to={`/movie/${similar.id}`}>
+            <Link key={index} to={`/${currentType}/${similar.id}`}>
               <div className="rounded-global max-w-[185px] hover:scale-110 duration-300 delay-100 rounded-[6px] overflow-hidden">
                 {/* img */}
                 <div className="relative group ">

@@ -21,15 +21,21 @@ export const TabMovie = React.memo(() => {
         ) : (
           <Col span={24}>
             <Banner listTrending={listTrending} isLoading={isLoading} />
-            <ComponentSlider dataPopular={listMovie} />
+            <ComponentSlider dataPopular={listMovie} type="movie" />
             <ComponentSlider
               dataPopular={listMovieUpComing}
               title="Up Coming"
+              type="movie"
             />
-            <ComponentSlider dataPopular={listTrending} title="Trending" />
+            <ComponentSlider
+              dataPopular={listTrending}
+              title="Trending"
+              type="movie"
+            />
             <ComponentSlider
               dataPopular={listMovieTopRated}
               title="Top Rated"
+              type="movie"
             />
           </Col>
         )}

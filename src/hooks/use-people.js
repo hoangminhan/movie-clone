@@ -5,6 +5,7 @@ import {
   getPopularPeople,
   getSearchPeople,
   getSocialNetwork,
+  getTvShowOfCast,
 } from "features";
 
 const { useSelector, useDispatch } = require("react-redux");
@@ -19,6 +20,7 @@ export const UsePeople = () => {
     dataCastTranslate,
     listPopularPeople,
     detailListPeople,
+    listTvShowOfCast,
   } = resultPeople;
 
   const handleGetListCastPopular = (params) => {
@@ -49,13 +51,19 @@ export const UsePeople = () => {
     };
     return dispatch(getSocialNetwork(payload));
   };
-  const handleGetMovieOfCast = (id, params, type) => {
+  const handleGetMovieOfCast = (id, params) => {
     const payload = {
       id,
       params,
-      type,
     };
     return dispatch(getMovieOfCast(payload));
+  };
+  const handleGetTvOfCast = (id, params) => {
+    const payload = {
+      id,
+      params,
+    };
+    return dispatch(getTvShowOfCast(payload));
   };
 
   return {
@@ -65,11 +73,13 @@ export const UsePeople = () => {
     dataCastTranslate,
     listPopularPeople,
     detailListPeople,
+    listTvShowOfCast,
     handleGetDetailCasts,
     handleGetSocialNetwork,
     handleGetMovieOfCast,
     handleGetDataTranslateCast,
     handleGetListCastPopular,
     handleGetSearchPeople,
+    handleGetTvOfCast,
   };
 };

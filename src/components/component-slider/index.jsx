@@ -13,7 +13,7 @@ import { formatNumber, getImage } from "utils";
 import "./style.scss";
 
 export const ComponentSlider = React.memo(
-  ({ dataPopular, children, title, slidesPerGroup = "4" }) => {
+  ({ dataPopular, children, title, slidesPerGroup = "4", type }) => {
     const currentType =
       sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
     const [t] = useTranslation();
@@ -38,7 +38,7 @@ export const ComponentSlider = React.memo(
             {dataPopular?.map((item, index) => {
               return (
                 <SwiperSlide key={index} className="cursor-pointer">
-                  <Link to={`/${currentType}/${item.id}`}>
+                  <Link to={`/${type}/${item.id}`}>
                     <div
                       className="group relative delay-150 hover:scale-110 duration-[250ms]"
                       // onClick={() => {
@@ -55,12 +55,10 @@ export const ComponentSlider = React.memo(
                       {/* name film */}
                       <div className="absolute bottom-0 bg-[#0d0c0f] w-full rounded-b-[6px]">
                         <Tooltip
-                          title={
-                            !item?.title ? item?.original_title : item?.title
-                          }
+                          title={!item?.title ? item?.name : item?.title}
                         >
                           <p className="text-[16px] line-clamp-1 text-center text-[#999898]">
-                            {!item?.title ? item?.original_title : item?.title}
+                            {!item?.title ? item?.name : item?.title}
                           </p>
                         </Tooltip>
                       </div>

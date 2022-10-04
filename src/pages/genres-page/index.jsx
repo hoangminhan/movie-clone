@@ -102,6 +102,7 @@ const GenresPage = () => {
         ) : (
           <div className="flex flex-wrap gap-6">
             {dataGenres?.map((item, index) => {
+              console.log({ item });
               return (
                 index < quanlityItem && (
                   // <Link key={index} to={`/movie/${item.id}`}>
@@ -113,8 +114,9 @@ const GenresPage = () => {
                         item?.media_type === "movie" ? "movie" : "tv";
                       sessionStorage.setItem(
                         "currentTab",
-                        type === "movie" ? "/" : "tab-tv-show"
+                        item.media_type === "movie" ? "/" : "tab-tv-show"
                       );
+
                       navigate(`/${type}/${item.id}`);
                     }}
                   >

@@ -11,7 +11,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import Iframe from "react-iframe";
 import ReactPlayer from "react-player";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { embedMovieTrailer, formatNumber, getImage } from "utils";
 
@@ -32,6 +32,7 @@ export const BodyWatch = ({
 }) => {
   const { numberSearson, currentSeason, currentEpisode } = dataSeason;
   const [t] = useTranslation();
+  const navigate = useNavigate();
   return (
     <>
       <div className="mt-[128px] px-4 text-[#fff]">
@@ -42,7 +43,7 @@ export const BodyWatch = ({
         {dataDetail ? (
           <div className="px-4 mt-6">
             <h3 className="text-[#fff]">
-              Tóm tắt:
+              Tóm tắt: &nbsp;
               {currenTab !== "/" ? (
                 <>
                   <span>Season {currentSeason}</span>{" "}
@@ -176,19 +177,20 @@ export const BodyWatch = ({
             <div className="flex flex-wrap gap-2 text-[14px] text-yellow-200 mt-8">
               <p className="text-[24px]">{t("Keywords")}:</p>
               {listKeywordsMovie.map((keyword) => {
-                const currentType =
-                  sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
                 const nameKeyword = keyword.name;
                 return (
                   <Tooltip key={keyword.id} title={keyword.name}>
-                    <Link
-                      to={{
-                        pathname: `/keyword/${keyword.id}/${currentType}`,
+                    <p
+                      className="underline cursor-pointer"
+                      onClick={() => {
+                        const currentTab = sessionStorage.getItem("currentTab");
+                        if (currentTab === "/") {
+                          navigate(`/keyword/${keyword.id}`);
+                        }
                       }}
-                      state={{ nameKeyword } ? nameKeyword : "sdasdsd"}
                     >
-                      <p className="underline cursor-pointer">{keyword.name}</p>
-                    </Link>
+                      {keyword.name}
+                    </p>
                   </Tooltip>
                 );
               })}

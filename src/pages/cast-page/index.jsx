@@ -24,9 +24,11 @@ const CastPage = () => {
     dataDetailCast,
     dataSocialNetwork,
     listMovieOfCast,
+    listTvShowOfCast,
     handleGetDetailCasts,
     handleGetSocialNetwork,
     handleGetMovieOfCast,
+    handleGetTvOfCast,
   } = UsePeople();
   const [isExpand, setIsExpand] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,29 +43,22 @@ const CastPage = () => {
       setIsLoading(true);
       const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
 
-      const currentType =
-        sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
-
       await handleGetDetailCasts(idCast, {
         api_key: process.env.REACT_APP_API_KEY,
-        // language: locale,
       });
-      // await handleGetDataTranslateCast(idCast, {
-      //   api_key: process.env.REACT_APP_API_KEY,
-      //   language: "en-US",
-      // });
+
       await handleGetSocialNetwork(idCast, {
         api_key: process.env.REACT_APP_API_KEY,
         language: locale,
       });
-      await handleGetMovieOfCast(
-        idCast,
-        {
-          api_key: process.env.REACT_APP_API_KEY,
-          language: locale,
-        },
-        currentType
-      );
+      await handleGetMovieOfCast(idCast, {
+        api_key: process.env.REACT_APP_API_KEY,
+        language: locale,
+      });
+      await handleGetTvOfCast(idCast, {
+        api_key: process.env.REACT_APP_API_KEY,
+        language: locale,
+      });
 
       setIsLoading(false);
     };
@@ -217,8 +212,19 @@ const CastPage = () => {
       <StyleSkeleton active loading={isLoading}>
         <div className="px-5 mb-10">
           <ComponentSlider
+            type="movie"
             dataPopular={listMovieOfCast}
             title={`${t("Movies of")} ${dataDetailCast.name}`}
+            slidesPerGroup={4}
+          />
+        </div>
+      </StyleSkeleton>
+      <StyleSkeleton active loading={isLoading}>
+        <div className="px-5 mb-10">
+          <ComponentSlider
+            type="tv"
+            dataPopular={listTvShowOfCast}
+            title={`${t("Tv show of")} ${dataDetailCast.name}`}
             slidesPerGroup={4}
           />
         </div>
