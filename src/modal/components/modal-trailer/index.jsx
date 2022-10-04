@@ -198,6 +198,7 @@ export const ModalTrailer = ({
                           : "tv";
                       return index < listCastsMovie.length - 1 ? (
                         <Link
+                          key={index}
                           to={`/cast/${cast.id}/${currentType}`}
                         >{`${cast.name},  `}</Link>
                       ) : (

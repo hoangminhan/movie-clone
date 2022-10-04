@@ -48,6 +48,7 @@ export const useHomePage = () => {
     listMovieOfGenres,
     dataSeasonTv,
     dataEposideTv,
+    isLoadingChangeTab,
   } = resultMovie;
 
   const handleGetTypeAction = (payload) => {
@@ -225,6 +226,7 @@ export const useHomePage = () => {
     dataSeasonTv,
     listMovieOfGenres,
     dataEposideTv,
+    isLoadingChangeTab,
     handleGetDetailMovie,
     handleGetMovie,
     handleGetListTrending,

@@ -1,4 +1,4 @@
-import { Col, Row } from "antd";
+import { Col, Row, Skeleton } from "antd";
 import { Banner, ComponentSlider, Filter } from "components";
 import { useHomePage } from "hooks/use-homepage";
 import React from "react";
@@ -10,18 +10,29 @@ export const TabMovie = React.memo(() => {
     listMovieTopRated,
     listMovieUpComing,
     isLoading,
+    isLoadingChangeTab,
   } = useHomePage();
 
   return (
     <>
       <Row gutter={[12, 12]}>
-        <Col span={24}>
-          <Banner listTrending={listTrending} isLoading={isLoading} />
-          <ComponentSlider dataPopular={listMovie} />
-          <ComponentSlider dataPopular={listMovieUpComing} title="Up Coming" />
-          <ComponentSlider dataPopular={listTrending} title="Trending" />
-          <ComponentSlider dataPopular={listMovieTopRated} title="Top Rated" />
-        </Col>
+        {isLoadingChangeTab ? (
+          <Skeleton active paragraph={{ rows: 20 }} />
+        ) : (
+          <Col span={24}>
+            <Banner listTrending={listTrending} isLoading={isLoading} />
+            <ComponentSlider dataPopular={listMovie} />
+            <ComponentSlider
+              dataPopular={listMovieUpComing}
+              title="Up Coming"
+            />
+            <ComponentSlider dataPopular={listTrending} title="Trending" />
+            <ComponentSlider
+              dataPopular={listMovieTopRated}
+              title="Top Rated"
+            />
+          </Col>
+        )}
       </Row>
     </>
   );

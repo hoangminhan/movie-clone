@@ -48,6 +48,7 @@ const initialState = {
     totalPages: 1,
   },
   dataDetail: {},
+  isLoadingChangeTab: false,
 };
 export const movieSlice = createSlice({
   name: "movie",
@@ -55,6 +56,9 @@ export const movieSlice = createSlice({
   reducers: {
     reducerClearSimilarMovie: (state, action) => {
       state.listSimilarMovie = [];
+    },
+    reducerLoadingChangeTab: (state, action) => {
+      state.isLoadingChangeTab = action.payload;
     },
   },
   extraReducers: {
@@ -286,5 +290,5 @@ export const movieSlice = createSlice({
   },
 });
 const { reducer, actions } = movieSlice;
-export const { reducerClearSimilarMovie } = actions;
+export const { reducerClearSimilarMovie, reducerLoadingChangeTab } = actions;
 export default reducer;

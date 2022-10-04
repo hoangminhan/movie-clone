@@ -49,7 +49,6 @@ export const getMovieOfCast = createAsyncThunk(
   "movie-of-cast",
   async (payload) => {
     const { id, params, type } = payload;
-    console.log({ type });
 
     if (type === "movie") {
       return await apiPeople.getMovieOfCast(id, params);

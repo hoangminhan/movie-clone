@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 import { embedMovie, getImage } from "utils";
 
 export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
-  console.log({ dataDetail });
   const { isLoading } = useHomePage();
   const executeScroll = () => {
     const elementToScroll = document.getElementById("movie-id");

@@ -30,7 +30,6 @@ export const BodyWatch = ({
   currenTab,
   dataSeason,
 }) => {
-  console.log({ dataDetail, listCastsMovie });
   const { numberSearson, currentSeason, currentEpisode } = dataSeason;
   const [t] = useTranslation();
   return (

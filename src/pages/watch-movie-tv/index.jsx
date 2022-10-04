@@ -31,7 +31,13 @@ import Iframe from "react-iframe";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { embedMovie, embedTV, formatNumber, getImage } from "utils";
+import {
+  embedMovie,
+  embedTV,
+  formatNumber,
+  getImage,
+  handleScrollToTop,
+} from "utils";
 import { BodyWatch, EpisodeTv, Hero } from "./components";
 import { useContext } from "react";
 import { UserContext } from "contexts";
@@ -62,6 +68,17 @@ const WatchMovieTv = () => {
     dataEposideTv,
   } = useHomePage();
 
+  // render season
+  const handleRenderSeason = (number) => {
+    let i = [];
+    for (let n = 1; n <= number; n++) {
+      if (n <= number) {
+        i.push(n);
+      }
+    }
+    return i;
+  };
+
   const [currentUrl, setCurrentUrl] = useState("");
   // const handleChangeUrl = (newUrl) => {
   //   setCurrentUrl(newUrl);
@@ -89,7 +106,6 @@ const WatchMovieTv = () => {
   const stateContext = useContext(UserContext);
   const { currentTabGlobal } = stateContext;
   const [tabGlobal] = currentTabGlobal;
-  console.log({ tabGlobal });
 
   const handleLoadMoreSimilar = async () => {
     setIsLoadMore(true);
@@ -111,15 +127,15 @@ const WatchMovieTv = () => {
     setIsLoadMore(false);
   };
 
+  console.log(handleRenderSeason(season.numberSearson)?.length);
+
+  // scroll
+
   // change episode
   const handleChangeEpisode = (episode) => {
-    console.log({ episode });
     if (+episode !== +season.currentEpisode) {
       setSeason({ ...season, currentEpisode: episode });
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+      handleScrollToTop();
     } else {
       message.warning(`Bạn đang ở episode ${episode}`);
     }
@@ -217,11 +233,14 @@ const WatchMovieTv = () => {
       setCurrentUrl(
         currentType === "movie"
           ? embedMovie(idDetail)
-          : embedTV(idDetail, season.currentSeason, season.currentEpisode)
+          : embedTV(idDetail, season.currentSeason, season.numberSearson)
+      );
+      console.log(
+        embedTV(idDetail, season.currentSeason, season.numberSearson)
       );
     };
     handleGetData();
-  }, [idDetail, season.currentEpisode]);
+  }, [idDetail, season.currentEpisode, season.currentSeason]);
   return (
     <div>
       <Row className="mr-[350px] h-full">
@@ -250,13 +269,14 @@ const WatchMovieTv = () => {
               infoTrailerMovie={
                 tabGlobal === "/"
                   ? infoTrailerMovie
-                  : dataEposideTv?.videos?.results[0] || []
+                  : dataEposideTv?.videos?.results[0] ||
+                    dataSeasonTv?.videos?.results[0]
               }
             />
 
             {/* xem phim */}
             <div className="my-10 mx-4 overflow-hidden">
-              {/* {currentUrl && (
+              {currentUrl && (
                 <Iframe
                   id="movie-id"
                   src={currentUrl}
@@ -264,12 +284,11 @@ const WatchMovieTv = () => {
                   width="100%"
                   allowFullScreen
                 ></Iframe>
-              )} */}
-              <p>hello</p>
+              )}
             </div>
 
             {/* eposide tv */}
-            <div className="flex flex-col justify-end items-end">
+            <div className="flex flex-col justify-end items-end px-[24px]">
               <p className="italic font-bold">
                 Episode <span className="italic">{season.currentEpisode}</span>
               </p>
@@ -282,6 +301,37 @@ const WatchMovieTv = () => {
               </div>
             </div>
 
+            {/* season */}
+            {handleRenderSeason(season.numberSearson)?.length === 1 ? (
+              ""
+            ) : (
+              <div className="flex gap-5 gap-y-7 flex-wrap px-[24px] mt-[32px]">
+                {handleRenderSeason(season.numberSearson).map((item, index) => {
+                  return (
+                    <p
+                      key={index}
+                      className={`px-2 py-1 rounded-md overflow-hidden cursor-pointer flex text-[18px]  ${
+                        +season.currentSeason === +item
+                          ? "bg-black text-white"
+                          : "bg-slate-400"
+                      }`}
+                      onClick={() => {
+                        if (season.currentSeason === +item) {
+                          message.warning(`Bạn đang ở Season ${item}`);
+                        } else {
+                          setSeason({ ...season, currentSeason: +item });
+                          handleScrollToTop();
+                        }
+                      }}
+                    >
+                      Season &nbsp;<span>{item}</span>
+                    </p>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* action */}
             <div className="flex justify-start mr-6 mt-[24px]">
               <div className="ml-[50px] mr-[32px] group relative w-[50px] h-[50px] cursor-pointer duration-300">
                 <div className="absolute z-[2]">

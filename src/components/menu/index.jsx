@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "contexts";
+import { reducerLoadingChangeTab } from "features";
+import { useDispatch } from "react-redux";
 
 const { TabPane } = Tabs;
 
@@ -36,11 +38,13 @@ export const Menu = () => {
   const [tabGlobal, setTabGlobal] = currentTabGlobal;
   const [currentTab, setCurrentTab] = useState(tabGlobal || "/");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChangeCurrentTab = (data) => {
     sessionStorage.setItem("currentTab", data);
     setCurrentTab(data);
     setTabGlobal(data);
+    dispatch(reducerLoadingChangeTab(true));
 
     if (data === "/") {
       navigate(`/`);
@@ -49,6 +53,10 @@ export const Menu = () => {
     } else {
       navigate("/tv-show");
     }
+
+    setTimeout(() => {
+      dispatch(reducerLoadingChangeTab(false));
+    }, 100);
   };
   return (
     <nav className="basis-1/5">

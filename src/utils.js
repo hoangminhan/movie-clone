@@ -26,3 +26,9 @@ export const formatNumber = (number, type = 1) => {
     ? new Intl.NumberFormat().format(Math.round(number * type) / type)
     : 0;
 };
+export const handleScrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};

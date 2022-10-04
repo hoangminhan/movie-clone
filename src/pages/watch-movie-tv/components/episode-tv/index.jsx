@@ -20,7 +20,6 @@ export const EpisodeTv = ({
       </h3>
       <div>
         {episodes?.map((item, index) => {
-          console.log({ item });
           return (
             <div
               key={index}
