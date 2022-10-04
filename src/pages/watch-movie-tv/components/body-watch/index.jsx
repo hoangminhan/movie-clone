@@ -27,8 +27,11 @@ export const BodyWatch = ({
   listKeywordsMovie,
   infoTrailerMovie,
   isLoadingDetail,
+  currenTab,
+  dataSeason,
 }) => {
-  console.log({ dataDetail, listKeywordsMovie });
+  console.log({ dataDetail, listCastsMovie });
+  const { numberSearson, currentSeason, currentEpisode } = dataSeason;
   const [t] = useTranslation();
   return (
     <>
@@ -40,7 +43,15 @@ export const BodyWatch = ({
         {dataDetail ? (
           <div className="px-4 mt-6">
             <h3 className="text-[#fff]">
-              Tóm tắt:{" "}
+              Tóm tắt:
+              {currenTab !== "/" ? (
+                <>
+                  <span>Season {currentSeason}</span>{" "}
+                  <span>Episode {currentEpisode}</span>
+                </>
+              ) : (
+                ""
+              )}
               <span className="mt-3">
                 {dataDetail?.title
                   ? dataDetail.title
@@ -53,53 +64,67 @@ export const BodyWatch = ({
             </p>
             {/* genres */}
 
-            <div className="text-[18px] flex items-center">
-              <span className="mr-2 text-[24px]">{t("Genres")}:</span>
-              {dataDetail?.genres?.map((genre, index) => {
-                const currentType =
-                  sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
-                return (
-                  <div key={index} className="cursor-pointer">
-                    <Link
-                      to={`/genres/${genre.id}-${genre.name}/${currentType}`}
-                    >
-                      {index < dataDetail.genres.length - 1 ? (
-                        <span>{genre.name},&nbsp;</span>
-                      ) : (
-                        <span>{genre.name}</span>
-                      )}
-                    </Link>
-                  </div>
-                );
-              })}
-            </div>
+            {currenTab === "/" ? (
+              <div className="text-[18px] flex items-center">
+                <span className="mr-2 text-[24px]">{t("Genres")}:</span>
+                {dataDetail?.genres?.map((genre, index) => {
+                  const currentType =
+                    sessionStorage.getItem("currentTab") === "/"
+                      ? "movie"
+                      : "tv";
+                  return (
+                    <div key={index} className="cursor-pointer">
+                      <Link
+                        to={`/genres/${genre.id}-${genre.name}/${currentType}`}
+                      >
+                        {index < dataDetail.genres.length - 1 ? (
+                          <span>{genre.name},&nbsp;</span>
+                        ) : (
+                          <span>{genre.name}</span>
+                        )}
+                      </Link>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              ""
+            )}
 
             {/* trailer */}
 
             <div className="mt-4 animate-pulse">
               <p className="my-4 underline">Trailer:</p>
-              <ReactPlayer
-                url={embedMovieTrailer(infoTrailerMovie?.key)}
-                style={{ margin: "0 auto" }}
-                width="80%"
-                height={500}
-                controls
-              />
+              {isLoadingDetail ? (
+                <Skeleton active paragraph={{ rows: 10 }} />
+              ) : (
+                <ReactPlayer
+                  url={embedMovieTrailer(infoTrailerMovie?.key)}
+                  style={{ margin: "0 auto" }}
+                  width="80%"
+                  height={500}
+                  controls
+                />
+              )}
             </div>
 
             {/* rating */}
             <div className="flex items-center gap-4 mt-9">
               <p className="text-white text-[24px]">{t("Rating")}:</p>
-              <StyledProgress
-                format={(percent, successPercent) => {
-                  return <span className="text-white">{percent / 10}</span>;
-                }}
-                width={80}
-                type="circle"
-                strokeColor="text-primary"
-                trailColor="white"
-                percent={formatNumber(dataDetail.vote_average, 10) * 10}
-              />
+              {isLoadingDetail ? (
+                <Skeleton active avatar />
+              ) : (
+                <StyledProgress
+                  format={(percent, successPercent) => {
+                    return <span className="text-white">{percent / 10}</span>;
+                  }}
+                  width={80}
+                  type="circle"
+                  strokeColor="text-primary"
+                  trailColor="white"
+                  percent={formatNumber(dataDetail.vote_average, 10) * 10}
+                />
+              )}
             </div>
             {/* casts */}
 
@@ -110,7 +135,7 @@ export const BodyWatch = ({
               )}
             </h3>
             <div className="flex flex-wrap gap-x-4 gap-y-6 my-4 pl-4">
-              {listCastsMovie.map((cast, index) => {
+              {listCastsMovie?.map((cast, index) => {
                 const currentType =
                   sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
                 return (

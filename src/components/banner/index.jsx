@@ -134,7 +134,6 @@ export const Banner = ({ listTrending, isLoading }) => {
   //     swiperRef.current.swiper.autoplay.start();
   //   }
   // }, [stopSlider]);
-  console.log({ dataDetail });
 
   useEffect(() => {
     if (listTrending?.length) {

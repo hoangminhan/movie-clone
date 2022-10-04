@@ -39,4 +39,14 @@ export const ApiTvShow = {
     const url = "genre/tv/list";
     return axiosClient.get(url, { params });
   },
+  // get season
+  getSeasonTv: (id, numberSeason, params) => {
+    const url = `tv/${id}/season/${numberSeason}`;
+    return axiosClient.get(url, { params });
+  },
+  // get episode
+  getEpisodeTv: (id, numberSeason, eposideNumber, params) => {
+    const url = `tv/${id}/season/${numberSeason}/episode/${eposideNumber}`;
+    return axiosClient.get(url, { params });
+  },
 };

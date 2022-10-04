@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { embedMovie, getImage } from "utils";
 
 export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
+  console.log({ dataDetail });
   const { isLoading } = useHomePage();
   const executeScroll = () => {
     const elementToScroll = document.getElementById("movie-id");
@@ -50,9 +51,7 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
           {/* name phim */}
           <div className="absolute  left-[30%] bottom-[20%] max-w-[500px] ">
             <p className="text-white text-[40px] font-medium drop-shadow-2xl shadow-[red] line-clamp-2  p-5 ml-3 pr-0  leading-10 stroke-text">
-              {dataDetail?.title
-                ? dataDetail?.title
-                : dataDetail?.original_title}
+              {dataDetail?.title ? dataDetail?.title : dataDetail?.name}
             </p>
           </div>
 
@@ -82,7 +81,7 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
             onClick={() => {
               executeScroll();
 
-              handleChangeUrl(embedMovie(dataDetail.id));
+              // handleChangeUrl(embedMovie(dataDetail.id));
             }}
           >
             <div className="flex items-center justify-center px-4 py-3 bg-primary text-white rounded-[20px] hover:scale-110 duration-200 cursor-pointer">

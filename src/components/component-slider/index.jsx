@@ -11,11 +11,11 @@ import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { formatNumber, getImage } from "utils";
 import "./style.scss";
-const currentType =
-  sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
 
 export const ComponentSlider = React.memo(
   ({ dataPopular, children, title, slidesPerGroup = "4" }) => {
+    const currentType =
+      sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
     const [t] = useTranslation();
     return (
       <div className={`${title ? "mt-[64px]" : "mt-[128px]"}`}>

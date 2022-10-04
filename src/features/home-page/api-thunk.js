@@ -182,3 +182,29 @@ export const getDiscoverMovie = createAsyncThunk(
     return response;
   }
 );
+
+// get season tv
+export const getSeasonTv = createAsyncThunk(
+  "list-season-tv",
+  async (payload) => {
+    const { id, numberSeason, params } = payload;
+
+    const response = await ApiTvShow.getSeasonTv(id, numberSeason, params);
+    return response;
+  }
+);
+// get eposide of season tv
+export const getEpisodeTv = createAsyncThunk(
+  "list-eposide-season",
+  async (payload) => {
+    const { id, numberSeason, eposideNumber, params } = payload;
+
+    const response = await ApiTvShow.getEpisodeTv(
+      id,
+      numberSeason,
+      eposideNumber,
+      params
+    );
+    return response;
+  }
+);

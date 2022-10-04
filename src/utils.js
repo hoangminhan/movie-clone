@@ -7,6 +7,8 @@ export const getImage = (url, width = "original") => {
 };
 
 export const embedMovie = (id) => `${EMBED_TO}/movie?id=${id}`;
+export const embedTV = (id, season, episode) =>
+  `${EMBED_TO}/tv?id=${id}&s=${season}&e=${episode}`;
 export const embedMovieTrailer = (url) => `${EMBED_TO_TRAILER}${url}`;
 
 // open notification

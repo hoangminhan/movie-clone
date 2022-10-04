@@ -4,6 +4,7 @@ import {
   getDetailKeyword,
   getDetailMovie,
   getDiscoverMovie,
+  getEpisodeTv,
   getKeywords,
   getListGenresMovie,
   getListMovieKeyword,
@@ -11,6 +12,7 @@ import {
   getListReviews,
   getListTrending,
   getRecommendationMovie,
+  getSeasonTv,
   getSimilarMovie,
   getTrailerMovie,
   getTrailerTvShow,
@@ -44,6 +46,8 @@ export const useHomePage = () => {
     listMovieKeyword,
     dataDetailKeyword,
     listMovieOfGenres,
+    dataSeasonTv,
+    dataEposideTv,
   } = resultMovie;
 
   const handleGetTypeAction = (payload) => {
@@ -179,6 +183,25 @@ export const useHomePage = () => {
   const handleGetDiscoverMovie = (params) => {
     return dispatch(getDiscoverMovie(params));
   };
+  // get season
+  const handleGetSeasonTv = (id, numberSeason, params) => {
+    const payload = {
+      id,
+      numberSeason,
+      params,
+    };
+    return dispatch(getSeasonTv(payload));
+  };
+  // get eposide of season tv
+  const handleGetEpisodeTv = (id, numberSeason, eposideNumber, params) => {
+    const payload = {
+      id,
+      numberSeason,
+      eposideNumber,
+      params,
+    };
+    return dispatch(getEpisodeTv(payload));
+  };
 
   return {
     listMovie,
@@ -199,7 +222,9 @@ export const useHomePage = () => {
     dataDiscoverMovie,
     listMovieKeyword,
     dataDetailKeyword,
+    dataSeasonTv,
     listMovieOfGenres,
+    dataEposideTv,
     handleGetDetailMovie,
     handleGetMovie,
     handleGetListTrending,
@@ -215,5 +240,7 @@ export const useHomePage = () => {
     handleGetListMovieKeyword,
     handleGetDetailKeyword,
     handleGetListMovieOfGenres,
+    handleGetSeasonTv,
+    handleGetEpisodeTv,
   };
 };

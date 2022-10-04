@@ -5,6 +5,7 @@ import {
   getDetailKeyword,
   getDetailMovie,
   getDiscoverMovie,
+  getEpisodeTv,
   getKeywords,
   getListGenresMovie,
   getListMovieKeyword,
@@ -12,6 +13,7 @@ import {
   getListReviews,
   getListTrending,
   getRecommendationMovie,
+  getSeasonTv,
   getSimilarMovie,
   getTrailerMovie,
   handleGetListMovie,
@@ -33,6 +35,8 @@ const initialState = {
   listMovieKeyword: {},
   dataDetailKeyword: {},
   listMovieOfGenres: {},
+  dataSeasonTv: {},
+  dataEposideTv: {},
   isLoading: false,
   detail: {
     currentPage: 1,
@@ -120,7 +124,6 @@ export const movieSlice = createSlice({
       state.isLoading = true;
     },
     [getDetailMovie.fulfilled]: (state, action) => {
-      console.log("......", action.payload);
       state.isLoading = false;
       state.dataDetail = action.payload;
     },
@@ -256,6 +259,28 @@ export const movieSlice = createSlice({
       state.isLoading = false;
     },
     [getListMovieOfGenres.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    // get season tv
+    [getSeasonTv.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [getSeasonTv.fulfilled]: (state, action) => {
+      state.dataSeasonTv = { ...action.payload };
+      state.isLoading = false;
+    },
+    [getSeasonTv.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    // get season tv
+    [getEpisodeTv.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [getEpisodeTv.fulfilled]: (state, action) => {
+      state.dataEposideTv = { ...action.payload };
+      state.isLoading = false;
+    },
+    [getEpisodeTv.rejected]: (state, action) => {
       state.isLoading = false;
     },
   },

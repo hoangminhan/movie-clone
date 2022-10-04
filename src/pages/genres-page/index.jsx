@@ -102,7 +102,6 @@ const GenresPage = () => {
         ) : (
           <div className="flex flex-wrap gap-6">
             {dataGenres?.map((item, index) => {
-              console.log({ item });
               return (
                 index < quanlityItem && (
                   // <Link key={index} to={`/movie/${item.id}`}>
