@@ -62,6 +62,7 @@ const KeywordPage = () => {
   const [dataModal, setDataModal] = useState({});
 
   const handleToggleModal = (result) => {
+    console.log("click");
     setVisibleModal(true);
     setDataModal(result);
   };

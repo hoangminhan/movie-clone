@@ -158,10 +158,14 @@ export const getListReviews = createAsyncThunk(
 );
 // get list geners movie
 export const getListGenresMovie = createAsyncThunk(
-  "list-genres-movie",
-  async (params) => {
-    const response = await apiMovie.getListGenresMovie(params);
-    return response;
+  "list-genres-movie-tv",
+  async (payload) => {
+    const { type, params } = payload;
+    if (type === "movie") {
+      return await apiMovie.getListGenresMovie(params);
+    } else {
+      return await ApiTvShow.getListGenresTv(params);
+    }
   }
 );
 // get list  movie of geners
@@ -175,11 +179,15 @@ export const getListMovieOfGenres = createAsyncThunk(
   }
 );
 // get list discover movie
-export const getDiscoverMovie = createAsyncThunk(
-  "list-discover-movie",
-  async (params) => {
-    const response = await apiDiscovery.getDiscoverMovie(params);
-    return response;
+export const getDiscoverMovieTv = createAsyncThunk(
+  "list-discover--tv",
+  async (payload) => {
+    const { type, params } = payload;
+    if (type === "movie") {
+      return await apiDiscovery.getDiscoverMovie(params);
+    } else {
+      return await apiDiscovery.getDiscoverTv(params);
+    }
   }
 );
 

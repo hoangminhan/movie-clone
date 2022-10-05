@@ -4,6 +4,7 @@ import {
   getDetailKeyword,
   getDetailMovie,
   getDiscoverMovie,
+  getDiscoverMovieTv,
   getEpisodeTv,
   getKeywords,
   getListGenresMovie,
@@ -177,12 +178,21 @@ export const useHomePage = () => {
     return dispatch(getListMovieOfGenres(payload));
   };
 
-  const handleGetListGenresMovie = (params) => {
-    return dispatch(getListGenresMovie(params));
+  const handleGetListGenresMovie = (type, params) => {
+    const payload = {
+      type,
+      params,
+    };
+    return dispatch(getListGenresMovie(payload));
   };
   // get dicover
-  const handleGetDiscoverMovie = (params) => {
-    return dispatch(getDiscoverMovie(params));
+  const handleGetDiscoverMovieTv = (type, params) => {
+    const payload = {
+      type,
+      params,
+    };
+
+    return dispatch(getDiscoverMovieTv(payload));
   };
   // get season
   const handleGetSeasonTv = (id, numberSeason, params) => {
@@ -238,7 +248,7 @@ export const useHomePage = () => {
     handleGetListKeywords,
     handleGetListReviews,
     handleGetListGenresMovie,
-    handleGetDiscoverMovie,
+    handleGetDiscoverMovieTv,
     handleGetListMovieKeyword,
     handleGetDetailKeyword,
     handleGetListMovieOfGenres,

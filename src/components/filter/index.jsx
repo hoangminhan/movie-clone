@@ -53,6 +53,7 @@ export const Filter = ({
   const [listGenres, setListGenres] = useState(
     filters?.with_genres?.length > 0 ? [...filters.with_genres] : []
   );
+  console.log({ listGenres });
 
   const handleSelectSortDiscover = (data) => {
     handleSelectSort(data);
@@ -198,6 +199,7 @@ export const Filter = ({
                 className="text-white bg-primary w-[100%] h-[30px] rounded-md cursor-pointer"
                 onClick={() => {
                   handelClearFilter();
+                  setListGenres([]);
                 }}
               >
                 {t("Clear")}

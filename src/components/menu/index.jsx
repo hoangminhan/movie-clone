@@ -46,7 +46,7 @@ export const Menu = () => {
     sessionStorage.setItem("currentTab", data);
     setCurrentTab(data);
     setTabGlobal(data);
-    dispatch(reducerLoadingChangeTab(true));
+    // dispatch(reducerLoadingChangeTab(true));
 
     if (data === "/") {
       navigate(`/`);
@@ -56,9 +56,9 @@ export const Menu = () => {
       navigate("/tv-show");
     }
 
-    setTimeout(() => {
-      dispatch(reducerLoadingChangeTab(false));
-    }, 100);
+    // setTimeout(() => {
+    //   dispatch(reducerLoadingChangeTab(false));
+    // }, 100);
   };
   return (
     <nav className="basis-1/5">

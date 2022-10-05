@@ -16,29 +16,25 @@ export const TabMovie = React.memo(() => {
   return (
     <>
       <Row gutter={[12, 12]}>
-        {isLoadingChangeTab ? (
-          <Skeleton active paragraph={{ rows: 20 }} />
-        ) : (
-          <Col span={24}>
-            <Banner listTrending={listTrending} isLoading={isLoading} />
-            <ComponentSlider dataPopular={listMovie} type="movie" />
-            <ComponentSlider
-              dataPopular={listMovieUpComing}
-              title="Up Coming"
-              type="movie"
-            />
-            <ComponentSlider
-              dataPopular={listTrending}
-              title="Trending"
-              type="movie"
-            />
-            <ComponentSlider
-              dataPopular={listMovieTopRated}
-              title="Top Rated"
-              type="movie"
-            />
-          </Col>
-        )}
+        <Col span={24}>
+          <Banner listTrending={listTrending} isLoading={isLoading} />
+          <ComponentSlider dataPopular={listMovie} type="movie" />
+          <ComponentSlider
+            dataPopular={listMovieUpComing}
+            title="Up Coming"
+            type="movie"
+          />
+          <ComponentSlider
+            dataPopular={listTrending}
+            title="Trending"
+            type="movie"
+          />
+          <ComponentSlider
+            dataPopular={listMovieTopRated}
+            title="Top Rated"
+            type="movie"
+          />
+        </Col>
       </Row>
     </>
   );

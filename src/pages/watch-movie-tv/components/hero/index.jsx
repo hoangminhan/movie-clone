@@ -23,9 +23,9 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
         <div className="max-h-[500px] w-full relative">
           <ImageCustom
             src={
-              getImage(dataDetail.backdrop_path, "w1280").includes("null")
+              getImage(dataDetail.backdrop_path).includes("null")
                 ? iconImg.Img404Backdrop
-                : getImage(dataDetail.backdrop_path, "w1280")
+                : getImage(dataDetail.backdrop_path)
             }
             className="object-fill max-h-[500px] w-full rounded-b-lg"
           />
@@ -57,12 +57,10 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
           {/* genres */}
           <div className="absolute left-[30%] bottom-[8%] p-5 ml-3 flex">
             {dataDetail?.genres?.map((genre, index) => {
-              const currentType =
-                sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
               return (
                 <Tooltip title={genre.name} key={index}>
                   <Link
-                    to={`/genres/${genre.id}-${genre.name}/${currentType}`}
+                    to={`/genres/${genre.id}-${genre.name}`}
                     state={{ genreName: genre.name }}
                   >
                     <p className="max-w-[140px] line-clamp-1 py-1 px-3 border-solid border-white border-[1px] mr-3 rounded-3xl text-white text-[16px] uppercase cursor-pointer hover:scale-110 duration-150 stroke-text-sm">

@@ -3,9 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Empty, Pagination, Skeleton, Tabs, Tooltip } from "antd";
 import iconImg from "assets";
 import { ImageCustom } from "components";
+import { UserContext } from "contexts";
 import { useHomePage } from "hooks/use-homepage";
 import React from "react";
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { formatNumber, getImage } from "utils";
 
@@ -66,68 +68,68 @@ export const ContentDiscovery = ({
     }
   };
   const { page, results: resultDiscover, total_pages } = dataDiscoverMovie;
+  const stateContext = useContext(UserContext);
+  const { currentTabGlobal } = stateContext;
+  const [tabGlobal, setTabGlobal] = currentTabGlobal;
+  const navigate = useNavigate();
   return (
     <div className="">
       <StyledTabs defaultActiveKey={currentTab} onChange={handleChangeTab}>
         <StyledTabs.TabPane tab="Movie" key="1">
           {/* content tab movie */}
-          {isLoadingDiscover ? (
-            <Skeleton
-              active
-              loading={isLoadingDiscover}
-              paragraph={{ rows: 20 }}
-            ></Skeleton>
-          ) : (
-            <div className="mt-5 flex flex-wrap gap-x-10 gap-y-10">
-              {resultDiscover?.map((itemMovie, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="hover:scale-110 duration-200 cursor-pointer relative rounded-b-lg rounded-tl-lg overflow-hidden"
-                  >
-                    <Link to={`/movie/${itemMovie.id}`}>
-                      <div className="h-[100%] flex flex-col">
-                        <ImageCustom
-                          src={
-                            !getImage(itemMovie.poster_path, "w185").includes(
-                              "null"
-                            )
-                              ? getImage(itemMovie.poster_path, "w185")
-                              : iconImg.Img404
-                          }
-                          width="185px"
-                          height="100%"
-                          className="rounded-b-lg grow-[1]"
-                        />
-                        <Tooltip title={itemMovie.title}>
-                          <p className="pt-2 text-center text-[18px] max-w-[185px] bg-[#1c1c1e] line-clamp-1">
-                            {itemMovie.title}
-                          </p>
-                        </Tooltip>
-                      </div>
-                    </Link>
-                    {/* rate */}
-                    <div className="absolute top-[-8px] right-[0px] text-[13px]">
-                      <Badge.Ribbon
-                        color="#1890ff"
-                        text={
-                          <p className="rounded-[10px] leading-6">
-                            {formatNumber(itemMovie.vote_average, 10)}
-                            <span className="inline-block ml-1">
-                              <FontAwesomeIcon
-                                icon={faStar}
-                                className="text-white"
-                              />
-                            </span>
-                          </p>
-                        }
-                      ></Badge.Ribbon>
-                    </div>
+
+          <div className="mt-5 flex flex-wrap gap-x-10 gap-y-10">
+            {resultDiscover?.map((itemMovie, index) => {
+              return (
+                <div
+                  key={index}
+                  className="hover:scale-110 duration-200 cursor-pointer relative rounded-b-lg rounded-tl-lg overflow-hidden"
+                  onClick={() => {
+                    navigate(`/movie/${itemMovie.id}`);
+                    sessionStorage.setItem("currentTab", "/");
+                    setTabGlobal("/");
+                  }}
+                >
+                  <div className="h-[100%] flex flex-col">
+                    <ImageCustom
+                      src={
+                        !getImage(itemMovie.poster_path, "w185").includes(
+                          "null"
+                        )
+                          ? getImage(itemMovie.poster_path, "w185")
+                          : iconImg.Img404
+                      }
+                      width="185px"
+                      height="100%"
+                      className="rounded-b-lg grow-[1]"
+                    />
+                    <Tooltip title={itemMovie.title}>
+                      <p className="pt-2 text-center text-[18px] max-w-[185px] bg-[#1c1c1e] line-clamp-1">
+                        {itemMovie.title}
+                      </p>
+                    </Tooltip>
                   </div>
-                );
-              })}
-            </div>
-          )}
+                  {/* rate */}
+                  <div className="absolute top-[-8px] right-[0px] text-[13px]">
+                    <Badge.Ribbon
+                      color="#1890ff"
+                      text={
+                        <p className="rounded-[10px] leading-6">
+                          {formatNumber(itemMovie.vote_average, 10)}
+                          <span className="inline-block ml-1">
+                            <FontAwesomeIcon
+                              icon={faStar}
+                              className="text-white"
+                            />
+                          </span>
+                        </p>
+                      }
+                    ></Badge.Ribbon>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
           <div className="flex justify-center mt-6">
             {total_pages ? (
@@ -149,8 +151,79 @@ export const ContentDiscovery = ({
         </StyledTabs.TabPane>
         <StyledTabs.TabPane tab="TV show" key="0">
           {/* content tab tv show */}
+          <div className="mt-5 flex flex-wrap gap-x-10 gap-y-10">
+            {resultDiscover?.map((itemMovie, index) => {
+              return (
+                <div
+                  key={index}
+                  className="hover:scale-110 duration-200 cursor-pointer relative rounded-b-lg rounded-tl-lg overflow-hidden"
+                  onClick={() => {
+                    navigate(`/tv/${itemMovie.id}`);
+                    sessionStorage.setItem("currentTab", "tab-tv-show");
+                    setTabGlobal("/tab-tv-show");
+                  }}
+                >
+                  <div className="h-[100%] flex flex-col">
+                    <ImageCustom
+                      src={
+                        !getImage(itemMovie.poster_path, "w185").includes(
+                          "null"
+                        )
+                          ? getImage(itemMovie.poster_path, "w185")
+                          : iconImg.Img404
+                      }
+                      width="185px"
+                      height="100%"
+                      className="rounded-b-lg grow-[1]"
+                    />
+                    <Tooltip title={itemMovie.title}>
+                      <p className="pt-2 text-center text-[18px] max-w-[185px] bg-[#1c1c1e] line-clamp-1">
+                        {itemMovie.title}
+                      </p>
+                    </Tooltip>
+                  </div>
 
-          <div className="mt-5"></div>
+                  {/* rate */}
+                  <div className="absolute top-[-8px] right-[0px] text-[13px]">
+                    <Badge.Ribbon
+                      color="#1890ff"
+                      text={
+                        <p className="rounded-[10px] leading-6">
+                          {formatNumber(itemMovie.vote_average, 10)}
+                          <span className="inline-block ml-1">
+                            <FontAwesomeIcon
+                              icon={faStar}
+                              className="text-white"
+                            />
+                          </span>
+                        </p>
+                      }
+                    ></Badge.Ribbon>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="flex justify-center mt-6">
+            {total_pages ? (
+              <StyledPagination
+                current={+filters.page}
+                defaultCurrent={+filters.page}
+                showSizeChanger={false}
+                total={total_pages > 100 ? 100 : total_pages}
+                disabled={isLoadingDiscover}
+                pageSize={20}
+                onChange={(page, pageSize) => {
+                  handleChangePage(page);
+                }}
+              />
+            ) : (
+              ""
+            )}
+          </div>
+
+          <div className="mt-5">asdasdasd</div>
         </StyledTabs.TabPane>
       </StyledTabs>
     </div>

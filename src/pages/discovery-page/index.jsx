@@ -1,13 +1,10 @@
-import { Col, Pagination, Row } from "antd";
+import { Col, Row } from "antd";
 import { Filter } from "components";
 import { UserContext } from "contexts";
 import { useHomePage } from "hooks/use-homepage";
 import moment from "moment/moment";
-import React, { useContext, useLayoutEffect } from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import styled from "styled-components";
 import { ContentDiscovery } from "./component";
 
 const DiscoveryPage = () => {
@@ -21,9 +18,8 @@ const DiscoveryPage = () => {
     with_genres: [],
     page: 1,
   });
-  const [isLoadingDiscover, setIsLoadingDiscover] = useState(false);
 
-  const [filters, setFilters] = useState({
+  const filterMovie = {
     api_key: process.env.REACT_APP_API_KEY,
     language: searchParams.get("laguage") || locale,
     sort_by: searchParams.get("sort_by") || "popularity.desc",
@@ -34,23 +30,52 @@ const DiscoveryPage = () => {
     "primary_release_date.lte":
       searchParams.get("primary_release_date.lte") ||
       moment(new Date()).format("YYYY-MM-DD"),
-  });
+  };
+  const filterTv = {
+    api_key: process.env.REACT_APP_API_KEY,
+    language: searchParams.get("laguage") || locale,
+    sort_by: searchParams.get("sort_by") || "popularity.desc",
+    with_genres: searchParams.getAll("with_genres") || [],
+    page: searchParams.get("page") || 1,
+    "air_date.gte:": searchParams.get("air_date.gte:") || [],
+    "air_date.lte":
+      searchParams.get("air_date.lte") ||
+      moment(new Date()).format("YYYY-MM-DD"),
+  };
+  const [filters, setFilters] = useState(currentTab ? filterMovie : filterTv);
 
   const {
     listGenresMovie,
     dataDiscoverMovie,
     handleGetListGenresMovie,
-    handleGetDiscoverMovie,
+    handleGetDiscoverMovieTv,
     isLoading,
   } = useHomePage();
 
   const handleChangeCurrentTab = (tab) => {
     setCurrentTab(tab);
+    if (tab) {
+      setFilters({
+        ...filterMovie,
+        page: 1,
+        sort_by: "popularity.desc",
+        with_genres: [],
+      });
+      // searchParams.set("page", 1);
+      // searchParams.set("sort_by", "popularity.desc");
+    } else {
+      setFilters({
+        ...filterTv,
+        page: 1,
+        sort_by: "popularity.desc",
+        with_genres: [],
+      });
+      // searchParams.set("page", 1);
+      // searchParams.set("sort_by", "popularity.desc");
+    }
   };
 
   const handleSelectSort = (data) => {
-    setIsLoadingDiscover(true);
-
     setFilters({ ...filters, sort_by: data });
   };
 
@@ -71,7 +96,6 @@ const DiscoveryPage = () => {
       top: 0,
       behavior: "smooth",
     });
-    setIsLoadingDiscover(true);
     setFilters({ ...filters, page });
   };
 
@@ -84,51 +108,74 @@ const DiscoveryPage = () => {
 
   const handleChangeFilterDate = (date, type) => {
     if (type === "from") {
-      setFilters({ ...filters, "primary_release_date.gte": date });
+      if (currentTab) {
+        setFilters({ ...filters, "primary_release_date.gte": date });
+      } else {
+        setFilters({ ...filters, "air_date.gte": date });
+      }
     } else {
-      setFilters({ ...filters, "primary_release_date.lte": date });
+      if (currentTab) {
+        setFilters({ ...filters, "primary_release_date.lte": date });
+      } else {
+        setFilters({ ...filters, "air_date.lte": date });
+      }
     }
   };
 
   // cleaer filter
   const handelClearFilter = () => {
-    setFilters({
-      ...filters,
-      api_key: process.env.REACT_APP_API_KEY,
-      language: locale,
-      sort_by: "popularity.desc",
-      with_genres: [],
-      page: 1,
-      "primary_release_date.gte": [],
-      "primary_release_date.lte": moment(new Date()).format("YYYY-MM-DD"),
-    });
+    if (currentTab) {
+      setFilters({
+        ...filters,
+        api_key: process.env.REACT_APP_API_KEY,
+        language: locale,
+        sort_by: "popularity.desc",
+        with_genres: [],
+        page: 1,
+        "primary_release_date.gte": [],
+        "primary_release_date.lte": moment(new Date()).format("YYYY-MM-DD"),
+      });
+    } else {
+      setFilters({
+        ...filters,
+        api_key: process.env.REACT_APP_API_KEY,
+        language: locale,
+        sort_by: "popularity.desc",
+        with_genres: [],
+        page: 1,
+        "air_date.gte": [],
+        "air_date.lte": moment(new Date()).format("YYYY-MM-DD"),
+      });
+    }
   };
   // sync filter to url
   useEffect(() => {
     const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
     setSearchParams({ ...filters, language: locale, api_key: "" });
-  }, [filters, stateContext]);
+  }, [filters, stateContext, currentTab]);
 
   // handle filters
   useEffect(() => {
     const getData = async () => {
-      await handleGetDiscoverMovie(filters);
+      const type = currentTab ? "movie" : "tv";
+
+      await handleGetDiscoverMovieTv(type, filters);
     };
     getData();
-    setIsLoadingDiscover(false);
-  }, [stateContext, filters]);
+  }, [stateContext, filters, currentTab]);
 
   useEffect(() => {
     const getData = async () => {
       const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
+      const type = currentTab ? "movie" : "tv";
 
-      await handleGetListGenresMovie({
+      await handleGetListGenresMovie(type, {
         api_key: process.env.REACT_APP_API_KEY,
         language: locale,
       });
     };
     getData();
-  }, [stateContext]);
+  }, [stateContext, currentTab]);
 
   return (
     <div className="py-[12px] min-h-[100vh] ">
@@ -143,7 +190,7 @@ const DiscoveryPage = () => {
             isLoadingDiscover={isLoading}
           />
         </Col>
-        <Col span={4}>
+        <Col span={4} className="mt-[75px]">
           <Filter
             listGenresMovie={listGenresMovie}
             handleSelectSort={handleSelectSort}

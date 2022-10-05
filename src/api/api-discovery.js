@@ -5,4 +5,8 @@ export const apiDiscovery = {
     const url = "discover/movie";
     return axiosClient.get(url, { params });
   },
+  getDiscoverTv: (params) => {
+    const url = "discover/tv";
+    return axiosClient.get(url, { params });
+  },
 };

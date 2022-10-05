@@ -3,7 +3,7 @@ import { UsePeople } from "hooks";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { getImage } from "utils";
+import { getImage, handleScrollToTop } from "utils";
 import { UserContext } from "contexts";
 import { useRef } from "react";
 import { ImageCustom } from "components";
@@ -113,29 +113,24 @@ const PeoplePage = () => {
           />
         </div>
       </div>
-      {isLoading ? (
-        <div>
-          <Skeleton paragraph={{ rows: 20 }} />
-        </div>
-      ) : (
-        <div className="flex flex-wrap gap-10">
-          {listPopularPeople.map((people, index) => {
-            return (
-              <Link to={`/cast/${people.id}`} key={index}>
-                <div className="rounded-lg overflow-hidden hover:scale-110 duration-200">
-                  <ImageCustom
-                    alt="people"
-                    src={getImage(people.profile_path, "w185")}
-                  />
-                  <p className="text-[18px] text-center line-clamp-1">
-                    {people.name}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      )}
+
+      <div className="flex flex-wrap gap-10">
+        {listPopularPeople.map((people, index) => {
+          return (
+            <Link to={`/cast/${people.id}`} key={index}>
+              <div className="rounded-lg overflow-hidden hover:scale-110 duration-200">
+                <ImageCustom
+                  alt="people"
+                  src={getImage(people.profile_path, "w185")}
+                />
+                <p className="text-[18px] text-center line-clamp-1">
+                  {people.name}
+                </p>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
 
       {/* pagination */}
       <div className="mt-10 flex justify-center">
@@ -147,6 +142,7 @@ const PeoplePage = () => {
           pageSize={20}
           onChange={(page, pageSize) => {
             setFilters({ ...filters, page: page });
+            handleScrollToTop();
           }}
         />
       </div>

@@ -136,10 +136,8 @@ export const BodyWatch = ({
             </h3>
             <div className="flex flex-wrap gap-x-4 gap-y-6 my-4 pl-4">
               {listCastsMovie?.map((cast, index) => {
-                const currentType =
-                  sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
                 return (
-                  <Link key={index} to={`/cast/${cast.id}/${currentType}`}>
+                  <Link key={index} to={`/cast/${cast.id}`}>
                     <div className="flex w-[250px] gap-2">
                       <Skeleton loading={isLoadingDetail} active avatar>
                         <div className="max-w-[65px] w-full h-[65px]">

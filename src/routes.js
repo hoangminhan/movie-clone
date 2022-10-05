@@ -90,7 +90,7 @@ let RouteList = [
     ),
   },
   {
-    path: "/genres/:id/:type",
+    path: "/genres/:id",
     element: (
       <DefaultLayout page="genres">
         <GenresPage />

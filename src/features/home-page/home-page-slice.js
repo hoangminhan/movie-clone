@@ -4,7 +4,7 @@ import {
   getDetail,
   getDetailKeyword,
   getDetailMovie,
-  getDiscoverMovie,
+  getDiscoverMovieTv,
   getEpisodeTv,
   getKeywords,
   getListGenresMovie,
@@ -219,17 +219,17 @@ export const movieSlice = createSlice({
       state.isLoading = false;
     },
     // list discover movie
-    [getDiscoverMovie.pending]: (state, action) => {
+    [getDiscoverMovieTv.pending]: (state, action) => {
       state.isLoading = true;
     },
-    [getDiscoverMovie.fulfilled]: (state, action) => {
+    [getDiscoverMovieTv.fulfilled]: (state, action) => {
       const { results } = action.payload;
       // const newResult = results.filter((item) => item.poster_path);
       // state.dataDiscoverMovie = { ...action.payload, results: [...newResult] };
       state.dataDiscoverMovie = { ...action.payload };
       state.isLoading = false;
     },
-    [getDiscoverMovie.rejected]: (state, action) => {
+    [getDiscoverMovieTv.rejected]: (state, action) => {
       state.isLoading = false;
     },
     // list  movie keyword

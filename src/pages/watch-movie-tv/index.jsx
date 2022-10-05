@@ -111,7 +111,7 @@ const WatchMovieTv = () => {
 
   useEffect(() => {
     const type = sessionStorage.getItem("currentTab") || "/";
-    const currentType = type === "tv" ? "tv" : "movie";
+    const currentType = type === "tab-tv-show" ? "tv" : "movie";
     if (currentType === "tv") {
       setSearchParams({
         ...season,
@@ -398,58 +398,51 @@ const WatchMovieTv = () => {
             <p id="similar-movie" className="text-white mt-6 mb-8 uppercase">
               {t("Similar")}
             </p>
-            {listSimilarMovie?.length ? (
-              <Skeleton
-                active
-                loading={isLoadingDetail}
-                paragraph={{ rows: 30 }}
-              >
-                <div className="flex flex-col gap-5">
-                  {listSimilarMovie?.map((similarContent, index) => {
-                    return (
-                      <Link key={index} to={`/movie/${similarContent.id}`}>
-                        <div
-                          className="group flex gap-4 text-[#fff] cursor-pointer hover:brightness-125
+            <Skeleton active loading={isLoading} paragraph={{ rows: 30 }}>
+              <div className="flex flex-col gap-5">
+                {listSimilarMovie?.map((similarContent, index) => {
+                  return (
+                    <Link key={index} to={`/movie/${similarContent.id}`}>
+                      <div
+                        className="group flex gap-4 text-[#fff] cursor-pointer hover:brightness-125
                 
                 "
-                          onClick={() => {
-                            // navigate(`movie/${similarContent.id}`);
-                          }}
-                        >
-                          <div className="max-w-[100px] w-full group-hover:scale-110 duration-200 delay-150">
-                            <ImageCustom
-                              src={getImage(similarContent.poster_path, "w154")}
-                              className="w-[154px] object-contain rounded-lg rounded-global"
-                            />
-                          </div>
-                          <div className="grow">
-                            <p className="text-[18px] line-clamp-2">
-                              {similarContent.title
-                                ? similarContent.title
-                                : similarContent.name}
-                            </p>
-                            <p className="text-[15px] text-[#ccc]">
-                              {similarContent.release_date
-                                ? similarContent.release_date
-                                : similarContent.first_air_date}
-                            </p>
-                            <p className="text-[16px] text-yellow-400">
-                              {formatNumber(similarContent.vote_average, 10)}{" "}
-                              &nbsp;
-                              <FontAwesomeIcon icon={faStar} color="yellow" />
-                            </p>
-                          </div>
+                        onClick={() => {
+                          // navigate(`movie/${similarContent.id}`);
+                        }}
+                      >
+                        <div className="max-w-[100px] w-full group-hover:scale-110 duration-200 delay-150">
+                          <ImageCustom
+                            src={getImage(similarContent.poster_path, "w154")}
+                            className="w-[154px] object-contain rounded-lg rounded-global"
+                          />
                         </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </Skeleton>
-            ) : (
-              <div className="h-[100%] flex items-center justify-center">
-                <Empty />
+                        <div className="grow">
+                          <p className="text-[18px] line-clamp-2">
+                            {similarContent.title
+                              ? similarContent.title
+                              : similarContent.name}
+                          </p>
+                          <p className="text-[15px] text-[#ccc]">
+                            {similarContent.release_date
+                              ? similarContent.release_date
+                              : similarContent.first_air_date}
+                          </p>
+                          <p className="text-[16px] text-yellow-400">
+                            {formatNumber(similarContent.vote_average, 10)}{" "}
+                            &nbsp;
+                            <FontAwesomeIcon icon={faStar} color="yellow" />
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
-            )}
+            </Skeleton>
+            {/* <div className="h-[100%] flex items-center justify-center">
+                <Empty />
+              </div> */}
 
             {listSimilarMovie?.length ? (
               <div className="my-8 text-center">

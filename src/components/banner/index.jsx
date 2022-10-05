@@ -241,13 +241,9 @@ export const Banner = ({ listTrending, isLoading }) => {
                     {listType?.length ? (
                       <div className="mt-7 flex gap-3">
                         {listType?.map((item, index) => {
-                          const currentType =
-                            sessionStorage.getItem("currentTab") === "/"
-                              ? "movie"
-                              : "tv";
                           return (
                             <Link
-                              to={`/genres/${item.id}-${item.name}/${currentType}`}
+                              to={`/genres/${item.id}-${item.name}`}
                               key={index}
                             >
                               <p className="bg-zinc-900  px-2 border-[#ccc] backdrop-opacity-5 text-[18px] border-[1px] border-solid rounded-xl cursor-pointer">
