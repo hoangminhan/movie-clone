@@ -412,9 +412,10 @@ const WatchMovieTv = () => {
                         }}
                       >
                         <div className="max-w-[100px] w-full group-hover:scale-110 duration-200 delay-150">
-                          <ImageCustom
+                          <img
                             src={getImage(similarContent.poster_path, "w154")}
                             className="w-[154px] object-contain rounded-lg rounded-global"
+                            alt=""
                           />
                         </div>
                         <div className="grow">

@@ -29,7 +29,7 @@ export const LanguageProject = () => {
           />
         </div>
         <p className="text-[18px] ml-2 text-white">
-          {globalLocale === "vi-VN" ? "Tiếng Việt" : "English"}
+          {globalLocale === "vi-VN" ? "Viet Nam" : "English"}
         </p>
       </div>
     </Tooltip>

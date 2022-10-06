@@ -13,6 +13,7 @@ import { faClock, faCompass } from "@fortawesome/free-regular-svg-icons";
 import {
   faRightFromBracket,
   faRightToBracket,
+  faSearch,
   faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -81,6 +82,7 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
     getItem("Home", "/", <HomeOutlined />),
     // getItem("Movie", "/movie", <DesktopOutlined />),
     getItem(t("Discovery"), "/discovery", <FontAwesomeIcon icon={faCompass} />),
+    getItem(t("Search"), "/search", <FontAwesomeIcon icon={faSearch} />),
     getItem(t("Favorite"), "/favorite", <ContainerOutlined />),
     getItem(t("History"), "/history", <FontAwesomeIcon icon={faClock} />),
     getItem(t("Settings"), "/settings", <SettingOutlined />, [

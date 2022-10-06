@@ -34,12 +34,13 @@ export const EpisodeTv = ({
                 Episode: <span>{item.episode_number}</span>
               </p>
               <div className="max-w-[185px]">
-                <ImageCustom
+                <img
                   src={
                     getImage(item.still_path, "w185").includes("null")
                       ? iconImg.Img404
                       : getImage(item.still_path, "w185")
                   }
+                  alt=""
                   className="max-h-[104px] w-[185px] rounded-md"
                 />
               </div>

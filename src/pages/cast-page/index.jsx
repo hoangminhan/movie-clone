@@ -74,10 +74,11 @@ const CastPage = () => {
           <StyleSkeleton avatar active loading={isLoading}>
             <div className="flex justify-start gap-10">
               <div>
-                <ImageCustom
+                <img
                   src={getImage(dataDetailCast.profile_path)}
                   width="185px"
                   className="rounded-lg"
+                  alt="img_profile"
                 />
               </div>
               <div className="grow-[1]">

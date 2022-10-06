@@ -3,6 +3,7 @@ import {
   getDetailCast,
   getMovieOfCast,
   getPopularPeople,
+  getSearchPage,
   getSearchPeople,
   getSocialNetwork,
   getTvShowOfCast,
@@ -21,6 +22,7 @@ export const UsePeople = () => {
     listPopularPeople,
     detailListPeople,
     listTvShowOfCast,
+    dataSearchPage,
   } = resultPeople;
 
   const handleGetListCastPopular = (params) => {
@@ -65,6 +67,13 @@ export const UsePeople = () => {
     };
     return dispatch(getTvShowOfCast(payload));
   };
+  const handleGetDataPageSearch = (type, params) => {
+    const payload = {
+      type,
+      params,
+    };
+    return dispatch(getSearchPage(payload));
+  };
 
   return {
     dataDetailCast,
@@ -74,6 +83,7 @@ export const UsePeople = () => {
     listPopularPeople,
     detailListPeople,
     listTvShowOfCast,
+    dataSearchPage,
     handleGetDetailCasts,
     handleGetSocialNetwork,
     handleGetMovieOfCast,
@@ -81,5 +91,6 @@ export const UsePeople = () => {
     handleGetListCastPopular,
     handleGetSearchPeople,
     handleGetTvOfCast,
+    handleGetDataPageSearch,
   };
 };

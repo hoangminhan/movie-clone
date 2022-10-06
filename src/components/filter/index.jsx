@@ -1,8 +1,8 @@
 import { Collapse, DatePicker, Select } from "antd";
-import { t } from "i18next";
 import moment from "moment";
 import React from "react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
@@ -48,6 +48,7 @@ export const Filter = ({
   handleChangeFilterDate,
   handelClearFilter,
 }) => {
+  const [t] = useTranslation();
   const [isVisibleSelect, setIsVisibleSelect] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams({});
   const [listGenres, setListGenres] = useState(

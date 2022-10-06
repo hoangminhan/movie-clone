@@ -4,6 +4,7 @@ import {
   getDetailCast,
   getMovieOfCast,
   getPopularPeople,
+  getSearchPage,
   getSearchPeople,
   getSocialNetwork,
   getTvShowOfCast,
@@ -16,6 +17,7 @@ const initialState = {
   listTvShowOfCast: [],
   dataCastTranslate: {},
   listPopularPeople: [],
+  dataSearchPage: {},
   detailListPeople: {
     totalPage: 1,
     page: 1,
@@ -121,6 +123,17 @@ export const PeopleSlice = createSlice({
       state.isLoadingPeople = true;
     },
     [getTvShowOfCast.rejected]: (state, action) => {
+      state.isLoadingPeople = true;
+    },
+    // dataSearch page
+    [getSearchPage.pending]: (state, action) => {
+      state.isLoadingPeople = true;
+    },
+    [getSearchPage.fulfilled]: (state, action) => {
+      state.dataSearchPage = { ...action.payload };
+      state.isLoadingPeople = true;
+    },
+    [getSearchPage.rejected]: (state, action) => {
       state.isLoadingPeople = true;
     },
   },

@@ -19,26 +19,30 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
 
   return (
     <div className="max-h-[500px]">
-      <Skeleton active round loading={isLoadingDetail} paragraph={{ rows: 17 }}>
+      {isLoading ? (
+        <Skeleton active round paragraph={{ rows: 17 }}></Skeleton>
+      ) : (
         <div className="max-h-[500px] w-full relative">
-          <ImageCustom
+          <img
             src={
               getImage(dataDetail.backdrop_path).includes("null")
                 ? iconImg.Img404Backdrop
                 : getImage(dataDetail.backdrop_path)
             }
             className="object-fill max-h-[500px] w-full rounded-b-lg"
+            alt="hero"
           />
 
           {/* poster */}
           <div className="absolute bottom-[-15%] left-[15%] max-w-[185px]">
-            <ImageCustom
+            <img
               src={
                 getImage(dataDetail.poster_path, "w185").includes("null")
                   ? iconImg.Img404
                   : getImage(dataDetail.poster_path, "w185")
               }
               className="rounded-global"
+              alt="poster"
             />
           </div>
 
@@ -49,7 +53,7 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
 
           {/* name phim */}
           <div className="absolute  left-[30%] bottom-[20%] max-w-[500px] ">
-            <p className="text-white text-[40px] font-medium drop-shadow-2xl shadow-[red] line-clamp-2  p-5 ml-3 pr-0  leading-10 stroke-text">
+            <p className="text-white text-[40px] font-medium drop-shadow-2xl shadow-[red]  p-5 ml-3 pr-0  leading-10 stroke-text">
               {dataDetail?.title ? dataDetail?.title : dataDetail?.name}
             </p>
           </div>
@@ -89,7 +93,7 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
             </div>
           </div>
         </div>
-      </Skeleton>
+      )}
     </div>
   );
 };

@@ -8,6 +8,7 @@ const LoginPage = lazy(() => import("./pages/login-page"));
 const RegisterPage = lazy(() => import("./pages/register-page"));
 const PeoplePage = lazy(() => import("./pages/people-page"));
 const DiscoveryPage = lazy(() => import("./pages/discovery-page"));
+const SearchPage = lazy(() => import("./pages/search-page"));
 const KeywordPage = lazy(() => import("./pages/keyword-page"));
 const GenresPage = lazy(() => import("./pages/genres-page"));
 const CastPage = lazy(() => import("./pages/cast-page"));
@@ -82,6 +83,14 @@ let RouteList = [
     ),
   },
   {
+    path: "/search",
+    element: (
+      <DefaultLayout page="Search">
+        <SearchPage />
+      </DefaultLayout>
+    ),
+  },
+  {
     path: "/keyword/:idKeyword",
     element: (
       <DefaultLayout page="keyword">
@@ -100,7 +109,7 @@ let RouteList = [
   {
     path: "/cast/:idCast",
     element: (
-      <DefaultLayout>
+      <DefaultLayout page="Cast">
         <CastPage />
       </DefaultLayout>
     ),

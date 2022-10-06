@@ -12,7 +12,7 @@ import { useHomePage } from "hooks/use-homepage";
 import { t } from "i18next";
 import { useState } from "react";
 import ReactPlayer from "react-player";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ShowMoreText from "react-show-more-text";
 import { embedMovieTrailer, formatNumber } from "utils";
 import "./style.scss";
@@ -27,7 +27,8 @@ export const ModalTrailer = ({
   const { handleGetDetailMovie, listCastsMovie } = useHomePage();
   const [isLoading, setIsLoading] = useState(false);
   const currentType =
-    sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
+    sessionStorage.getItem("currentTab") === "tab-tv-show" ? "tv" : "movie";
+  const navigate = useNavigate();
 
   return (
     <Modal
@@ -167,7 +168,7 @@ export const ModalTrailer = ({
                 <FontAwesomeIcon icon={faStar} color="yellow" />
               </p>
               {/* overview */}
-              <p className="mt-2">
+              <div className="mt-2">
                 <span className="mr-2">{t("Overview")}:</span>
                 <ShowMoreText
                   /* Default options */
@@ -184,7 +185,7 @@ export const ModalTrailer = ({
                 >
                   <p>{dataDetail?.overview}</p>
                 </ShowMoreText>
-              </p>
+              </div>
             </Col>
             <Col span={12}>
               <div>
@@ -192,20 +193,14 @@ export const ModalTrailer = ({
                   <span className="text-[16px] mr-2">{t("Cast")}:</span>
                   <p className="line-clamp-2">
                     {listCastsMovie?.map((cast, index) => {
-                      const currentType =
-                        sessionStorage.getItem("currentTab") === "/"
-                          ? "movie"
-                          : "tv";
                       return index < listCastsMovie.length - 1 ? (
                         <Link
                           key={index}
-                          to={`/cast/${cast.id}/${currentType}`}
+                          to={`/cast/${cast.id}`}
                         >{`${cast.name},  `}</Link>
                       ) : (
                         // cast.name
-                        <Link
-                          to={`/cast/${cast.id}/${currentType}`}
-                        >{`${cast.name}`}</Link>
+                        <Link to={`/cast/${cast.id}`}>{`${cast.name}`}</Link>
                       );
                     })}
                   </p>
@@ -214,19 +209,35 @@ export const ModalTrailer = ({
                   <span className="text-[16px] mr-2">{t("Genres")}:</span>
                   <div className="flex">
                     {dataDetail?.genres?.map((genre, index) => {
+                      console.log(genre);
+
                       const currentType =
-                        sessionStorage.getItem("currentTab") === "/"
-                          ? "movie"
-                          : "tv";
+                        sessionStorage.getItem("currentTab") === "tab-tv-show"
+                          ? "tv"
+                          : "movie";
                       return (
-                        <div key={index} className="flex">
-                          <Link to={`/genres/${genre.id}/${currentType}`}>
+                        <div
+                          key={index}
+                          className="flex"
+                          onClick={() => {
+                            if (currentType === "tv") {
+                              return;
+                            } else {
+                              navigate(`/genres/${genre.id}-${genre.name}`);
+                            }
+                          }}
+                        >
+                          <p
+                            className={
+                              currentType !== "tv" ? "cursor-pointer" : ""
+                            }
+                          >
                             {index < dataDetail.genres.length - 1 ? (
                               <span>{genre.name},&nbsp; </span>
                             ) : (
                               <span>{genre.name}</span>
                             )}
-                          </Link>
+                          </p>
                         </div>
                       );
                     })}

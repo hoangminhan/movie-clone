@@ -12,13 +12,16 @@ export const SimilarContent = ({ dataSimilar }) => {
       <div className="flex flex-wrap gap-12 justify-center">
         {dataSimilar?.map((similar, index) => {
           const currentType =
-            sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
+            sessionStorage.getItem("currentTab") === "tab-tv-show"
+              ? "tv"
+              : "movie";
           return (
             <Link key={index} to={`/${currentType}/${similar.id}`}>
               <div className="rounded-global max-w-[185px] hover:scale-110 duration-300 delay-100 rounded-[6px] overflow-hidden">
                 {/* img */}
                 <div className="relative group ">
                   <ImageCustom
+                    data-aos="zoom-in"
                     src={getImage(similar.poster_path, "w185")}
                     className="h-[278px]"
                   />

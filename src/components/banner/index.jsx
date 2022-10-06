@@ -19,6 +19,7 @@ import { Autoplay, Navigation, Pagination } from "swiper";
 import { formatNumber, getImage, handleOpenNotification } from "utils";
 import { useModal } from "hooks";
 import { Badge, Skeleton } from "antd";
+import iconImg from "assets";
 
 export const Banner = ({ listTrending, isLoading }) => {
   const {
@@ -53,11 +54,13 @@ export const Banner = ({ listTrending, isLoading }) => {
   const handleCloseModal = (data) => {
     setVisibleModal(data);
   };
+  const currentType =
+    sessionStorage.getItem("currentTab") === "tab-tv-show" ? "tv" : "movie";
 
   // handle click trailer
   const handleClickTrailer = async (slider) => {
     const currentType =
-      sessionStorage.getItem("currentTab") === "/" ? "movie" : "tv";
+      sessionStorage.getItem("currentTab") === "tab-tv-show" ? "tv" : "movie";
     const currentLocale = sessionStorage.getItem("currentLocale") || "vi-VN";
     const { id: idMovie, media_type: type } = slider;
     handleGetListCasts(
@@ -105,35 +108,19 @@ export const Banner = ({ listTrending, isLoading }) => {
       setDataDetail({ ...newResultDetailMovie });
       setVisibleModal(true);
 
-      // handleToggleModal({
-      //   visible: true,
-      //   title: "Trailer movie",
-      //   typeModal: TYPEMODAL.MODAL_TRAILER,
-      //   propsModal: {
-      //     idMovie: idMovie,
-      //     currentUrl,
-      //     dataDetail: newResultDetailMovie,
-      //     dataSimilar,
-      //   },
-
-      //   attrModal: {
-      //     maskClosable: false,
-      //     width: 1000,
-      //   },
-      // });
       handleToggleAutoBanner(true);
     } else {
       handleOpenNotification("error", "", "Trailer is unavailable");
     }
   };
 
-  // useEffect(() => {
-  //   if (stopSlider) {
-  //     swiperRef.current.swiper.autoplay.stop();
-  //   } else {
-  //     swiperRef.current.swiper.autoplay.start();
-  //   }
-  // }, [stopSlider]);
+  useEffect(() => {
+    if (stopSlider) {
+      swiperRef.current.swiper.autoplay.stop();
+    } else {
+      swiperRef.current.swiper.autoplay.start();
+    }
+  }, [stopSlider]);
 
   useEffect(() => {
     if (listTrending?.length) {
@@ -143,7 +130,7 @@ export const Banner = ({ listTrending, isLoading }) => {
       const idMovie = listTrending[currentActiveIndex]?.id;
       const getDataDetail = async () => {
         const type = sessionStorage.getItem("currentTab") || "/";
-        const currentType = type === "/" ? "movie" : "pv";
+        const currentType = type === "tab-tv-show" ? "tv" : "movie";
         const result = await handleGetDetailMovie(
           idMovie,
           {
@@ -164,7 +151,7 @@ export const Banner = ({ listTrending, isLoading }) => {
   return (
     <>
       <div
-        // onMouseEnter={() => swiperRef.current.swiper.autoplay.start()}
+        onMouseEnter={() => swiperRef.current.swiper.autoplay.start()}
         className="max-h-[450px]"
       >
         <Swiper
@@ -176,8 +163,8 @@ export const Banner = ({ listTrending, isLoading }) => {
           className="banner-wrapper"
           pagination={false}
           navigation={true}
-          // modules={[Autoplay, Pagination, Navigation]}
-          modules={[Pagination, Navigation]}
+          modules={[Autoplay, Pagination, Navigation]}
+          // modules={[Pagination, Navigation]}
           onSlideChange={(event) => {
             setCurrentActiveIndex(event.activeIndex);
             setListType("");
@@ -188,7 +175,11 @@ export const Banner = ({ listTrending, isLoading }) => {
               <SwiperSlide key={index}>
                 <div className="group relative">
                   <img
-                    src={getImage(slider.backdrop_path, "w1280")}
+                    src={
+                      getImage(slider.backdrop_path, "w1280").includes("null")
+                        ? iconImg.Img404Backdrop
+                        : getImage(slider.backdrop_path, "w1280")
+                    }
                     alt=""
                     className="max-h-[600px] object-cover w-full"
                   />
@@ -242,16 +233,33 @@ export const Banner = ({ listTrending, isLoading }) => {
                       <div className="mt-7 flex gap-3">
                         {listType?.map((item, index) => {
                           return (
-                            <Link
-                              to={`/genres/${item.id}-${item.name}`}
+                            <div
                               key={index}
+                              onClick={() => {
+                                const currentType =
+                                  sessionStorage.getItem("currentTab") ===
+                                  "tab-tv-show"
+                                    ? "tv"
+                                    : "movie";
+                                if (currentType === "tv") {
+                                  return;
+                                } else {
+                                  navigate(`/genres/${item.id}-${item.name}`);
+                                }
+                              }}
                             >
-                              <p className="bg-zinc-900  px-2 border-[#ccc] backdrop-opacity-5 text-[18px] border-[1px] border-solid rounded-xl cursor-pointer">
+                              <p
+                                className={`bg-zinc-900  px-2 border-[#ccc] backdrop-opacity-5 text-[18px] border-[1px] border-solid rounded-xl ${
+                                  currentType === "movie"
+                                    ? "cursor-pointer"
+                                    : ""
+                                }`}
+                              >
                                 <span className="text-[#dcd4d4]">
                                   {item.name}
                                 </span>
                               </p>
-                            </Link>
+                            </div>
                           );
                         })}
                       </div>
@@ -288,9 +296,9 @@ export const Banner = ({ listTrending, isLoading }) => {
                   ease-in-out delay-250 hover:scale-110 duration-300 hidden  group-hover:block"
                     onClick={() => {
                       const currentType =
-                        sessionStorage.getItem("currentTab") === "/"
-                          ? "movie"
-                          : "tv";
+                        sessionStorage.getItem("currentTab") === "tab-tv-show"
+                          ? "tv"
+                          : "movie";
                       navigate(`/${currentType}/${slider.id}`);
                     }}
                   >

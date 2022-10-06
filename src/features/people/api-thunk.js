@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiPeople } from "api";
+import { apiPeople, apiSearch } from "api";
 
 // get detail cast
 export const getPopularPeople = createAsyncThunk(
@@ -58,5 +58,13 @@ export const getTvShowOfCast = createAsyncThunk(
   async (payload) => {
     const { id, params } = payload;
     return await apiPeople.getTvOfCast(id, params);
+  }
+);
+// search page
+export const getSearchPage = createAsyncThunk(
+  "search-page",
+  async (payload) => {
+    const { type, params } = payload;
+    return await apiSearch.getSearchData(type, params);
   }
 );

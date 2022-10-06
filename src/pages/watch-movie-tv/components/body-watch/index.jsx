@@ -68,15 +68,9 @@ export const BodyWatch = ({
               <div className="text-[18px] flex items-center">
                 <span className="mr-2 text-[24px]">{t("Genres")}:</span>
                 {dataDetail?.genres?.map((genre, index) => {
-                  const currentType =
-                    sessionStorage.getItem("currentTab") === "/"
-                      ? "movie"
-                      : "tv";
                   return (
                     <div key={index} className="cursor-pointer">
-                      <Link
-                        to={`/genres/${genre.id}-${genre.name}/${currentType}`}
-                      >
+                      <Link to={`/genres/${genre.id}-${genre.name}`}>
                         {index < dataDetail.genres.length - 1 ? (
                           <span>{genre.name},&nbsp;</span>
                         ) : (

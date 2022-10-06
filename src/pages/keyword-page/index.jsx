@@ -145,7 +145,7 @@ const KeywordPage = () => {
       </div>
 
       <Modal
-        open={visibleModal}
+        visible={visibleModal}
         footer={null}
         width={800}
         closable={false}

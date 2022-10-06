@@ -91,10 +91,10 @@ const PeoplePage = () => {
     }
     refSearch.current = setTimeout(() => {
       setFilters({ ...filters, query: value });
-    }, 2000);
+    }, 1500);
   };
   return (
-    <>
+    <div className="min-h-[100vh]">
       <div className="flex justify-end mb-10">
         <div className="grow-[1] max-w-[350px]">
           {/* <Search
@@ -114,23 +114,27 @@ const PeoplePage = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-10">
-        {listPopularPeople.map((people, index) => {
-          return (
-            <Link to={`/cast/${people.id}`} key={index}>
-              <div className="rounded-lg overflow-hidden hover:scale-110 duration-200">
-                <ImageCustom
-                  alt="people"
-                  src={getImage(people.profile_path, "w185")}
-                />
-                <p className="text-[18px] text-center line-clamp-1">
-                  {people.name}
-                </p>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
+      {isLoading ? (
+        <Skeleton active paragraph={{ rows: 20 }} />
+      ) : (
+        <div className="flex flex-wrap gap-10">
+          {listPopularPeople.map((people, index) => {
+            return (
+              <Link to={`/cast/${people.id}`} key={index}>
+                <div className="rounded-lg overflow-hidden hover:scale-110 duration-200">
+                  <img
+                    alt="people"
+                    src={getImage(people.profile_path, "w185")}
+                  />
+                  <p className="text-[18px] text-center line-clamp-1">
+                    {people.name}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      )}
 
       {/* pagination */}
       <div className="mt-10 flex justify-center">
@@ -146,7 +150,7 @@ const PeoplePage = () => {
           }}
         />
       </div>
-    </>
+    </div>
   );
 };
 
