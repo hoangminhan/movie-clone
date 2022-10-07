@@ -54,7 +54,6 @@ export const Filter = ({
   const [listGenres, setListGenres] = useState(
     filters?.with_genres?.length > 0 ? [...filters.with_genres] : []
   );
-  console.log({ listGenres });
 
   const handleSelectSortDiscover = (data) => {
     handleSelectSort(data);

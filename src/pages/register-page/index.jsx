@@ -1,9 +1,11 @@
 import { Form, Input } from "antd";
 import iconImg from "assets";
 import { LanguageProject } from "components/header/component";
+import { UserContext } from "contexts";
+import { useContext } from "react";
 
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const StyleInput = styled(Input)`
@@ -47,6 +49,11 @@ const StyleInputPassword = styled(Input.Password)`
 const RegisterPage = () => {
   const [t] = useTranslation();
   const onFinish = (values) => {};
+
+  const stateContext = useContext(UserContext);
+  const { currentTabGlobal } = stateContext;
+  const [tabGlobal, setTabGlobal] = currentTabGlobal;
+  const navigate = useNavigate();
 
   const onFinishFailed = (errorInfo) => {};
   return (
@@ -234,7 +241,19 @@ const RegisterPage = () => {
       </div>
 
       {/* language */}
-      <div className="absolute top-[2%] right-[3%]">
+      <div className="absolute top-0 right-[3%] left-[3%] flex justify-between items-center">
+        <div className="flex justify-center mt-2">
+          <img
+            src={iconImg.logoImg}
+            className="rounded-full w-[50px] h-[50px] object-cover cursor-pointer"
+            alt=""
+            onClick={() => {
+              setTabGlobal("/");
+              sessionStorage.setItem("currentTab", "/");
+              navigate("/");
+            }}
+          />
+        </div>
         <LanguageProject />
       </div>
     </div>

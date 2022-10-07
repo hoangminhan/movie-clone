@@ -1,25 +1,27 @@
 import { Menu } from "components";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { LanguageProject, Profile, TabHeader } from "./component";
 
 export const Header = ({ page }) => {
+  const [t] = useTranslation();
   const location = useLocation();
   const { pathname } = location;
   const handleContentHeader = (page) => {
     switch (page) {
       case "keyword":
-        return "Keyword";
+        return t("Keyword");
       case "discovery":
-        return <p>FIND FILMS THAT BEST FIT YOU</p>;
+        return <p>{t("FIND FILMS THAT BEST FIT YOU")}</p>;
       case "genres":
-        return "Genres";
+        return t("Genres");
       case "movie":
         return "Detail movie";
       case "Cast":
-        return "Information Cast";
+        return t("Actor Info");
       case "Search":
-        return "Search";
+        return t("Search");
       default:
         return <Menu />;
     }

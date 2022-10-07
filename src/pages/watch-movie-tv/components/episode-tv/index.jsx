@@ -31,7 +31,7 @@ export const EpisodeTv = ({
               }}
             >
               <p className="text-[20px]">
-                Episode: <span>{item.episode_number}</span>
+                {t("Episode")}: <span>{item.episode_number}</span>
               </p>
               <div className="max-w-[185px]">
                 <img

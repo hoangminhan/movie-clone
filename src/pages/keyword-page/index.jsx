@@ -1,11 +1,12 @@
 import { faClose, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Modal, Pagination, Tooltip } from "antd";
+import iconImg from "assets";
 import { ImageCustom } from "components";
 import { UserContext } from "contexts";
 import { useHomePage } from "hooks/use-homepage";
-import { t } from "i18next";
 import React, { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Link,
   useLocation,
@@ -40,6 +41,7 @@ const StyledPagination = styled(Pagination)`
 `;
 
 const KeywordPage = () => {
+  const [t] = useTranslation();
   const {
     listMovieKeyword,
     dataDetailKeyword,
@@ -62,7 +64,6 @@ const KeywordPage = () => {
   const [dataModal, setDataModal] = useState({});
 
   const handleToggleModal = (result) => {
-    console.log("click");
     setVisibleModal(true);
     setDataModal(result);
   };
@@ -87,7 +88,9 @@ const KeywordPage = () => {
     <>
       <div className="flex justify-between mt-4">
         <p className="capitalize">{dataDetailKeyword.name || ""}</p>
-        <p>{total_results} movies</p>
+        <p>
+          {total_results} {t("movies")}
+        </p>
       </div>
       <div className="min-h-[100vh] my-[32px] flex flex-col justify-between">
         <div className="flex flex-wrap gap-[32px] ">
@@ -95,14 +98,18 @@ const KeywordPage = () => {
             return (
               <div
                 key={index}
-                className="mb-[32px] max-w-[185px] hover:scale-110 duration-150 cursor-pointer relative"
+                className="mb-[32px] max-w-[185px] hover:scale-110 duration-150 cursor-pointer relative flex flex-col"
                 onClick={() => {
                   handleToggleModal(result);
                 }}
               >
                 <ImageCustom
-                  src={getImage(result.poster_path, "w185")}
-                  className="rounded-md"
+                  src={
+                    getImage(result.poster_path, "w185").includes("null")
+                      ? iconImg.Img404
+                      : getImage(result.poster_path, "w185")
+                  }
+                  className="rounded-md flex-1"
                 />
 
                 <p className="line-clamp-1 text-[18px] text-center">
@@ -130,18 +137,22 @@ const KeywordPage = () => {
         </div>
 
         {/* pagination */}
-        <div className="text-center mt-[24px]">
-          <StyledPagination
-            current={+filters.page}
-            defaultCurrent={+filters.page || 1}
-            showSizeChanger={false}
-            total={total_results}
-            pageSize={20}
-            onChange={(page, pageSize) => {
-              setFilters({ ...filters, page: page });
-            }}
-          />
-        </div>
+        {total_pages > 20 ? (
+          <div className="text-center mt-[24px]">
+            <StyledPagination
+              current={+filters.page}
+              defaultCurrent={+filters.page || 1}
+              showSizeChanger={false}
+              total={total_results}
+              pageSize={20}
+              onChange={(page, pageSize) => {
+                setFilters({ ...filters, page: page });
+              }}
+            />
+          </div>
+        ) : (
+          ""
+        )}
       </div>
 
       <Modal
@@ -173,8 +184,9 @@ const KeywordPage = () => {
                 </Link>
               </Tooltip>
               <p className="text-[16px] opacity-70">{dataModal.release_date}</p>
-              <p className="text-[16px]">
-                Overview: <span>{dataModal.overview}</span>
+              <p className="text-[18px]">
+                {t("Overview")}:{" "}
+                <span className="text-[16px]">{dataModal.overview}</span>
               </p>
             </div>
             <div className="max-w-[185px] cursor-pointer rounded-md rounded-tr-none overflow-hidden flex-1 relative">

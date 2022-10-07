@@ -37,7 +37,7 @@ export const BodyWatch = ({
     <>
       <div className="mt-[128px] px-4 text-[#fff]">
         <p className="uppercase underline font-medium text-primary">
-          {t("Information")}
+          {t("information")}
         </p>
 
         {dataDetail ? (
@@ -46,8 +46,12 @@ export const BodyWatch = ({
               Tóm tắt: &nbsp;
               {currenTab !== "/" ? (
                 <>
-                  <span>Season {currentSeason}</span>{" "}
-                  <span>Episode {currentEpisode}</span>
+                  <span>
+                    {t("Season")} {currentSeason}
+                  </span>{" "}
+                  <span>
+                    {t("Episode")} {currentEpisode}
+                  </span>
                 </>
               ) : (
                 ""

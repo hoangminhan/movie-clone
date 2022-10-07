@@ -39,9 +39,7 @@ export const PeopleSlice = createSlice({
         totalPage: total_pages,
       };
 
-      state.listPopularPeople = [
-        ...results.filter((item) => item.profile_path),
-      ];
+      state.listPopularPeople = [...results];
       state.isLoadingPeople = true;
     },
     [getPopularPeople.rejected]: (state, action) => {
@@ -59,9 +57,7 @@ export const PeopleSlice = createSlice({
         totalPage: total_pages,
       };
 
-      state.listPopularPeople = [
-        ...results.filter((item) => item.profile_path),
-      ];
+      state.listPopularPeople = [...results];
 
       state.isLoadingPeople = true;
     },
@@ -103,12 +99,7 @@ export const PeopleSlice = createSlice({
       state.isLoadingPeople = true;
     },
     [getMovieOfCast.fulfilled]: (state, action) => {
-      state.listMovieOfCast = [
-        ...action.payload.cast.filter(
-          (movie) =>
-            movie.vote_average && movie.poster_path && movie.backdrop_path
-        ),
-      ];
+      state.listMovieOfCast = [...action.payload.cast];
       state.isLoadingPeople = true;
     },
     [getMovieOfCast.rejected]: (state, action) => {

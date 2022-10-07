@@ -2,7 +2,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Empty, Pagination, Skeleton, Tabs, Tooltip } from "antd";
 import iconImg from "assets";
-import { ImageCustom } from "components";
+import { ImageCustom, StyledPagination } from "components";
 import { UserContext } from "contexts";
 import { useHomePage } from "hooks/use-homepage";
 import React from "react";
@@ -31,26 +31,6 @@ const StyledTabs = styled(Tabs)`
   &.ant-tabs > .ant-tabs-nav,
   .ant-tabs > div > .ant-tabs-nav {
     margin-bottom: 0;
-  }
-`;
-
-const StyledPagination = styled(Pagination)`
-  .ant-pagination-item {
-    border-radius: 999px;
-  }
-  .ant-pagination-prev {
-  }
-  .ant-pagination-prev .ant-pagination-item-link,
-  .ant-pagination-next .ant-pagination-item-link {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 999px;
-  }
-  .ant-pagination-jump-next
-    .ant-pagination-item-container
-    .ant-pagination-item-ellipsis {
-    color: #fff;
   }
 `;
 

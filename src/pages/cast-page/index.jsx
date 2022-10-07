@@ -1,14 +1,12 @@
-import { ComponentSlider, ImageCustom } from "components";
+import { Skeleton } from "antd";
+import { ComponentSlider } from "components";
 import { UsePeople } from "hooks";
 import { t } from "i18next";
 import moment from "moment";
-import React, { useLayoutEffect } from "react";
-import { useEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { formatNumber, getImage } from "utils";
 import ShowMoreText from "react-show-more-text";
-import { useState } from "react";
-import { Skeleton } from "antd";
+import { formatNumber, getImage } from "utils";
 
 import iconImg from "assets";
 import styled from "styled-components";
@@ -145,8 +143,6 @@ const CastPage = () => {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      {/* {dataSocialNetwork.instagram_id} */}
-                      {/* <FontAwesomeIcon icon={faInstagram} /> */}
                       <img src={iconImg.instagramImg} alt="" />
                     </a>
                   </div>
@@ -157,7 +153,6 @@ const CastPage = () => {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      {/* {dataSocialNetwork.instagram_id} */}
                       <img src={iconImg.facebookContact} alt="" />
                     </a>
                   </div>
@@ -186,7 +181,7 @@ const CastPage = () => {
             paragraph={{ width: "100%" }}
           >
             <h3 className="text-white ">
-              {dataDetailCast.name} {t("Biography")}:
+              {t("Biography")} {t("Of")} {dataDetailCast.name}:
             </h3>
             <ShowMoreText
               /* Default options */

@@ -16,3 +16,4 @@ export * from "./button-custom";
 export * from "./similar-content";
 export * from "./button-add-list";
 export * from "./filter";
+export * from "./styled-pagination";

@@ -6,7 +6,7 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { faClock, faCompass } from "@fortawesome/free-regular-svg-icons";
@@ -21,6 +21,7 @@ import "./style.scss";
 import { useTranslation } from "react-i18next";
 import { useContext, useState } from "react";
 import { UserContext } from "contexts";
+import iconImg from "assets";
 
 // styled
 const StyledMenu = styled(Menu)`
@@ -124,10 +125,23 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
         !isToggle ? "w-[270px]" : "w-[100px]"
       }`}
     >
+      <div className="flex justify-center mt-5">
+        <img
+          src={iconImg.logoImg}
+          className="rounded-full w-[70px] h-[70px] object-cover cursor-pointer"
+          alt=""
+          onClick={() => {
+            setTabGlobal("/");
+            sessionStorage.setItem("currentTab", "/");
+            navigate("/");
+          }}
+        />
+      </div>
       <section className="mt-[64px] text-[18px]">
         {!isToggle ? (
           <StyledMenuToggle
             defaultSelectedKeys={[location.pathname]}
+            selectedKeys={[location.pathname]}
             mode="inline"
             inlineCollapsed={isToggle}
             items={items}
@@ -137,6 +151,7 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
           <StyledMenu
             mode="inline"
             defaultSelectedKeys={[location.pathname]}
+            selectedKeys={[location.pathname]}
             inlineCollapsed={isToggle}
             items={items}
             onSelect={handleChangeCurrentMenu}

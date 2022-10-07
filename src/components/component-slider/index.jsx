@@ -41,7 +41,6 @@ export const ComponentSlider = React.memo(
             className="swiper-popular"
           >
             {dataPopular?.map((item, index) => {
-              console.log({ item });
               return (
                 <SwiperSlide key={index} className="cursor-pointer">
                   <div

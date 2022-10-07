@@ -244,7 +244,6 @@ const WatchMovieTv = () => {
         // language: locale,
         page: 1,
       });
-      console.log({ season });
       setCurrentUrl(
         currentType === "movie"
           ? embedMovie(idDetail)
@@ -307,14 +306,14 @@ const WatchMovieTv = () => {
             ) : (
               <div className="flex flex-col justify-end items-end px-[24px]">
                 <p className="italic font-bold">
-                  Episode{" "}
+                  {t("Episode")}
                   <span className="italic">{season.currentEpisode}</span>
                 </p>
                 <div className="flex">
                   <p>
-                    Season <span>{season.currentSeason}</span>
+                    {t("Season")} <span>{season.currentSeason}</span>
                   </p>
-                  &nbsp; - Episode{" "}
+                  &nbsp; - {t("Episode")}
                   <span className="ml-1">{season.currentEpisode}</span>{" "}
                 </div>
               </div>

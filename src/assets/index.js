@@ -6,6 +6,8 @@ import facebookContact from "./facebook_contact.png";
 import instagramImg from "./instagram.png";
 import twitterkImg from "./twitter.png";
 import Img404 from "./404.jpg";
+import skyImg from "./sky.jpg";
+import logoImg from "./logo.jpg";
 import Img404Backdrop from "./backdrop_default.jpg";
 import videoBacground from "./videos/movie-bacground.mp4";
 import trailerMovie from "./videos/trailer-movie.mp4";
@@ -21,5 +23,7 @@ const iconImg = {
   facebookImg,
   Img404Backdrop,
   Img404,
+  logoImg,
+  skyImg,
 };
 export default iconImg;

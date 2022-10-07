@@ -209,8 +209,6 @@ export const ModalTrailer = ({
                   <span className="text-[16px] mr-2">{t("Genres")}:</span>
                   <div className="flex">
                     {dataDetail?.genres?.map((genre, index) => {
-                      console.log(genre);
-
                       const currentType =
                         sessionStorage.getItem("currentTab") === "tab-tv-show"
                           ? "tv"
