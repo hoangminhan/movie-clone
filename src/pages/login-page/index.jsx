@@ -1,4 +1,4 @@
-import { Form, Input } from "antd";
+import { Form, Input, message } from "antd";
 import iconImg from "assets";
 import { LanguageProject } from "components/header/component";
 import { UserContext } from "contexts";
@@ -7,6 +7,7 @@ import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const StyleInput = styled(Input)`
   &.ant-input {
@@ -35,21 +36,39 @@ const StyleInputPassword = styled(Input.Password)`
   &.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
     border: none;
   }
-  /* &.ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper {
-    background-color: #555353;
-  }
-  .ant-input {
-    background-color: #555353; */
-  /* } */
 `;
 
 const LoginPage = () => {
   const [t] = useTranslation();
-  const onFinish = (values) => {};
   const stateContext = useContext(UserContext);
   const { currentTabGlobal } = stateContext;
   const [tabGlobal, setTabGlobal] = currentTabGlobal;
   const navigate = useNavigate();
+  const onFinish = async (values) => {
+    console.log(values);
+    const { username: email, password } = values;
+    const authentication = getAuth();
+    try {
+      const response = await signInWithEmailAndPassword(
+        authentication,
+        email,
+        password
+      );
+      console.log(response);
+      const { idToken: accessToken, refreshToken } = response._tokenResponse;
+      console.log({ accessToken, refreshToken });
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      navigate("/");
+    } catch (error) {
+      if (error.code === "auth/wrong-password") {
+        message.error("Please check the Password");
+      }
+      if (error.code === "auth/user-not-found") {
+        message.error("Please check the Email");
+      }
+    }
+  };
 
   const onFinishFailed = (errorInfo) => {};
   return (
@@ -60,7 +79,8 @@ const LoginPage = () => {
         muted
         className="fixed object-cover left-0 h-full w-full inset-0 -z-10"
       >
-        <source src={iconImg.trailerMovie} type="video/mp4" />
+        {/* <source src={iconImg.trailerMovie} type="video/mp4" /> */}
+        <source src="" type="video/mp4" />
       </video>
       <div className="bg-black/40 h-[100vh]"></div>
 

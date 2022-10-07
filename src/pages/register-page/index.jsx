@@ -1,9 +1,10 @@
-import { Form, Input } from "antd";
+import { Form, Input, message } from "antd";
 import iconImg from "assets";
 import { LanguageProject } from "components/header/component";
 import { UserContext } from "contexts";
 import { useContext } from "react";
 
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -20,12 +21,6 @@ const StyleInput = styled(Input)`
   &.ant-input:focus {
     border: none;
   }
-  /* &.ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input {
-    background-color: #555353;
-  }
-  .ant-input {
-    background-color: #555353 !important; */
-  /* } */
 `;
 const StyleInputPassword = styled(Input.Password)`
   &.ant-input-affix-wrapper {
@@ -38,17 +33,31 @@ const StyleInputPassword = styled(Input.Password)`
   &.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
     border: none;
   }
-  /* &.ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper {
-    background-color: #555353;
-  }
-  .ant-input {
-    background-color: #555353; */
+
   /* } */
 `;
 
 const RegisterPage = () => {
   const [t] = useTranslation();
-  const onFinish = (values) => {};
+  const onFinish = async (values) => {
+    console.log(values);
+    const { username: email, password } = values;
+    const authentication = getAuth();
+    try {
+      const response = await createUserWithEmailAndPassword(
+        authentication,
+        email,
+        password
+      );
+      const { idToken: accessToken, refreshToken } = response;
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+    } catch (error) {
+      if (error.code === "auth/email-already-in-use") {
+        message.error("email already in use");
+      }
+    }
+  };
 
   const stateContext = useContext(UserContext);
   const { currentTabGlobal } = stateContext;
@@ -161,7 +170,7 @@ const RegisterPage = () => {
                   {t("Username")}:
                 </label>
               }
-              name="firstName"
+              name="username"
               rules={[
                 {
                   required: true,
