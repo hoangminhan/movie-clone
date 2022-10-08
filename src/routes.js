@@ -1,5 +1,6 @@
 import { TabMovie, TabSeries, TabTvShow } from "components";
 import { DefaultLayout } from "layout";
+
 import { lazy } from "react";
 
 const NotFound = lazy(() => import("./pages/not-found"));
@@ -12,6 +13,8 @@ const SearchPage = lazy(() => import("./pages/search-page"));
 const KeywordPage = lazy(() => import("./pages/keyword-page"));
 const GenresPage = lazy(() => import("./pages/genres-page"));
 const CastPage = lazy(() => import("./pages/cast-page"));
+const UserPage = lazy(() => import("./pages/user-page"));
+const BookMarkedPage = lazy(() => import("./pages/bookmark-page"));
 const WatchMovieTv = lazy(() => import("./pages/watch-movie-tv"));
 
 //  const RouteList = [
@@ -75,6 +78,14 @@ let RouteList = [
     element: <RegisterPage />,
   },
   {
+    path: "/account",
+    element: (
+      <DefaultLayout page="Account Settings">
+        <UserPage />
+      </DefaultLayout>
+    ),
+  },
+  {
     path: "/discovery",
     element: (
       <DefaultLayout page="discovery">
@@ -87,6 +98,14 @@ let RouteList = [
     element: (
       <DefaultLayout page="Search">
         <SearchPage />
+      </DefaultLayout>
+    ),
+  },
+  {
+    path: "/favorite",
+    element: (
+      <DefaultLayout page="Favorite">
+        <BookMarkedPage />
       </DefaultLayout>
     ),
   },

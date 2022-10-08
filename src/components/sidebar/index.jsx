@@ -5,7 +5,7 @@ import {
   RightOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import { Menu } from "antd";
+import { Menu, notification } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -87,7 +87,7 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
     getItem(t("Favorite"), "/favorite", <ContainerOutlined />),
     getItem(t("History"), "/history", <FontAwesomeIcon icon={faClock} />),
     getItem(t("Settings"), "/settings", <SettingOutlined />, [
-      getItem(t("Profile"), "account", <FontAwesomeIcon icon={faUserTie} />),
+      getItem(t("Profile"), "/account", <FontAwesomeIcon icon={faUserTie} />),
     ]),
     getItem(
       `${isLogin ? t("Logout") : t("Login")}`,
@@ -114,9 +114,22 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
     selectedKeys,
     domEvent,
   }) => {
-    setTabGlobal("/");
-    sessionStorage.setItem("currentTab", "/");
-    navigate(key);
+    const accessToken = localStorage.getItem("accessToken") || "";
+    if (
+      (key === "/favorite" ||
+        key === "/history" ||
+        key === "/settings" ||
+        key === "/account") &&
+      !accessToken
+    ) {
+      notification.warning({
+        message: "Bạn cần đăng nhập để thực hiện chức năng này",
+      });
+    } else {
+      setTabGlobal("/");
+      sessionStorage.setItem("currentTab", "/");
+      navigate(key);
+    }
   };
 
   return (

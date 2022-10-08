@@ -9,17 +9,16 @@ import "./style.scss";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { unwrapResult } from "@reduxjs/toolkit";
+import iconImg from "assets";
 import { ButtomCustom, ButtonPlay } from "components";
+import { useModal } from "hooks";
 import { useHomePage } from "hooks/use-homepage";
 import { t } from "i18next";
 import { ModalTrailer } from "modal/components";
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Autoplay, Navigation, Pagination } from "swiper";
 import { formatNumber, getImage, handleOpenNotification } from "utils";
-import { useModal } from "hooks";
-import { Badge, Skeleton } from "antd";
-import iconImg from "assets";
 
 export const Banner = ({ listTrending, isLoading }) => {
   const {

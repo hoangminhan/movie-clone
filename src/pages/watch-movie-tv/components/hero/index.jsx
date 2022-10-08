@@ -1,20 +1,55 @@
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Skeleton, Tooltip } from "antd";
+import { message, notification, Skeleton, Tooltip } from "antd";
 import iconImg from "assets";
-import { ButtonAddList, ImageCustom } from "components";
+import { ButtonAddList } from "components";
 import { useHomePage } from "hooks/use-homepage";
 import { t } from "i18next";
 import { Link } from "react-router-dom";
-import { embedMovie, getImage } from "utils";
+import { getImage } from "utils";
+
+import { getFirestore, addDoc, collection, getDocs } from "firebase/firestore";
+import { useEffect } from "react";
+
+const db = getFirestore();
 
 export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
+  useEffect(() => {
+    const getData = async () => {};
+    getData();
+  }, []);
   const { isLoading } = useHomePage();
   const executeScroll = () => {
     const elementToScroll = document.getElementById("movie-id");
     elementToScroll.scrollIntoView({
       behavior: "smooth",
     });
+  };
+
+  const handleAddBookMarked = async (data) => {
+    console.log("click", data);
+    const querySnapshot = await getDocs(collection(db, "bookmark"));
+    let checkExist = false;
+    querySnapshot.forEach((doc) => {
+      if (data.id === doc.data().id) {
+        checkExist = true;
+      }
+      // console.log(doc.id, " => ", doc.data());
+    });
+    if (checkExist) {
+      message.warning("Phim này đã được thêm vào bookmark");
+    } else {
+      await addDoc(collection(db, "bookmark"), {
+        id: data.id,
+        type: "tv",
+        rate: dataDetail.vote_average,
+        url: dataDetail.poster_path,
+        title: dataDetail?.title ? dataDetail?.title : dataDetail?.name,
+      });
+      notification.success({
+        message: "Thêm thành công vào danh sách ưa thích",
+      });
+    }
   };
 
   return (
@@ -47,7 +82,12 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
           </div>
 
           {/* add list */}
-          <div className="absolute right-2 top-2 ml-6 cursor-pointer hover:scale-110 duration-200">
+          <div
+            className="absolute right-2 top-2 cursor-pointer hover:scale-110 duration-200"
+            onClick={() => {
+              handleAddBookMarked(dataDetail);
+            }}
+          >
             <ButtonAddList />
           </div>
 

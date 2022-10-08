@@ -7,7 +7,14 @@ import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  FacebookAuthProvider,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
+// import { authentication } from "firebase";
 
 const StyleInput = styled(Input)`
   &.ant-input {
@@ -41,11 +48,13 @@ const StyleInputPassword = styled(Input.Password)`
 const LoginPage = () => {
   const [t] = useTranslation();
   const stateContext = useContext(UserContext);
-  const { currentTabGlobal } = stateContext;
+  const { currentTabGlobal, currentDataUser } = stateContext;
   const [tabGlobal, setTabGlobal] = currentTabGlobal;
+  const [dataUser, setDataUser] = currentDataUser;
   const navigate = useNavigate();
+
+  // login with user and password
   const onFinish = async (values) => {
-    console.log(values);
     const { username: email, password } = values;
     const authentication = getAuth();
     try {
@@ -56,7 +65,7 @@ const LoginPage = () => {
       );
       console.log(response);
       const { idToken: accessToken, refreshToken } = response._tokenResponse;
-      console.log({ accessToken, refreshToken });
+      setDataUser({ ...response.user, isManually: true });
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       navigate("/");
@@ -71,6 +80,63 @@ const LoginPage = () => {
   };
 
   const onFinishFailed = (errorInfo) => {};
+
+  // login with facebook
+  const handleSignInWithfacebook = async () => {
+    try {
+      const provider = new FacebookAuthProvider();
+      const authentication = getAuth();
+      const res = await signInWithPopup(authentication, provider);
+      const {
+        oauthAccessToken: accessToken,
+        refreshToken,
+        displayName,
+        email,
+      } = res._tokenResponse;
+      setDataUser(res.user);
+      console.log({ res });
+      const userInfo = {
+        displayName,
+        email,
+      };
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      navigate("/");
+
+      console.log(res);
+    } catch (error) {
+      console.log("error", error.message);
+    }
+  };
+  // login with google
+  const handleSignInWithGoogle = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const authentication = getAuth();
+      const res = await signInWithPopup(authentication, provider);
+      const {
+        oauthAccessToken: accessToken,
+        refreshToken,
+        displayName,
+        email,
+      } = res._tokenResponse;
+      setDataUser(res.user);
+
+      const userInfo = {
+        displayName,
+        email,
+      };
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      navigate("/");
+
+      console.log(res);
+    } catch (error) {
+      console.log("error", error.message);
+    }
+  };
   return (
     <div>
       <video
@@ -92,10 +158,18 @@ const LoginPage = () => {
         <div>
           <div className="flex justify-center gap-5 mt-3">
             <p className="w-[50px] h-[50px] bg-[#fff] rounded-full flex items-center justify-center cursor-pointer hover:scale-110 duration-200">
-              <img src={iconImg.googleImg} alt="" />
+              <img
+                src={iconImg.googleImg}
+                alt=""
+                onClick={handleSignInWithGoogle}
+              />
             </p>
             <p className="w-[50px] h-[50px] bg-[#fff] rounded-full flex items-center justify-center cursor-pointer hover:scale-110 duration-200">
-              <img src={iconImg.facebookImg} alt="" />
+              <img
+                src={iconImg.facebookImg}
+                alt=""
+                onClick={handleSignInWithfacebook}
+              />
             </p>
           </div>
         </div>

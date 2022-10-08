@@ -8,9 +8,11 @@ export const UserProviderContext = ({ children }) => {
   const [tabGlobal, setTabGlobal] = useState(
     sessionStorage.getItem("currentTab") || "/"
   );
+  const [dataUser, setDataUser] = useState({});
   const stateContext = {
     localeGlobal: [globalLocale, setGlobalLocale],
     currentTabGlobal: [tabGlobal, setTabGlobal],
+    currentDataUser: [dataUser, setDataUser],
   };
 
   return (

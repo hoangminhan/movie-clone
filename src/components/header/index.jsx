@@ -22,6 +22,10 @@ export const Header = ({ page }) => {
         return t("Actor Info");
       case "Search":
         return t("Search");
+      case "Favorite":
+        return t("My Favorite");
+      case "Account Settings":
+        return t("Account Settings");
       default:
         return <Menu />;
     }

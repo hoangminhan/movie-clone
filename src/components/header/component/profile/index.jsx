@@ -1,10 +1,17 @@
-import { Avatar, Button, Dropdown, Menu } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import { Link, useNavigate } from "react-router-dom";
+import { Avatar, Dropdown, Menu } from "antd";
+import { UserContext } from "contexts";
+import { getAuth, signOut } from "firebase/auth";
+import { useContext } from "react";
 import { useTranslation } from "react-i18next";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Profile = () => {
   const navigate = useNavigate();
+
+  const stateContext = useContext(UserContext);
+  const { currentDataUser } = stateContext;
+  const [dataUser, setDataUser] = currentDataUser;
   const menu = (
     <Menu
       items={[
@@ -14,9 +21,16 @@ export const Profile = () => {
             <p
               className="text-black"
               onClick={() => {
-                localStorage.removeItem("accessToken");
-                localStorage.removeItem("refreshToken");
-                navigate("/");
+                const auth = getAuth();
+                console.log({ auth });
+                signOut(auth)
+                  .then((data) => {
+                    localStorage.removeItem("accessToken");
+                    localStorage.removeItem("refreshToken");
+                    localStorage.removeItem("userInfo");
+                    navigate("/");
+                  })
+                  .catch((error) => {});
               }}
             >
               Log out
@@ -32,8 +46,9 @@ export const Profile = () => {
     <Dropdown overlay={menu} placement="bottomLeft">
       <Avatar
         size="large"
-        src="https://joeschmoe.io/api/v1/random"
+        src={dataUser?.photoURL}
         icon={<UserOutlined />}
+        className="cursor-pointer"
       />
     </Dropdown>
   ) : (

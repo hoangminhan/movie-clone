@@ -52,6 +52,7 @@ const RegisterPage = () => {
       const { idToken: accessToken, refreshToken } = response;
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
+      navigate("/");
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
         message.error("email already in use");
