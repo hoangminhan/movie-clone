@@ -1,5 +1,6 @@
 import {
   faClose,
+  faHeart,
   faStar,
   faThumbsDown,
   faThumbsUp,
@@ -8,9 +9,17 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Col, Modal, Row, Spin, Tooltip } from "antd";
 import { ButtomCustom, ButtonAddList, SimilarContent } from "components";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+} from "firebase/firestore";
+import { useAddList } from "hooks";
 import { useHomePage } from "hooks/use-homepage";
 import { t } from "i18next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { Link, useNavigate } from "react-router-dom";
 import ShowMoreText from "react-show-more-text";
@@ -29,13 +38,40 @@ export const ModalTrailer = ({
   const currentType =
     sessionStorage.getItem("currentTab") === "tab-tv-show" ? "tv" : "movie";
   const navigate = useNavigate();
+  const { handleAddBookMarked } = useAddList();
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    if (dataDetail.id) {
+      const handleCheckIsFavorite = async (dataDetail) => {
+        let idCheck = "123";
+        if (dataDetail?.id) {
+          const db = getFirestore();
+
+          const querySnapsot = query(
+            collection(db, "bookmark"),
+            where("id", "==", dataDetail.id)
+          );
+          const querySnapshot = await getDocs(querySnapsot);
+          querySnapshot.forEach((item, index) => {
+            if (item.data().id === dataDetail.id) {
+              idCheck = item.data().id;
+              setIsFavorite(true);
+            }
+          });
+        }
+        return idCheck;
+      };
+      handleCheckIsFavorite(dataDetail);
+    }
+  }, [dataDetail, isFavorite]);
 
   return (
     <Modal
       visible={visibleModal}
       wrapClassName="modal-config"
       style={{
-        top: 0,
+        top: 80,
       }}
       closable={false}
       footer={null}
@@ -44,7 +80,7 @@ export const ModalTrailer = ({
     >
       <div className="relative flex justify-center flex-col">
         {/* button close */}
-        <div className="absolute right-[-18px] top-[-18px]">
+        <div className="absolute right-[-18px] top-[-5px]">
           <Tooltip title="Click to exit" placement="right">
             <div
               className="px-[14px] py-[8px] bg-[#fff] rounded-full cursor-pointer border-solid border-[1px] border-[black] hover:scale-110 duration-300"
@@ -90,8 +126,34 @@ export const ModalTrailer = ({
               </Link>
             </div>
             {/* add playlist */}
-            <div className="ml-8 cursor-pointer hover:scale-110 duration-200">
-              <ButtonAddList />
+            <div
+              className={`ml-8 cursor-pointer hover:scale-110 duration-200`}
+              onClick={async () => {
+                setIsFavorite(!isFavorite);
+                await handleAddBookMarked(dataDetail);
+              }}
+            >
+              <Tooltip
+                title={
+                  isFavorite
+                    ? "Xóa khỏi danh sách ưa thích"
+                    : "Thêm vào danh sách của tôi"
+                }
+              >
+                <p
+                  className={`group bg-transparent w-10 h-10 flex items-center justify-center rounded-full border-solid 
+              ${isFavorite ? "border-[#5179ff]" : "border-[white]"}
+              border-[2px] hover:border-[#5179ff]`}
+                >
+                  <FontAwesomeIcon
+                    icon={faHeart}
+                    color="white"
+                    className={`text-[13px] ${
+                      isFavorite ? "text-[#5179ff]" : ""
+                    }`}
+                  />
+                </p>
+              </Tooltip>
             </div>
 
             {/* like */}

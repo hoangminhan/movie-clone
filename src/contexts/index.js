@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export const UserContext = React.createContext({});
 export const UserProviderContext = ({ children }) => {
@@ -14,6 +15,17 @@ export const UserProviderContext = ({ children }) => {
     currentTabGlobal: [tabGlobal, setTabGlobal],
     currentDataUser: [dataUser, setDataUser],
   };
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setDataUser(user);
+        // ...
+      } else {
+      }
+    });
+  }, []);
 
   return (
     <UserContext.Provider value={stateContext}>{children}</UserContext.Provider>

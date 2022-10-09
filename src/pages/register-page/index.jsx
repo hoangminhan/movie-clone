@@ -40,7 +40,6 @@ const StyleInputPassword = styled(Input.Password)`
 const RegisterPage = () => {
   const [t] = useTranslation();
   const onFinish = async (values) => {
-    console.log(values);
     const { username: email, password } = values;
     const authentication = getAuth();
     try {

@@ -15,17 +15,12 @@ const UserPage = () => {
     const getUserInfo = async () => {
       try {
         const authentication = getAuth();
-        // console.log(authentication);
-        // const user = authentication.currentUser;
+
         onAuthStateChanged(authentication, (user) => {
           if (user) {
-            console.log(user);
             setDataUser(user);
-            console.log(user);
             // ...
           } else {
-            // User is signed out
-            // ...
           }
         });
       } catch (error) {}

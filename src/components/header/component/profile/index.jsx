@@ -22,7 +22,6 @@ export const Profile = () => {
               className="text-black"
               onClick={() => {
                 const auth = getAuth();
-                console.log({ auth });
                 signOut(auth)
                   .then((data) => {
                     localStorage.removeItem("accessToken");

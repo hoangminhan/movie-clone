@@ -63,7 +63,6 @@ const LoginPage = () => {
         email,
         password
       );
-      console.log(response);
       const { idToken: accessToken, refreshToken } = response._tokenResponse;
       setDataUser({ ...response.user, isManually: true });
       localStorage.setItem("accessToken", accessToken);
@@ -94,7 +93,6 @@ const LoginPage = () => {
         email,
       } = res._tokenResponse;
       setDataUser(res.user);
-      console.log({ res });
       const userInfo = {
         displayName,
         email,
@@ -103,8 +101,6 @@ const LoginPage = () => {
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
       navigate("/");
-
-      console.log(res);
     } catch (error) {
       console.log("error", error.message);
     }
@@ -131,8 +127,6 @@ const LoginPage = () => {
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
       navigate("/");
-
-      console.log(res);
     } catch (error) {
       console.log("error", error.message);
     }
