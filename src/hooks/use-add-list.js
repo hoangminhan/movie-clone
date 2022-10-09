@@ -7,6 +7,8 @@ import {
   doc,
   getDocs,
   getFirestore,
+  query,
+  where,
 } from "firebase/firestore";
 import { useContext } from "react";
 
@@ -19,7 +21,11 @@ export const useAddList = () => {
 
   const handleAddBookMarked = async (data) => {
     let dataDelete = {};
-    const querySnapshot = await getDocs(collection(db, "bookmark"));
+    const querySnapsot = query(
+      collection(db, "bookmark"),
+      where("user_id", "==", dataUser?.uid)
+    );
+    const querySnapshot = await getDocs(querySnapsot);
     let checkExist = false;
     querySnapshot.forEach((doc) => {
       if (data.id === doc.data().id) {

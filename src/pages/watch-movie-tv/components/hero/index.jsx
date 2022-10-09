@@ -25,6 +25,9 @@ import { useState } from "react";
 export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
   const { handleAddBookMarked } = useAddList();
   const [isFavorite, setIsFavorite] = useState(false);
+  const stateContext = useContext(UserContext);
+  const { currentDataUser } = stateContext;
+  const [dataUser, setDataUser] = currentDataUser;
   useEffect(() => {
     if (dataDetail.id) {
       const handleCheckIsFavorite = async (dataDetail) => {
@@ -32,8 +35,10 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
         if (dataDetail?.id) {
           const db = getFirestore();
 
+          console.log(dataUser);
           const querySnapsot = query(
             collection(db, "bookmark"),
+            where("user_id", "==", dataUser?.uid),
             where("id", "==", dataDetail.id)
           );
           const querySnapshot = await getDocs(querySnapsot);
