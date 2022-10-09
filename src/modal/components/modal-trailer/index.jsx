@@ -9,6 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Col, Modal, Row, Spin, Tooltip } from "antd";
 import { ButtomCustom, ButtonAddList, SimilarContent } from "components";
+import { UserContext } from "contexts";
 import {
   collection,
   getDocs,
@@ -19,7 +20,7 @@ import {
 import { useAddList } from "hooks";
 import { useHomePage } from "hooks/use-homepage";
 import { t } from "i18next";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { Link, useNavigate } from "react-router-dom";
 import ShowMoreText from "react-show-more-text";
@@ -41,6 +42,10 @@ export const ModalTrailer = ({
   const { handleAddBookMarked } = useAddList();
   const [isFavorite, setIsFavorite] = useState(false);
 
+  const stateContext = useContext(UserContext);
+  const { currentDataUser } = stateContext;
+  const [dataUser, setDataUser] = currentDataUser;
+
   useEffect(() => {
     if (dataDetail.id) {
       const handleCheckIsFavorite = async (dataDetail) => {
@@ -50,6 +55,7 @@ export const ModalTrailer = ({
 
           const querySnapsot = query(
             collection(db, "bookmark"),
+            where("user_id", "==", dataUser?.uid),
             where("id", "==", dataDetail.id)
           );
           const querySnapshot = await getDocs(querySnapsot);

@@ -37,9 +37,11 @@ export const useAddList = () => {
       const itemDeleteRef = doc(db, "bookmark", dataDelete.id_field);
       deleteDoc(itemDeleteRef)
         .then((data) => {
+          console.log({ data });
           notification.error({
             message: "Xóa khỏi danh sách bookmark",
           });
+          return;
         })
         .catch((error) => {
           console.log(error);
@@ -56,6 +58,7 @@ export const useAddList = () => {
       notification.success({
         message: "Thêm thành công vào list bookmark",
       });
+      return;
     }
   };
   return {

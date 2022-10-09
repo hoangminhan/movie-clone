@@ -35,16 +35,17 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
         if (dataDetail?.id) {
           const db = getFirestore();
 
-          console.log(dataUser);
           const querySnapsot = query(
             collection(db, "bookmark"),
             where("user_id", "==", dataUser?.uid),
             where("id", "==", dataDetail.id)
           );
           const querySnapshot = await getDocs(querySnapsot);
+          console.log({ querySnapshot });
           querySnapshot.forEach((item, index) => {
             if (item.data().id === dataDetail.id) {
               idCheck = item.data().id;
+              // setIsFavorite(!isFavorite);
               setIsFavorite(true);
             }
           });
@@ -53,7 +54,8 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
       };
       handleCheckIsFavorite(dataDetail);
     }
-  }, [dataDetail, isFavorite]);
+  }, [dataDetail, dataUser.uid, isFavorite]);
+  console.log(isFavorite);
 
   useEffect(() => {
     const getData = async () => {};

@@ -18,24 +18,21 @@ export const UserProviderContext = ({ children }) => {
 
   useEffect(() => {
     const handleGetDataUser = async () => {
-      console.log("context");
       const auth = getAuth();
-      console.log(auth);
-      console.log(auth.currentUser);
-      const user = auth.currentUser;
-      setDataUser({ ...user });
-      // onAuthStateChanged(auth, (user) => {
-      //   if (user) {
-      //     console.log(user);
-      //     setDataUser(user);
-      //     // ...
-      //   } else {
-      //   }
-      // });
+      // console.log(auth);
+      // console.log(auth.currentUser);
+      // const user = auth.currentUser;
+      // setDataUser({ ...user });
+      onAuthStateChanged(getAuth(), async (user) => {
+        if (user) {
+          setDataUser(user);
+          // ...
+        } else {
+        }
+      });
     };
     handleGetDataUser();
   }, []);
-  console.log({ dataUser });
 
   return (
     <UserContext.Provider value={stateContext}>{children}</UserContext.Provider>
