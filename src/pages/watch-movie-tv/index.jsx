@@ -288,7 +288,7 @@ const WatchMovieTv = () => {
 
             {/* xem phim */}
             <div className="my-10 mx-4 overflow-hidden" id="movie-id">
-              {/* {currentUrl && (
+              {currentUrl && (
                 <Iframe
                   id="movie-id"
                   src={currentUrl}
@@ -296,7 +296,7 @@ const WatchMovieTv = () => {
                   width="100%"
                   allowFullScreen
                 ></Iframe>
-              )} */}
+              )}
             </div>
 
             {/* eposide tv */}

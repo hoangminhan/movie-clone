@@ -149,7 +149,7 @@ const LoginPage = () => {
         muted
         className="fixed object-cover left-0 h-full w-full inset-0 -z-10"
       >
-        {/* <source src={iconImg.trailerMovie} type="video/mp4" /> */}
+        <source src={iconImg.trailerMovie} type="video/mp4" />
         <source src="" type="video/mp4" />
       </video>
       <div className="bg-black/40 h-[100vh]"></div>
