@@ -1,4 +1,4 @@
-import { Form, Input, message } from "antd";
+import { Form, Input, message, Spin } from "antd";
 import iconImg from "assets";
 import { LanguageProject } from "components/header/component";
 import { UserContext } from "contexts";
@@ -14,6 +14,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
+import { useState } from "react";
 // import { authentication } from "firebase";
 
 const StyleInput = styled(Input)`
@@ -46,6 +47,7 @@ const StyleInputPassword = styled(Input.Password)`
 `;
 
 const LoginPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [t] = useTranslation();
   const stateContext = useContext(UserContext);
   const { currentTabGlobal, currentDataUser } = stateContext;
@@ -55,6 +57,7 @@ const LoginPage = () => {
 
   // login with user and password
   const onFinish = async (values) => {
+    setIsLoading(true);
     const { username: email, password } = values;
     const authentication = getAuth();
     try {
@@ -66,10 +69,12 @@ const LoginPage = () => {
       const { idToken: accessToken, refreshToken } = response._tokenResponse;
       setDataUser({ ...response.user, isManually: true });
       localStorage.setItem("accessToken", accessToken);
+      setIsLoading(false);
       localStorage.setItem("refreshToken", refreshToken);
       navigate("/");
     } catch (error) {
       console.log(error.code);
+      setIsLoading(false);
       if (error.code === "auth/wrong-password") {
         message.error("Please check the Password");
       }
@@ -240,11 +245,15 @@ const LoginPage = () => {
             </Form.Item>
 
             <button
+              disabled={isLoading ? true : false}
               type="primary"
               htmlType="submit"
-              className="bg-blue-600 hover:bg-blue-800 text-white hover:text-[#ccc] font-bold py-3 px-5 rounded-lg text-[18px] min-w-[110px] mt-4"
+              className={`bg-blue-600 hover:bg-blue-800 text-white hover:text-[#ccc] font-bold  w-[150px] py-2 rounded-lg text-[18px] min-w-[110px] mt-4
+              ${isLoading ? "cursor-not-allowed bg-[#ccc] hover:bg-[#ccc]" : ""}
+              
+              `}
             >
-              {t("Login")}
+              {isLoading ? <Spin className="text-white" /> : t("Login")}
               {/* <FontAwesomeIcon icon={faRightToBracket} className="ml-1" /> */}
             </button>
 

@@ -52,8 +52,10 @@ export const Profile = () => {
     </Dropdown>
   ) : (
     <Link to="/login">
-      <p className="px-3  bg-primary rounded-3xl hover:scale-110 duration-200 flex items-center justify-center">
-        <button className="text-white text-[20px]">{t("Login")}</button>
+      <p className="bg-primary rounded-3xl hover:scale-110 duration-200 flex items-center justify-center">
+        <button className="text-white text-[20px] min-w-[100px] px-2">
+          {t("Login")}
+        </button>
       </p>
     </Link>
   );

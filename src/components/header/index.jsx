@@ -1,8 +1,7 @@
 import { Menu } from "components";
-import React from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import { LanguageProject, Profile, TabHeader } from "./component";
+import { LanguageProject, Profile } from "./component";
 
 export const Header = ({ page }) => {
   const [t] = useTranslation();
@@ -24,6 +23,8 @@ export const Header = ({ page }) => {
         return t("Search");
       case "Favorite":
         return t("My Favorite");
+      case "History":
+        return t("Watched");
       case "Account Settings":
         return t("Account Settings");
       default:

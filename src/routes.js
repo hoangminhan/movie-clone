@@ -15,6 +15,7 @@ const GenresPage = lazy(() => import("./pages/genres-page"));
 const CastPage = lazy(() => import("./pages/cast-page"));
 const UserPage = lazy(() => import("./pages/user-page"));
 const BookMarkedPage = lazy(() => import("./pages/bookmark-page"));
+const HistoryPage = lazy(() => import("./pages/history-page"));
 const WatchMovieTv = lazy(() => import("./pages/watch-movie-tv"));
 
 //  const RouteList = [
@@ -106,6 +107,14 @@ let RouteList = [
     element: (
       <DefaultLayout page="Favorite">
         <BookMarkedPage />
+      </DefaultLayout>
+    ),
+  },
+  {
+    path: "/history",
+    element: (
+      <DefaultLayout page="History">
+        <HistoryPage />
       </DefaultLayout>
     ),
   },

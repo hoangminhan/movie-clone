@@ -205,7 +205,7 @@ const RegisterPage = () => {
                 },
                 {
                   pattern: new RegExp(
-                    /^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$/
+                    /(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,})/
                   ),
                   message:
                     "Minimum six characters, at least one letter and one number",

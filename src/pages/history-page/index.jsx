@@ -1,3 +1,5 @@
+import React, { useContext } from "react";
+
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import {
   faClose,
@@ -29,7 +31,6 @@ import {
   deleteField,
   deleteDoc,
 } from "firebase/firestore";
-import React, { useContext } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -51,9 +52,9 @@ const StyledCollapse = styled(Collapse)`
 `;
 const { Panel } = Collapse;
 
-const BookMarkedPage = () => {
+const HistoryPage = () => {
   const db = getFirestore();
-  const [dataFavorite, setDataFavorite] = useState([]);
+  const [dataHistory, setDataHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const stateContext = useContext(UserContext);
@@ -64,14 +65,13 @@ const BookMarkedPage = () => {
   const navigate = useNavigate();
   const [currentOption, setCurrentOption] = useState("multi");
   const [t] = useTranslation();
+  const [isDelete, setIsDelete] = useState(false);
 
   const filterOption = [
     { name: "All", value: "multi" },
     { name: "Movie", value: "movie" },
     { name: "Tv show", value: "tv" },
   ];
-  const [isDelete, setIsDelete] = useState(false);
-
   useEffect(() => {
     if (dataUser.uid) {
       const getData = async () => {
@@ -80,12 +80,12 @@ const BookMarkedPage = () => {
         let dataQuery;
         if (currentOption === "multi") {
           dataQuery = query(
-            collection(db, "bookmark"),
+            collection(db, "history"),
             where("user_id", "==", dataUser?.uid)
           );
         } else {
           dataQuery = query(
-            collection(db, "bookmark"),
+            collection(db, "history"),
             where("user_id", "==", dataUser?.uid),
             where("type", "==", currentOption === "movie" ? "movie" : "tv")
           );
@@ -97,16 +97,16 @@ const BookMarkedPage = () => {
             data.push({ ...item.data(), id_field: item.id });
           }
         });
-        setDataFavorite([...data]);
+        setDataHistory([...data]);
         setIsLoading(false);
       };
       getData();
     }
-  }, [dataUser, currentOption, isDelete]);
+  }, [dataUser, currentOption, db, isDelete]);
   const [isEdit, setIsEdit] = useState(false);
 
-  const handleDeleteFavorite = async (dataDelete) => {
-    const itemDeleteRef = doc(db, "bookmark", dataDelete.id_field);
+  const handleDeleteHistory = async (dataDelete) => {
+    const itemDeleteRef = doc(db, "history", dataDelete.id_field);
     deleteDoc(itemDeleteRef)
       .then((data) => {
         message.success("Delete success");
@@ -119,7 +119,7 @@ const BookMarkedPage = () => {
   const handleDeleteAll = async (dataDelete, type) => {
     if (type !== "multi") {
       const dataQuery = query(
-        collection(db, "bookmark"),
+        collection(db, "history"),
         where("user_id", "==", dataUser?.uid),
         where("type", "==", type)
       );
@@ -128,15 +128,17 @@ const BookMarkedPage = () => {
       querySnapshot.forEach((item, index) => {
         console.log(item.data());
         if (item.data().id) {
-          const itemDeleteRef = doc(db, "bookmark", item.id);
+          const itemDeleteRef = doc(db, "history", item.id);
           deleteDoc(itemDeleteRef);
+
+          //   data.push({ ...item.data(), id_field: item.id });
         }
       });
       setIsDelete(!isDelete);
       message.success("Xóa thành công");
     } else {
       const dataQuery = query(
-        collection(db, "bookmark"),
+        collection(db, "history"),
         where("user_id", "==", dataUser?.uid)
       );
 
@@ -144,7 +146,7 @@ const BookMarkedPage = () => {
       querySnapshot.forEach((item, index) => {
         console.log(item.data());
         if (item.data().id) {
-          const itemDeleteRef = doc(db, "bookmark", item.id);
+          const itemDeleteRef = doc(db, "history", item.id);
           deleteDoc(itemDeleteRef);
 
           //   data.push({ ...item.data(), id_field: item.id });
@@ -162,7 +164,7 @@ const BookMarkedPage = () => {
       ) : (
         <Row gutter={[24, 24]} className="mt-8">
           <Col span={19}>
-            {dataFavorite?.length ? (
+            {dataHistory?.length ? (
               <>
                 {isEdit ? (
                   <div className="mb-7">
@@ -170,7 +172,7 @@ const BookMarkedPage = () => {
                       className="group hover:cursor-pointer"
                       onClick={() => {
                         setIsEdit(false);
-                        handleDeleteAll(dataFavorite, currentOption);
+                        handleDeleteAll(dataHistory, currentOption);
                       }}
                     >
                       <FontAwesomeIcon icon={faTrash} className=" text-white" />
@@ -197,77 +199,72 @@ const BookMarkedPage = () => {
             ) : (
               ""
             )}
-            {dataFavorite?.length ? (
-              <>
-                <div className="flex gap-10 flex-wrap">
-                  {dataFavorite.map((favorite, index) => {
-                    return (
-                      <div
-                        key={favorite.id}
-                        className="max-w-[185px] relative flex flex-col cursor-pointer hover:scale-110 hover:duration-200"
-                      >
-                        <ImageCustom
-                          src={getImage(favorite.url, "w342")}
-                          className="rounded-md flex-1"
-                          onClick={() => {
-                            if (favorite.type === "movie") {
-                              setTabGlobal("/");
-                              sessionStorage.setItem("currentTab", "/");
-                            } else {
-                              setTabGlobal("tab-tv-show");
-                              sessionStorage.setItem(
-                                "currentTab",
-                                "tab-tv-show"
-                              );
-                            }
-                            navigate(`/${favorite.type}/${favorite.id}`);
-                          }}
-                        />
-                        <div>
-                          <p className="text-[18px] text-center line-clamp-1">
-                            {favorite.title}
-                          </p>
-                        </div>
-                        <div className="absolute top-[-8px] right-[0px] text-[13px]">
-                          <Badge.Ribbon
-                            color="#1890ff"
-                            text={
-                              <p className="rounded-[10px]  m-0 leading-6">
-                                {formatNumber(favorite.rate, 10)}
-                                <span className="inline-block ml-1">
-                                  <FontAwesomeIcon
-                                    icon={faStar}
-                                    className="text-white"
-                                  />
-                                </span>
-                              </p>
-                            }
-                          ></Badge.Ribbon>
-                        </div>
-                        <div
-                          className={`absolute top-[-15px] ${
-                            isEdit ? "block" : "hidden"
-                          }`}
-                        >
-                          <Tooltip title={t("Click to delete")}>
-                            <p
-                              className=" w-[24px] h-[24px] hover:scale-110 hover:duration-150"
-                              onClick={() => {
-                                handleDeleteFavorite(favorite);
-                              }}
-                            >
-                              <FontAwesomeIcon
-                                icon={faClose}
-                                className="w-[24px] h-[24px] bg-[red] rounded-full"
-                              />
-                            </p>
-                          </Tooltip>
-                        </div>
+            {dataHistory?.length ? (
+              <div className="flex gap-10 flex-wrap">
+                {dataHistory.map((favorite, index) => {
+                  return (
+                    <div
+                      key={favorite.id}
+                      className="max-w-[185px] relative flex flex-col cursor-pointer hover:scale-110 hover:duration-200"
+                    >
+                      <ImageCustom
+                        src={getImage(favorite.url, "w342")}
+                        className="rounded-md flex-1"
+                        onClick={() => {
+                          if (favorite.type === "movie") {
+                            setTabGlobal("/");
+                            sessionStorage.setItem("currentTab", "/");
+                          } else {
+                            setTabGlobal("tab-tv-show");
+                            sessionStorage.setItem("currentTab", "tab-tv-show");
+                          }
+                          navigate(`/${favorite.type}/${favorite.id}`);
+                        }}
+                      />
+                      <div>
+                        <p className="text-[18px] text-center line-clamp-1">
+                          {favorite.name}
+                        </p>
                       </div>
-                    );
-                  })}
-                </div>
-              </>
+                      <div className="absolute top-[-8px] right-[0px] text-[13px]">
+                        <Badge.Ribbon
+                          color="#1890ff"
+                          text={
+                            <p className="rounded-[10px]  m-0 leading-6">
+                              {formatNumber(favorite.rate, 10)}
+                              <span className="inline-block ml-1">
+                                <FontAwesomeIcon
+                                  icon={faStar}
+                                  className="text-white"
+                                />
+                              </span>
+                            </p>
+                          }
+                        ></Badge.Ribbon>
+                      </div>
+                      <div
+                        className={`absolute top-[-15px] ${
+                          isEdit ? "block" : "hidden"
+                        }`}
+                      >
+                        <Tooltip title={t("Click to delete")}>
+                          <p
+                            className=" w-[24px] h-[24px] hover:scale-110 hover:duration-150"
+                            onClick={() => {
+                              handleDeleteHistory(favorite);
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faClose}
+                              className="w-[24px] h-[24px] bg-[red] rounded-full"
+                            />
+                          </p>
+                        </Tooltip>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             ) : (
               <div className="h-[100%] flex justify-center items-center">
                 <Empty />
@@ -322,4 +319,4 @@ const BookMarkedPage = () => {
   );
 };
 
-export default BookMarkedPage;
+export default HistoryPage;

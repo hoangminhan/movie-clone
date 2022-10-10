@@ -61,7 +61,40 @@ export const useAddList = () => {
       return;
     }
   };
+  const handleAddHistory = async (data) => {
+    const db = getFirestore();
+
+    const queryDb = query(
+      collection(db, "history"),
+      where("user_id", "==", dataUser.uid),
+      where("id", "==", data.id)
+    );
+    const dataResult = await getDocs(queryDb);
+    let checkExist = false;
+    dataResult.forEach((doc) => {
+      if (data.id === doc.data().id) {
+        checkExist = true;
+      }
+    });
+    if (checkExist) {
+      return;
+    } else {
+      try {
+        await addDoc(collection(db, "history"), {
+          name: data.title ? data.title : data.name,
+          rate: data.vote_average,
+          user_id: dataUser.uid,
+          type: tabGlobal === "/" ? "movie" : "tv",
+          id: data.id,
+          url: data.poster_path,
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+  };
   return {
     handleAddBookMarked,
+    handleAddHistory,
   };
 };

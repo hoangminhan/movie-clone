@@ -77,7 +77,8 @@ function getItem(label, key, icon, children, title) {
 }
 
 export const Sidebar = ({ isToggle, handleToggleMenu }) => {
-  const [isLogin, setIsLogin] = useState(true);
+  // const [isLogin, setIsLogin] = useState(true);
+  const isLogin = localStorage.getItem("accessToken") || "";
   const { t } = useTranslation();
   const items = [
     getItem("Home", "/", <HomeOutlined />),

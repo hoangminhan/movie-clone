@@ -287,7 +287,7 @@ const WatchMovieTv = () => {
             />
 
             {/* xem phim */}
-            <div className="my-10 mx-4 overflow-hidden">
+            <div className="my-10 mx-4 overflow-hidden" id="movie-id">
               {/* {currentUrl && (
                 <Iframe
                   id="movie-id"

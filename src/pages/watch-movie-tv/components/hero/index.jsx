@@ -15,6 +15,7 @@ import {
   getDocs,
   query,
   where,
+  setDoc,
 } from "firebase/firestore";
 import { useEffect } from "react";
 import { useContext } from "react";
@@ -23,11 +24,13 @@ import { useAddList } from "hooks";
 import { useState } from "react";
 
 export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
-  const { handleAddBookMarked } = useAddList();
+  const { handleAddBookMarked, handleAddHistory } = useAddList();
   const [isFavorite, setIsFavorite] = useState(false);
   const stateContext = useContext(UserContext);
-  const { currentDataUser } = stateContext;
+  const { currentDataUser, currentTabGlobal } = stateContext;
   const [dataUser, setDataUser] = currentDataUser;
+  const [tabGlobal, setTabGlobal] = currentTabGlobal;
+
   useEffect(() => {
     if (dataDetail.id) {
       const handleCheckIsFavorite = async (dataDetail) => {
@@ -41,7 +44,6 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
             where("id", "==", dataDetail.id)
           );
           const querySnapshot = await getDocs(querySnapsot);
-          console.log({ querySnapshot });
           querySnapshot.forEach((item, index) => {
             if (item.data().id === dataDetail.id) {
               idCheck = item.data().id;
@@ -68,6 +70,42 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
       behavior: "smooth",
     });
   };
+
+  // const handleAddHistory = async (data) => {
+  //   const db = getFirestore();
+  //   console.log(dataUser.id);
+
+  //   console.log(data);
+  //   const queryDb = query(
+  //     collection(db, "history"),
+  //     where("user_id", "==", dataUser.uid),
+  //     where("id", "==", data.id)
+  //   );
+  //   const dataResult = await getDocs(queryDb);
+  //   let checkExist = false;
+  //   dataResult.forEach((doc) => {
+  //     if (data.id === doc.data().id) {
+  //       checkExist = true;
+  //     }
+  //   });
+  //   if (checkExist) {
+  //     return;
+  //   } else {
+  //     try {
+  //       await addDoc(collection(db, "history"), {
+  //         name: data.title ? data.title : data.name,
+  //         rate: data.vote_average,
+  //         user_id: dataUser.uid,
+  //         type: tabGlobal === "/" ? "movie" : "tv",
+  //         id: data.id,
+  //         url: data.poster_path,
+  //       });
+  //     } catch (error) {
+  //       console.log(error.message);
+  //       console.log("có lỗi xảy ra");
+  //     }
+  //   }
+  // };
 
   return (
     <div className="max-h-[500px]">
@@ -166,6 +204,7 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
             className="absolute bottom-3 right-3"
             onClick={() => {
               executeScroll();
+              handleAddHistory(dataDetail);
 
               // handleChangeUrl(embedMovie(dataDetail.id));
             }}
