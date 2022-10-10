@@ -125,7 +125,7 @@ const RegisterPage = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your username!",
+                    message: "Please input firstName!",
                   },
                 ]}
                 style={{ flex: "1" }}
@@ -150,7 +150,7 @@ const RegisterPage = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your password!",
+                    message: "Please input Lastname!",
                   },
                 ]}
               >
@@ -172,6 +172,10 @@ const RegisterPage = () => {
               }
               name="username"
               rules={[
+                {
+                  type: "email",
+                  message: "The input is not valid E-mail!",
+                },
                 {
                   required: true,
                   message: "Please input your username!",
@@ -197,7 +201,14 @@ const RegisterPage = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your username!",
+                  message: "Please input your password!",
+                },
+                {
+                  pattern: new RegExp(
+                    /^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$/
+                  ),
+                  message:
+                    "Minimum six characters, at least one letter and one number",
                 },
               ]}
               style={{ flex: "1" }}
@@ -217,11 +228,25 @@ const RegisterPage = () => {
                 </label>
               }
               name="confirmPassword"
+              dependencies={["password"]}
               rules={[
                 {
                   required: true,
-                  message: "Please input your username!",
+                  message: "Please confirm your passowrd!",
                 },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+
+                    return Promise.reject(
+                      new Error(
+                        "The two passwords that you entered do not match!"
+                      )
+                    );
+                  },
+                }),
               ]}
               style={{ flex: "1" }}
             >

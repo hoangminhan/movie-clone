@@ -69,16 +69,21 @@ const LoginPage = () => {
       localStorage.setItem("refreshToken", refreshToken);
       navigate("/");
     } catch (error) {
+      console.log(error.code);
       if (error.code === "auth/wrong-password") {
         message.error("Please check the Password");
       }
       if (error.code === "auth/user-not-found") {
         message.error("Please check the Email");
+      } else if (error.code === "auth/invalid-email") {
+        message.error("Emai invalid");
       }
     }
   };
 
-  const onFinishFailed = (errorInfo) => {};
+  const onFinishFailed = (errorInfo) => {
+    console.log(errorInfo);
+  };
 
   // login with facebook
   const handleSignInWithfacebook = async () => {
@@ -200,6 +205,10 @@ const LoginPage = () => {
                 {
                   required: true,
                   message: "Please input your username!",
+                },
+                {
+                  type: "email",
+                  message: "The input is not valid E-mail!",
                 },
               ]}
             >
