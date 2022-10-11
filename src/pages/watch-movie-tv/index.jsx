@@ -48,6 +48,9 @@ import { useContext } from "react";
 import { UserContext } from "contexts";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useTitle } from "hooks";
+import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { app } from "firebase-custom";
+import { child, get, getDatabase, onValue, ref } from "firebase/database";
 
 const WatchMovieTv = () => {
   let { idDetail } = useParams();
@@ -126,8 +129,9 @@ const WatchMovieTv = () => {
   }, [dataDetail]);
 
   const stateContext = useContext(UserContext);
-  const { currentTabGlobal } = stateContext;
+  const { currentTabGlobal, currentDataUser } = stateContext;
   const [tabGlobal] = currentTabGlobal;
+  const [dataUser, setDataUser] = currentDataUser;
 
   const handleLoadMoreSimilar = async () => {
     setIsLoadMore(true);
@@ -258,6 +262,28 @@ const WatchMovieTv = () => {
     };
     handleGetData();
   }, [idDetail, season.currentEpisode, season.currentSeason]);
+  useEffect(() => {
+    // const getRealTimeDb = async () => {
+    //   const postRef = app.database().ref("posts");
+    //   postRef.on("value", (data) => {
+    //     let newPost = data.val();
+    //     newPost.forEarch((item) => {
+    //       console.log({ item });
+    //     });
+    //   });
+    // };
+    // getRealTimeDb();
+    const db = getDatabase();
+    const getData = ref(db);
+    const fetchData = () => {
+      get(child(getData, "posts/")).then((snapshot) => {
+        const fetched = snapshot.val();
+        console.log(fetched);
+      });
+    };
+    fetchData();
+  }, []);
+  const [valueComment, setValueComment] = useState("");
   return (
     <div>
       <Row className="mr-[350px] h-full">
@@ -303,6 +329,44 @@ const WatchMovieTv = () => {
                   allowFullScreen
                 ></Iframe>
               )} */}
+            </div>
+
+            {/* commment */}
+            <div>
+              <form action="">
+                <input
+                  type="text"
+                  className="outline-none border-none"
+                  value={valueComment}
+                  onChange={(e) => {
+                    setValueComment(e.target.value);
+                  }}
+                />
+                <p
+                  className="cursor-pointer"
+                  onClick={() => {
+                    const db = getFirestore();
+
+                    console.log(dataUser);
+                    console.log(dataDetail);
+                    const dataAdd = {
+                      id_post: dataDetail.id,
+
+                      comment: [
+                        {
+                          user_uid: dataUser.uid,
+                          url: dataUser.photoURL,
+                          title: valueComment,
+                        },
+                      ],
+                    };
+                    addDoc(collection(db, "posts"), dataAdd);
+                    console.log(valueComment);
+                  }}
+                >
+                  Submit
+                </p>
+              </form>
             </div>
 
             {/* eposide tv */}

@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useTitle } from "hooks";
+import { addDoc, collection, getFirestore } from "firebase/firestore";
 
 const StyleInput = styled(Input)`
   &.ant-input {
@@ -40,6 +41,7 @@ const StyleInputPassword = styled(Input.Password)`
 
 const RegisterPage = () => {
   const [t] = useTranslation();
+  const db = getFirestore();
   const onFinish = async (values) => {
     const { username: email, password } = values;
     const authentication = getAuth();
@@ -49,9 +51,17 @@ const RegisterPage = () => {
         email,
         password
       );
-      const { idToken: accessToken, refreshToken } = response;
+      const { accessToken, refreshToken } = response.user;
+      const data = {
+        user_id: response.user.uid || "",
+        url: response.user.photoURL || "",
+        name: response.user.displayName || "",
+        email: response.user.email || "",
+        bookmark: [],
+        history: [],
+      };
+      addDoc(collection(db, "user"), data);
       localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
       navigate("/");
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {

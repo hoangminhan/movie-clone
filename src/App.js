@@ -10,7 +10,7 @@ import { UserContext } from "contexts";
 import { ConfigProvider } from "antd";
 import viVN from "antd/es/locale/vi_VN";
 import enUS from "antd/es/locale/en_US";
-import { app } from "./firebase";
+import { app } from "./firebase-custom";
 
 function App() {
   const stateContext = useContext(UserContext);
