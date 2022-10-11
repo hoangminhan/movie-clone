@@ -81,6 +81,17 @@
   "Episode":"Tập",
   "Find your favourite movies, TV shows, people and more":"Tìm phim, chương trình truyền hình, người yêu thích của bạn ...",
   "FIND FILMS THAT BEST FIT YOU":"Tìm những phim phù hợp với bạn nhất",
-  "Of":"của"
+  "Of":"của",
+  "Home page":"Trang chủ",
+  "Sign in to add to favorites":"Đăng nhập để thêm vào mục yêu thích",
+  "Remove from favorites":"Xóa khỏi mục ưa thích",
+  "Add to favorites":"Thêm vào mục ưa thích",
+  "You need to login to perform this function":"Bạn cần đăng nhập để thực hiện chức năng này",
+  "Invalid Email":"Email không hợp lệ",
+  "Please input your username":"Tên đăng nhập không được để trống",
+  "Please input your password":"Mật khẩu không được để trống",
+  "Please confirm your passowrd":"Vui lòng xác thực mật khẩu",
+  "The two passwords that you entered do not match!":"Xác thực không khớp",
+  "Please input Lastname":"Vui lòng nhập tên"
 
 }

@@ -2,7 +2,7 @@ import { Form, Input, message, Spin } from "antd";
 import iconImg from "assets";
 import { LanguageProject } from "components/header/component";
 import { UserContext } from "contexts";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,6 +15,7 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 import { useState } from "react";
+import { useTitle } from "hooks";
 // import { authentication } from "firebase";
 
 const StyleInput = styled(Input)`
@@ -54,6 +55,7 @@ const LoginPage = () => {
   const [tabGlobal, setTabGlobal] = currentTabGlobal;
   const [dataUser, setDataUser] = currentDataUser;
   const navigate = useNavigate();
+  const { handleChangeTitle } = useTitle();
 
   // login with user and password
   const onFinish = async (values) => {
@@ -141,6 +143,9 @@ const LoginPage = () => {
       console.log("error", error.message);
     }
   };
+  useEffect(() => {
+    handleChangeTitle(t("Login"));
+  }, []);
   return (
     <div>
       <video
@@ -209,11 +214,11 @@ const LoginPage = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your username!",
+                  message: t("Please input your username"),
                 },
                 {
                   type: "email",
-                  message: "The input is not valid E-mail!",
+                  message: t("Invalid Email"),
                 },
               ]}
             >
@@ -237,7 +242,7 @@ const LoginPage = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your password!",
+                  message: t("Please input your password"),
                 },
               ]}
             >

@@ -1,6 +1,7 @@
 import { Col, Row } from "antd";
 import { UserContext } from "contexts";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useTitle } from "hooks";
 import React, { useEffect, useLayoutEffect } from "react";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
@@ -10,6 +11,10 @@ const UserPage = () => {
   const { currentDataUser } = stateContext;
   const [dataUser, setDataUser] = currentDataUser;
   const [t] = useTranslation();
+  const { handleChangeTitle } = useTitle();
+  useEffect(() => {
+    handleChangeTitle(t("Profile"));
+  }, []);
 
   useLayoutEffect(() => {
     const getUserInfo = async () => {

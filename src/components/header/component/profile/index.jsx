@@ -12,6 +12,7 @@ export const Profile = () => {
   const stateContext = useContext(UserContext);
   const { currentDataUser } = stateContext;
   const [dataUser, setDataUser] = currentDataUser;
+
   const menu = (
     <Menu
       items={[

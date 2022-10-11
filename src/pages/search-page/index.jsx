@@ -4,7 +4,7 @@ import { Col, Row } from "antd";
 import iconImg from "assets";
 import { StyledPagination } from "components";
 import { UserContext } from "contexts";
-import { UsePeople } from "hooks";
+import { UsePeople, useTitle } from "hooks";
 import React from "react";
 import { useContext } from "react";
 import { useEffect } from "react";
@@ -27,6 +27,7 @@ const SearchPage = () => {
   const { localeGlobal } = stateContext;
   const [globalLocale, setGlobalLocale] = localeGlobal;
   const { results, page, total_pages, total_results } = dataSearchPage;
+  const { handleChangeTitle } = useTitle();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [filterSearch, setFilterSearch] = useState({
@@ -61,6 +62,9 @@ const SearchPage = () => {
       getData();
     }
   }, [filterSearch, stateContext]);
+  useEffect(() => {
+    handleChangeTitle(t("Search"));
+  }, []);
   return (
     <div className="min-h-[100vh]">
       <div

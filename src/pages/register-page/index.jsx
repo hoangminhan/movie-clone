@@ -2,12 +2,13 @@ import { Form, Input, message } from "antd";
 import iconImg from "assets";
 import { LanguageProject } from "components/header/component";
 import { UserContext } from "contexts";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useTitle } from "hooks";
 
 const StyleInput = styled(Input)`
   &.ant-input {
@@ -63,7 +64,10 @@ const RegisterPage = () => {
   const { currentTabGlobal } = stateContext;
   const [tabGlobal, setTabGlobal] = currentTabGlobal;
   const navigate = useNavigate();
-
+  const { handleChangeTitle } = useTitle();
+  useEffect(() => {
+    handleChangeTitle(t("Register"));
+  }, []);
   const onFinishFailed = (errorInfo) => {};
   return (
     <div>
@@ -122,12 +126,6 @@ const RegisterPage = () => {
                   </label>
                 }
                 name="firstName"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input firstName!",
-                  },
-                ]}
                 style={{ flex: "1" }}
               >
                 <StyleInput placeholder={t("First name")} />
@@ -147,12 +145,6 @@ const RegisterPage = () => {
                 }
                 name="lastname"
                 style={{ flex: "1" }}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input Lastname!",
-                  },
-                ]}
               >
                 <StyleInput placeholder={t("Last name")} />
               </Form.Item>
@@ -174,11 +166,11 @@ const RegisterPage = () => {
               rules={[
                 {
                   type: "email",
-                  message: "The input is not valid E-mail!",
+                  message: t("Invalid Email"),
                 },
                 {
                   required: true,
-                  message: "Please input your username!",
+                  message: "Please input your username",
                 },
               ]}
               style={{ flex: "1" }}
@@ -201,7 +193,7 @@ const RegisterPage = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your password!",
+                  message: "Please input your password",
                 },
                 {
                   pattern: new RegExp(
@@ -232,7 +224,7 @@ const RegisterPage = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please confirm your passowrd!",
+                  message: "Please confirm your passowrd",
                 },
                 ({ getFieldValue }) => ({
                   validator(_, value) {

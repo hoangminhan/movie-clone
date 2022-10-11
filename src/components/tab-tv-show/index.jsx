@@ -1,7 +1,9 @@
 import { Col, Row, Skeleton } from "antd";
 import { Banner, ComponentSlider } from "components";
+import { useTitle } from "hooks";
 import { useHomePage } from "hooks/use-homepage";
 import React from "react";
+import { useEffect } from "react";
 
 export const TabTvShow = () => {
   const {
@@ -12,6 +14,10 @@ export const TabTvShow = () => {
     isLoading,
     isLoadingChangeTab,
   } = useHomePage();
+  const { handleChangeTitle } = useTitle();
+  useEffect(() => {
+    handleChangeTitle("Tv - show");
+  }, []);
 
   return (
     <div className="min-h-[100vh]">

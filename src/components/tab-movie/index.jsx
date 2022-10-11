@@ -1,7 +1,9 @@
 import { Col, Row, Skeleton } from "antd";
 import { Banner, ComponentSlider, Filter } from "components";
+import { useTitle } from "hooks";
 import { useHomePage } from "hooks/use-homepage";
-import React from "react";
+import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export const TabMovie = React.memo(() => {
   const {
@@ -12,6 +14,11 @@ export const TabMovie = React.memo(() => {
     isLoading,
     isLoadingChangeTab,
   } = useHomePage();
+  const { handleChangeTitle } = useTitle();
+  const [t] = useTranslation();
+  useEffect(() => {
+    handleChangeTitle(t("Home page"));
+  }, []);
 
   return (
     <>

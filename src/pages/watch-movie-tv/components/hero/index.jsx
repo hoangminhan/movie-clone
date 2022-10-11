@@ -1,35 +1,34 @@
 import { faHeart, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { message, notification, Skeleton, Tooltip } from "antd";
+import { Skeleton, Tooltip } from "antd";
 import iconImg from "assets";
-import { ButtonAddList } from "components";
 import { useHomePage } from "hooks/use-homepage";
-import { t } from "i18next";
+
 import { Link } from "react-router-dom";
 import { getImage } from "utils";
 
+import { UserContext } from "contexts";
 import {
-  getFirestore,
-  addDoc,
   collection,
   getDocs,
+  getFirestore,
   query,
   where,
-  setDoc,
 } from "firebase/firestore";
-import { useEffect } from "react";
-import { useContext } from "react";
-import { UserContext } from "contexts";
-import { useAddList } from "hooks";
-import { useState } from "react";
+import { useAddList, useNotification } from "hooks";
+import { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
+  const [t] = useTranslation();
   const { handleAddBookMarked, handleAddHistory } = useAddList();
   const [isFavorite, setIsFavorite] = useState(false);
   const stateContext = useContext(UserContext);
   const { currentDataUser, currentTabGlobal } = stateContext;
   const [dataUser, setDataUser] = currentDataUser;
   const [tabGlobal, setTabGlobal] = currentTabGlobal;
+  const accessToken = localStorage.getItem("accessToken") || "";
+  const { handlePopupNotification } = useNotification();
 
   useEffect(() => {
     if (dataDetail.id) {
@@ -71,42 +70,6 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
     });
   };
 
-  // const handleAddHistory = async (data) => {
-  //   const db = getFirestore();
-  //   console.log(dataUser.id);
-
-  //   console.log(data);
-  //   const queryDb = query(
-  //     collection(db, "history"),
-  //     where("user_id", "==", dataUser.uid),
-  //     where("id", "==", data.id)
-  //   );
-  //   const dataResult = await getDocs(queryDb);
-  //   let checkExist = false;
-  //   dataResult.forEach((doc) => {
-  //     if (data.id === doc.data().id) {
-  //       checkExist = true;
-  //     }
-  //   });
-  //   if (checkExist) {
-  //     return;
-  //   } else {
-  //     try {
-  //       await addDoc(collection(db, "history"), {
-  //         name: data.title ? data.title : data.name,
-  //         rate: data.vote_average,
-  //         user_id: dataUser.uid,
-  //         type: tabGlobal === "/" ? "movie" : "tv",
-  //         id: data.id,
-  //         url: data.poster_path,
-  //       });
-  //     } catch (error) {
-  //       console.log(error.message);
-  //       console.log("có lỗi xảy ra");
-  //     }
-  //   }
-  // };
-
   return (
     <div className="max-h-[500px]">
       {isLoading ? (
@@ -140,22 +103,24 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
           <div
             className="absolute right-2 top-2 cursor-pointer hover:scale-110 duration-200"
             onClick={async () => {
-              const isLogin = localStorage.getItem("accessToken") || "";
-              if (isLogin) {
+              if (accessToken) {
                 setIsFavorite(!isFavorite);
                 await handleAddBookMarked(dataDetail);
               } else {
-                notification.warning({
-                  message: "Bạn cần đăng nhập để thực hiện chức năng",
-                });
+                handlePopupNotification(
+                  "You need to login to perform this function",
+                  "warning"
+                );
               }
             }}
           >
             <Tooltip
               title={
-                isFavorite
-                  ? "Xóa khỏi danh sách ưa thích"
-                  : "Thêm vào danh sách của tôi"
+                !accessToken
+                  ? t("Sign in to add to favorites")
+                  : isFavorite && accessToken
+                  ? t("Remove from favorites")
+                  : t("Add to favorites")
               }
             >
               <p

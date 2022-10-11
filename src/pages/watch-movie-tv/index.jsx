@@ -47,6 +47,7 @@ import { BodyWatch, EpisodeTv, Hero } from "./components";
 import { useContext } from "react";
 import { UserContext } from "contexts";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { useTitle } from "hooks";
 
 const WatchMovieTv = () => {
   let { idDetail } = useParams();
@@ -83,6 +84,7 @@ const WatchMovieTv = () => {
     }
     return i;
   };
+  const { handleChangeTitle } = useTitle();
 
   const [currentUrl, setCurrentUrl] = useState("");
   // const handleChangeUrl = (newUrl) => {
@@ -118,6 +120,10 @@ const WatchMovieTv = () => {
       });
     }
   }, [season]);
+  useEffect(() => {
+    console.log({ dataDetail });
+    handleChangeTitle(dataDetail.title ? dataDetail.title : dataDetail.name);
+  }, [dataDetail]);
 
   const stateContext = useContext(UserContext);
   const { currentTabGlobal } = stateContext;
@@ -288,7 +294,7 @@ const WatchMovieTv = () => {
 
             {/* xem phim */}
             <div className="my-10 mx-4 overflow-hidden" id="movie-id">
-              {currentUrl && (
+              {/* {currentUrl && (
                 <Iframe
                   id="movie-id"
                   src={currentUrl}
@@ -296,7 +302,7 @@ const WatchMovieTv = () => {
                   width="100%"
                   allowFullScreen
                 ></Iframe>
-              )}
+              )} */}
             </div>
 
             {/* eposide tv */}

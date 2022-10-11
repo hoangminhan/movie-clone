@@ -5,8 +5,8 @@ import {
   RightOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import { Menu, notification } from "antd";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Menu } from "antd";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { faClock, faCompass } from "@fortawesome/free-regular-svg-icons";
@@ -17,11 +17,12 @@ import {
   faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./style.scss";
-import { useTranslation } from "react-i18next";
-import { useContext, useState } from "react";
-import { UserContext } from "contexts";
 import iconImg from "assets";
+import { UserContext } from "contexts";
+import { useNotification } from "hooks";
+import { useContext } from "react";
+import { useTranslation } from "react-i18next";
+import "./style.scss";
 
 // styled
 const StyledMenu = styled(Menu)`
@@ -78,11 +79,11 @@ function getItem(label, key, icon, children, title) {
 
 export const Sidebar = ({ isToggle, handleToggleMenu }) => {
   // const [isLogin, setIsLogin] = useState(true);
+  const { handlePopupNotification } = useNotification();
   const isLogin = localStorage.getItem("accessToken") || "";
   const { t } = useTranslation();
   const items = [
     getItem("Home", "/", <HomeOutlined />),
-    // getItem("Movie", "/movie", <DesktopOutlined />),
     getItem(t("Discovery"), "/discovery", <FontAwesomeIcon icon={faCompass} />),
     getItem(t("Search"), "/search", <FontAwesomeIcon icon={faSearch} />),
     getItem(t("Favorite"), "/favorite", <ContainerOutlined />),
@@ -123,9 +124,10 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
         key === "/account") &&
       !accessToken
     ) {
-      notification.warning({
-        message: "Bạn cần đăng nhập để thực hiện chức năng này",
-      });
+      handlePopupNotification(
+        "You need to login to perform this function",
+        "warning"
+      );
     } else {
       setTabGlobal("/");
       sessionStorage.setItem("currentTab", "/");

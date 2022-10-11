@@ -4,6 +4,7 @@ import { Badge, Empty, Skeleton, Tooltip } from "antd";
 import iconImg from "assets";
 import { ImageCustom } from "components";
 import { UserContext } from "contexts";
+import { useTitle } from "hooks";
 import { useHomePage } from "hooks/use-homepage";
 import {
   useContext,
@@ -52,6 +53,7 @@ const GenresPage = () => {
       behavior: "smooth",
     });
   };
+  const { handleChangeTitle } = useTitle();
 
   const handleClickShow = () => {
     setQuanlityItem((preState) =>
@@ -59,6 +61,9 @@ const GenresPage = () => {
     );
     setIsClick(true);
   };
+  useEffect(() => {
+    handleChangeTitle(nameGenre);
+  }, []);
 
   useEffect(() => {
     if (isClick) {

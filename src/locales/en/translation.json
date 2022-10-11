@@ -80,5 +80,17 @@
   "Episode":"Tập",
   "Find your favourite movies, TV shows, people and more":"Find your favourite movies, TV shows, people and more",
   "FIND FILMS THAT BEST FIT YOU":"FIND FILMS THAT BEST FIT YOU",
-  "Of":"Of"
+  "Of":"Of",
+  "Home page":"Home page",
+  "Sign in to add to favorites":"Sign in to add to favorites",
+  "Remove from favorites":"Remove from favorites",
+  "Add to favorites":"Add to favorites",
+  "You need to login to perform this function":"You need to login to perform this function",
+  "The input is not valid E-mail!":"The input is not valid E-mail!",
+  "Invalid Email":"Invalid Email",
+  "Please input your username":"Please input username",
+  "Please input your password":"Please input password",
+  "Please confirm your passowrd":"Please confirm your passowrd",
+  "The two passwords that you entered do not match!":"The two passwords that you entered do not match!",
+  "Please input Lastname":"Please input Lastname"
 }

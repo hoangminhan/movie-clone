@@ -1,9 +1,11 @@
 import { Col, Row } from "antd";
 import { Filter } from "components";
 import { UserContext } from "contexts";
+import { useTitle } from "hooks";
 import { useHomePage } from "hooks/use-homepage";
 import moment from "moment/moment";
 import { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import { ContentDiscovery } from "./component";
 
@@ -18,6 +20,8 @@ const DiscoveryPage = () => {
     with_genres: [],
     page: 1,
   });
+  const { handleChangeTitle } = useTitle();
+  const [t] = useTranslation();
 
   const filterMovie = {
     api_key: process.env.REACT_APP_API_KEY,
@@ -163,6 +167,9 @@ const DiscoveryPage = () => {
     };
     getData();
   }, [stateContext, filters, currentTab]);
+  useEffect(() => {
+    handleChangeTitle(t("Discovery"));
+  }, []);
 
   useEffect(() => {
     const getData = async () => {

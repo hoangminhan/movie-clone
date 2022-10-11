@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Col, Modal, Row, Spin, Tooltip } from "antd";
-import { ButtomCustom, ButtonAddList, SimilarContent } from "components";
+import { ButtomCustom, SimilarContent } from "components";
 import { UserContext } from "contexts";
 import {
   collection,
@@ -17,10 +17,11 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { useAddList } from "hooks";
+import { useAddList, useNotification } from "hooks";
 import { useHomePage } from "hooks/use-homepage";
-import { t } from "i18next";
+
 import { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import ReactPlayer from "react-player";
 import { Link, useNavigate } from "react-router-dom";
 import ShowMoreText from "react-show-more-text";
@@ -34,17 +35,20 @@ export const ModalTrailer = ({
   visibleModal,
   handleCloseModal,
 }) => {
-  const { handleGetDetailMovie, listCastsMovie } = useHomePage();
+  const { listCastsMovie } = useHomePage();
+  const [t] = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const currentType =
     sessionStorage.getItem("currentTab") === "tab-tv-show" ? "tv" : "movie";
   const navigate = useNavigate();
   const { handleAddBookMarked } = useAddList();
   const [isFavorite, setIsFavorite] = useState(false);
+  const accessToken = localStorage.getItem("accessToken") || "";
 
   const stateContext = useContext(UserContext);
   const { currentDataUser } = stateContext;
   const [dataUser, setDataUser] = currentDataUser;
+  const { handlePopupNotification } = useNotification();
 
   useEffect(() => {
     if (dataDetail.id) {
@@ -135,15 +139,24 @@ export const ModalTrailer = ({
             <div
               className={`ml-8 cursor-pointer hover:scale-110 duration-200`}
               onClick={async () => {
-                setIsFavorite(!isFavorite);
-                await handleAddBookMarked(dataDetail);
+                if (accessToken) {
+                  setIsFavorite(!isFavorite);
+                  await handleAddBookMarked(dataDetail);
+                } else {
+                  handlePopupNotification(
+                    "You need to login to perform this function",
+                    "warning"
+                  );
+                }
               }}
             >
               <Tooltip
                 title={
-                  isFavorite
-                    ? "Xóa khỏi danh sách ưa thích"
-                    : "Thêm vào danh sách của tôi"
+                  !accessToken
+                    ? t("Sign in to add to favorites")
+                    : isFavorite && accessToken
+                    ? t("Remove from favorites")
+                    : t("Add to favorites")
                 }
               >
                 <p
@@ -188,29 +201,6 @@ export const ModalTrailer = ({
                 </Tooltip>
               </div>
             </div>
-            {/* <div className="group ml-4 cursor-pointer bg-transparent max-w-[150px]  h-full hover:scale-110 duration-200  flex gap-3">
-            <div className="peer-hover:block  translate-x-[130%] group-hover:translate-x-0 duration-300 delay-250">
-              <Tooltip title="Dis Like">
-                <p className="bg-[white] w-10 h-10 flex items-center justify-center rounded-full">
-                  <FontAwesomeIcon icon={faThumbsDown} color="black" />
-                </p>
-              </Tooltip>
-            </div>
-            <div>
-              <Tooltip title="Like">
-                <p className="bg-[white] w-10 h-10 flex items-center justify-center rounded-full">
-                  <FontAwesomeIcon icon={faThumbsUp} color="black" />
-                </p>
-              </Tooltip>
-            </div>
-            <div className="peer-hover:block translate-x-[-130%] group-hover:translate-x-0 duration-300 delay-250">
-              <Tooltip title="Perfect">
-                <p className="bg-[white] w-10 h-10 flex items-center justify-center rounded-full">
-                  <FontAwesomeIcon icon={faThumbsUp} color="black" />
-                </p>
-              </Tooltip>
-            </div>
-          </div> */}
           </Row>
           <Row
             gutter={[32, 16]}

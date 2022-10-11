@@ -1,5 +1,5 @@
 import { Card, Input, Pagination, Skeleton } from "antd";
-import { UsePeople } from "hooks";
+import { UsePeople, useTitle } from "hooks";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
@@ -20,6 +20,7 @@ const PeoplePage = () => {
     detailListPeople,
     handleGetSearchPeople,
   } = UsePeople();
+  const { handleChangeTitle } = useTitle();
   const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
   const { totalPage, page } = detailListPeople;
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -34,6 +35,9 @@ const PeoplePage = () => {
   const stateContext = useContext(UserContext);
 
   // const globalLocale =
+  useEffect(() => {
+    handleChangeTitle("People");
+  }, []);
 
   useEffect(() => {
     const getData = async () => {

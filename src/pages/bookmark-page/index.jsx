@@ -29,6 +29,7 @@ import {
   deleteField,
   deleteDoc,
 } from "firebase/firestore";
+import { useTitle } from "hooks";
 import React, { useContext } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -64,6 +65,7 @@ const BookMarkedPage = () => {
   const navigate = useNavigate();
   const [currentOption, setCurrentOption] = useState("multi");
   const [t] = useTranslation();
+  const { handleChangeTitle } = useTitle();
 
   const filterOption = [
     { name: "All", value: "multi" },
@@ -72,6 +74,9 @@ const BookMarkedPage = () => {
   ];
   const [isDelete, setIsDelete] = useState(false);
 
+  useEffect(() => {
+    handleChangeTitle("Bookmark");
+  }, []);
   useEffect(() => {
     if (dataUser.uid) {
       const getData = async () => {

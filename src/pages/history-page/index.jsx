@@ -37,6 +37,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { formatNumber, getImage } from "utils";
+import { useTitle } from "hooks";
 
 const StyledCollapse = styled(Collapse)`
   &.ant-collapse {
@@ -66,12 +67,16 @@ const HistoryPage = () => {
   const [currentOption, setCurrentOption] = useState("multi");
   const [t] = useTranslation();
   const [isDelete, setIsDelete] = useState(false);
+  const { handleChangeTitle } = useTitle();
 
   const filterOption = [
     { name: "All", value: "multi" },
     { name: "Movie", value: "movie" },
     { name: "Tv show", value: "tv" },
   ];
+  useEffect(() => {
+    handleChangeTitle(t("History"));
+  }, []);
   useEffect(() => {
     if (dataUser.uid) {
       const getData = async () => {

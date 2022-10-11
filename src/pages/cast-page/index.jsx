@@ -1,9 +1,9 @@
 import { Skeleton } from "antd";
 import { ComponentSlider } from "components";
-import { UsePeople } from "hooks";
+import { UsePeople, useTitle } from "hooks";
 import { t } from "i18next";
 import moment from "moment";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ShowMoreText from "react-show-more-text";
 import { formatNumber, getImage } from "utils";
@@ -30,6 +30,7 @@ const CastPage = () => {
   } = UsePeople();
   const [isExpand, setIsExpand] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { handleChangeTitle } = useTitle();
 
   // to expand text (show more , show less)
   const executeOnClick = (isExpandedCurrent) => {
@@ -62,6 +63,9 @@ const CastPage = () => {
     };
     getData();
   }, []);
+  useEffect(() => {
+    handleChangeTitle(dataDetailCast.name ? dataDetailCast.name : "Actor Page");
+  }, [dataDetailCast]);
   return (
     <div className="min-h-[100vh]">
       <div className="px-5 py-10 flex justify-center text-[20px]">
