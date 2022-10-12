@@ -11,14 +11,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { unwrapResult } from "@reduxjs/toolkit";
 import iconImg from "assets";
 import { ButtomCustom, ButtonPlay } from "components";
-import { useModal } from "hooks";
+import { useFirebaseRealTime, useModal } from "hooks";
 import { useHomePage } from "hooks/use-homepage";
 import { t } from "i18next";
 import { ModalTrailer } from "modal/components";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Autoplay, Navigation, Pagination } from "swiper";
 import { formatNumber, getImage, handleOpenNotification } from "utils";
+import { UserContext } from "contexts";
 
 export const Banner = ({ listTrending, isLoading }) => {
   const {
@@ -27,6 +28,10 @@ export const Banner = ({ listTrending, isLoading }) => {
     handleGetListCasts,
     handleGetSimilarMovie,
   } = useHomePage();
+
+  const stateContext = useContext(UserContext);
+  const { currentDataUser } = stateContext;
+  const [dataUser, setDataUser] = currentDataUser;
   const [visibleModal, setVisibleModal] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
   const [dataDetail, setDataDetail] = useState({});
@@ -146,6 +151,7 @@ export const Banner = ({ listTrending, isLoading }) => {
       getDataDetail();
     }
   }, [listTrending, setListType, currentActiveIndex]);
+  const { handleCheckIsExist } = useFirebaseRealTime();
 
   return (
     <>

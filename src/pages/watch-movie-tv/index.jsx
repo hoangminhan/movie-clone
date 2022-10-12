@@ -43,14 +43,24 @@ import {
   getImage,
   handleScrollToTop,
 } from "utils";
-import { BodyWatch, EpisodeTv, Hero } from "./components";
+import { BodyWatch, CommentMovie, EpisodeTv, Hero } from "./components";
 import { useContext } from "react";
 import { UserContext } from "contexts";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { useTitle } from "hooks";
+import { useFirebaseRealTime, useTitle } from "hooks";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { app } from "firebase-custom";
-import { child, get, getDatabase, onValue, ref } from "firebase/database";
+
+import {
+  child,
+  get,
+  getDatabase,
+  onChildAdded,
+  onValue,
+  push,
+  ref,
+  set,
+} from "firebase/database";
 
 const WatchMovieTv = () => {
   let { idDetail } = useParams();
@@ -262,28 +272,50 @@ const WatchMovieTv = () => {
     };
     handleGetData();
   }, [idDetail, season.currentEpisode, season.currentSeason]);
-  useEffect(() => {
-    // const getRealTimeDb = async () => {
-    //   const postRef = app.database().ref("posts");
-    //   postRef.on("value", (data) => {
-    //     let newPost = data.val();
-    //     newPost.forEarch((item) => {
-    //       console.log({ item });
-    //     });
-    //   });
-    // };
-    // getRealTimeDb();
-    const db = getDatabase();
-    const getData = ref(db);
-    const fetchData = () => {
-      get(child(getData, "posts/")).then((snapshot) => {
-        const fetched = snapshot.val();
-        console.log(fetched);
-      });
-    };
-    fetchData();
-  }, []);
+  const [dataComment, seDataComment] = useState({});
+  const [currentKey, setCurrentKey] = useState();
+  const { handleCheckIsExist } = useFirebaseRealTime();
+
   const [valueComment, setValueComment] = useState("");
+
+  // check movie have at realtime yet, to push item
+  useEffect(() => {
+    const checkDbFirebase = async () => {
+      const {
+        check: checkExist,
+        currentComment,
+        currentKey,
+      } = await handleCheckIsExist("posts/", idDetail);
+      if (!checkExist) {
+        const dbRealTime = getDatabase();
+        const postListRef = ref(dbRealTime, "posts");
+        const newPostRef = push(postListRef);
+        set(newPostRef, {
+          id_post: idDetail,
+          comment: [
+            {
+              url: "",
+              user_id: dataUser.uid,
+              title: "hello",
+              user_comment: "Tai Smile",
+              reply: [
+                {
+                  url: "",
+                  user_id: dataUser.uid,
+                  user_reply: "An",
+                  title: "Helo cai deo",
+                },
+              ],
+            },
+          ],
+        });
+      } else {
+        setCurrentKey(currentKey);
+        seDataComment({ ...currentComment });
+      }
+    };
+    checkDbFirebase();
+  }, [idDetail]);
   return (
     <div>
       <Row className="mr-[350px] h-full">
@@ -329,44 +361,6 @@ const WatchMovieTv = () => {
                   allowFullScreen
                 ></Iframe>
               )} */}
-            </div>
-
-            {/* commment */}
-            <div>
-              <form action="">
-                <input
-                  type="text"
-                  className="outline-none border-none"
-                  value={valueComment}
-                  onChange={(e) => {
-                    setValueComment(e.target.value);
-                  }}
-                />
-                <p
-                  className="cursor-pointer"
-                  onClick={() => {
-                    const db = getFirestore();
-
-                    console.log(dataUser);
-                    console.log(dataDetail);
-                    const dataAdd = {
-                      id_post: dataDetail.id,
-
-                      comment: [
-                        {
-                          user_uid: dataUser.uid,
-                          url: dataUser.photoURL,
-                          title: valueComment,
-                        },
-                      ],
-                    };
-                    addDoc(collection(db, "posts"), dataAdd);
-                    console.log(valueComment);
-                  }}
-                >
-                  Submit
-                </p>
-              </form>
             </div>
 
             {/* eposide tv */}
@@ -448,6 +442,51 @@ const WatchMovieTv = () => {
                   </Tooltip>
                 </div>
               </div>
+            </div>
+
+            {/* commment */}
+            <div>
+              {/* <form action="">
+                <input
+                  type="text"
+                  className="outline-none border-none"
+                  value={valueComment}
+                  onChange={(e) => {
+                    setValueComment(e.target.value);
+                  }}
+                />
+                <p
+                  className="cursor-pointer"
+                  onClick={() => {
+                    const db = getFirestore();
+
+                    console.log(dataUser);
+                    console.log(dataDetail);
+                    const dataAdd = {
+                      id_post: dataDetail.id,
+
+                      comment: [
+                        {
+                          user_uid: dataUser.uid,
+                          url: dataUser.photoURL,
+                          title: valueComment,
+                        },
+                      ],
+                    };
+                    addDoc(collection(db, "posts"), dataAdd);
+                    console.log(valueComment);
+                  }}
+                >
+                  Submit
+                </p>
+              </form> */}
+
+              <CommentMovie
+                dataComment={dataComment ? dataComment : {}}
+                dataUser={dataUser}
+                idDetail={idDetail}
+                currentKey={currentKey}
+              />
             </div>
 
             {/* recommendation */}

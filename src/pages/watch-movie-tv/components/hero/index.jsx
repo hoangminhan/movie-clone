@@ -56,7 +56,6 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
       handleCheckIsFavorite(dataDetail);
     }
   }, [dataDetail, dataUser.uid, isFavorite]);
-  console.log(isFavorite);
 
   useEffect(() => {
     const getData = async () => {};
