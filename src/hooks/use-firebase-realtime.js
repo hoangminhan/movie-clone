@@ -12,9 +12,7 @@ export const useFirebaseRealTime = () => {
     let currentComment = {};
     await get(child(getData, type)).then((snapshot) => {
       const fetched = snapshot.val();
-      console.log({ fetched });
       for (const [key, value] of Object.entries(fetched)) {
-        console.log({ value });
         if (+value.id_post === +idDetail) {
           currentComment = { ...value };
           check = true;
@@ -22,7 +20,6 @@ export const useFirebaseRealTime = () => {
         }
       }
     });
-    console.log({ currentComment });
 
     return { check, currentKey, currentComment };
   };

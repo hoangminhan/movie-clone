@@ -49,7 +49,6 @@ import { UserContext } from "contexts";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useFirebaseRealTime, useTitle } from "hooks";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
-import { app } from "firebase-custom";
 
 import {
   child,
@@ -275,8 +274,6 @@ const WatchMovieTv = () => {
   const [dataComment, seDataComment] = useState({});
   const [currentKey, setCurrentKey] = useState();
   const { handleCheckIsExist } = useFirebaseRealTime();
-
-  const [valueComment, setValueComment] = useState("");
 
   // check movie have at realtime yet, to push item
   useEffect(() => {

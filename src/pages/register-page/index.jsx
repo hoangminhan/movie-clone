@@ -52,6 +52,7 @@ const RegisterPage = () => {
         password
       );
       const { accessToken, refreshToken } = response.user;
+
       const data = {
         user_id: response.user.uid || "",
         url: response.user.photoURL || "",

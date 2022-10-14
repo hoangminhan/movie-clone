@@ -20,7 +20,6 @@ export const CommentMovie = ({
   currentKey,
 }) => {
   const { comment: commentList, id: idComment } = dataComment;
-  console.log({ commentList, dataUser });
   const [valueComment, setValueComment] = useState("");
   const dbRealTime = getDatabase();
 
