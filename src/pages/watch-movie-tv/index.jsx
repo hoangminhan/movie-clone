@@ -48,7 +48,17 @@ import { useContext } from "react";
 import { UserContext } from "contexts";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useFirebaseRealTime, useTitle } from "hooks";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getFirestore,
+  onSnapshot,
+  orderBy,
+  setDoc,
+  where,
+} from "firebase/firestore";
 
 import {
   child,
@@ -57,6 +67,7 @@ import {
   onChildAdded,
   onValue,
   push,
+  query,
   ref,
   set,
 } from "firebase/database";
@@ -133,7 +144,6 @@ const WatchMovieTv = () => {
     }
   }, [season]);
   useEffect(() => {
-    console.log({ dataDetail });
     handleChangeTitle(dataDetail.title ? dataDetail.title : dataDetail.name);
   }, [dataDetail]);
 
@@ -271,48 +281,56 @@ const WatchMovieTv = () => {
     };
     handleGetData();
   }, [idDetail, season.currentEpisode, season.currentSeason]);
-  const [dataComment, seDataComment] = useState({});
+  const [dataComment, setDataComment] = useState({});
+  const [dataReply, setDataReply] = useState({});
   const [currentKey, setCurrentKey] = useState();
   const { handleCheckIsExist } = useFirebaseRealTime();
 
   // check movie have at realtime yet, to push item
   useEffect(() => {
-    const checkDbFirebase = async () => {
-      const {
-        check: checkExist,
-        currentComment,
-        currentKey,
-      } = await handleCheckIsExist("posts/", idDetail);
-      if (!checkExist) {
-        const dbRealTime = getDatabase();
-        const postListRef = ref(dbRealTime, "posts");
-        const newPostRef = push(postListRef);
-        set(newPostRef, {
-          id_post: idDetail,
-          comment: [
-            {
-              url: "",
-              user_id: dataUser.uid,
-              title: "hello",
-              user_comment: "Tai Smile",
-              reply: [
-                {
-                  url: "",
-                  user_id: dataUser.uid,
-                  user_reply: "An",
-                  title: "Helo cai deo",
-                },
-              ],
-            },
-          ],
-        });
+    const handleGetdata = async () => {
+      const dbfireStore = getFirestore();
+
+      const dbfireStoreRef = collection(dbfireStore, "detail");
+      const checkDocumentComment = doc(dbfireStore, "detail", idDetail);
+      const docSnap = await getDoc(checkDocumentComment);
+      if (!docSnap.exists()) {
+        setDoc(doc(dbfireStore, "detail", idDetail), {}, { merge: true });
       } else {
-        setCurrentKey(currentKey);
-        seDataComment({ ...currentComment });
+        console.log("1");
       }
+      // check reply exits
+      const checkDocumentReply = doc(dbfireStore, "reply", idDetail);
+      const docSnapReply = await getDoc(checkDocumentReply);
+      if (!docSnapReply.exists()) {
+        console.log("0");
+        setDoc(doc(dbfireStore, "reply", idDetail), {}, { merge: true });
+      } else {
+        console.log("1");
+      }
+      const replyRef = collection(dbfireStore, "reply");
+      onSnapshot(replyRef, (querySnapshot) => {
+        querySnapshot.forEach((docs) => {
+          console.log(docs.data());
+
+          setDataReply({ ...docs.data() });
+        });
+      });
+
+      onSnapshot(dbfireStoreRef, (querySnapshot) => {
+        console.log(querySnapshot);
+        console.log("hehe");
+        querySnapshot.forEach((docs) => {
+          setDataComment({ ...docs.data() });
+          setCurrentKey(docs.data().id_detail);
+        });
+      });
     };
-    checkDbFirebase();
+    handleGetdata();
   }, [idDetail]);
+
+  // auto add data to detail collection at firebase
+
   return (
     <div>
       <Row className="mr-[350px] h-full">
@@ -479,7 +497,8 @@ const WatchMovieTv = () => {
               </form> */}
 
               <CommentMovie
-                dataComment={dataComment ? dataComment : {}}
+                dataComment={dataComment}
+                dataReply={dataReply}
                 dataUser={dataUser}
                 idDetail={idDetail}
                 currentKey={currentKey}
