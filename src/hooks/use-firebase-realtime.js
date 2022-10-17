@@ -1,27 +1,31 @@
-import { child, get, getDatabase, ref } from "firebase/database";
+import {
+  collection,
+  doc,
+  getDoc,
+  getFirestore,
+  onSnapshot,
+  where,
+} from "firebase/firestore";
+import { useState } from "react";
 
 export const useFirebaseRealTime = () => {
-  const dbRealTime = getDatabase();
-
-  const handleCheckIsExist = async (type, idDetail) => {
-    const getData = ref(dbRealTime);
-    let newRsult = [];
-
-    let check = false;
-    let currentKey = "";
-    let currentComment = {};
-    await get(child(getData, type)).then((snapshot) => {
-      const fetched = snapshot.val();
-      for (const [key, value] of Object.entries(fetched)) {
-        if (+value.id_post === +idDetail) {
-          currentComment = { ...value };
-          check = true;
-          currentKey = key;
+  const [dataCollection, setDataCollection] = useState();
+  const handleCheckIsExist = async (collection, idDetail) => {
+    // doc(collection, "detail", idDetail)
+    try {
+      onSnapshot(
+        collection(collection, "detail", where("id_detail", "==", idDetail)),
+        (doc) => {
+          console.log(doc.data());
+          setDataCollection({ ...doc.data() });
         }
-      }
-    });
+      );
+    } catch (error) {
+      console.log(error);
+      setDataCollection(error);
+    }
 
-    return { check, currentKey, currentComment };
+    return dataCollection;
   };
   return {
     handleCheckIsExist,
