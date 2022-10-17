@@ -34,6 +34,8 @@ import {
 import { t } from "i18next";
 import moment from "moment";
 import React, { useState } from "react";
+import { useEffect } from "react";
+import { useRef } from "react";
 import { uid } from "uid";
 
 const { TextArea } = Input;
@@ -50,12 +52,25 @@ export const CommentMovie = ({
   const [valueComment, setValueComment] = useState("");
   const [idComment, setIdComment] = useState(false);
   const [valueReply, setValueReply] = useState("");
+  const replyRef = useRef();
+  const repUpdateRely = useRef();
   const dbRealTime = getDatabase();
+  const repUpdateComment = useRef();
+
   const [formValue] = Form.useForm();
   const [formReply] = Form.useForm();
+  const [formUpdateComment] = Form.useForm();
+  const [formUpdateReply] = Form.useForm();
+  const [commentSelect, setCommentSelect] = useState();
+  const [valueCommentUpdate, setValueCommentUpdate] = useState();
+  const [commentSelectUpdate, setCommentSelectUpdate] = useState();
+  const [indexUpdate, setIndexUpdate] = useState();
+  const [valueReplyUpdate, setValueReplyUpdate] = useState();
+  const [replySelectUpdate, setReplySelectUpdate] = useState();
+  const [indexUpdateReply, setIndexUpdateReply] = useState();
+  const [currentReplyPosition, setCurrentReplyPosition] = useState();
 
   const handleSubmitComment = async (value) => {
-    console.log(dataComment);
     const dbfireStore = getFirestore();
 
     // const intitalComment = collection(dbfireStore, "detail", idDetail);
@@ -80,18 +95,54 @@ export const CommentMovie = ({
 
   const onFinishFailed = (value) => {};
 
-  const handleConfirmDelete = (data) => {
+  const handleConfirmDelete = async (data, type) => {
     const dbfireStore = getFirestore();
-    const commentRef = doc(dbfireStore, "detail", currentKey);
+    const commentRef = doc(dbfireStore, "detail", idDetail);
+
+    const replyRef = doc(dbfireStore, "reply", idDetail);
+
+    if (type === "comment") {
+      const findAllReply = dataReply.reply.filter(
+        (item) => item.id_comment === data.id_comment
+      );
+
+      await updateDoc(commentRef, {
+        comment: arrayRemove(data),
+      });
+      findAllReply.forEach((item) => {
+        updateDoc(replyRef, {
+          reply: arrayRemove(item),
+        });
+      });
+
+      message.success("delete success");
+    } else {
+      updateDoc(replyRef, {
+        reply: arrayRemove(data),
+      });
+      message.success("delete success");
+    }
+  };
+  const handleCancelDelete = (e) => {};
+
+  const handleSubmitUpdateComment = async (value) => {
+    const dbfireStore = getFirestore();
+
+    const commentRef = doc(dbfireStore, "detail", currentKey || idDetail);
+    const dataUpdate = {
+      ...commentSelectUpdate,
+      content_comment: valueCommentUpdate,
+    };
+    formUpdateComment.resetFields();
+    setIndexUpdate("");
 
     updateDoc(commentRef, {
-      comment: arrayRemove(data),
+      comment: arrayRemove(commentSelectUpdate),
     });
-
-    message.success("delete success");
+    updateDoc(commentRef, {
+      comment: arrayUnion(dataUpdate),
+    });
   };
-  const [commentSelect, setCommentSelect] = useState();
-  const handleCancelDelete = (e) => {};
 
   // add reply
 
@@ -101,14 +152,15 @@ export const CommentMovie = ({
     const { value_reply } = value;
 
     const commentRef = doc(dbfireStore, "reply", currentKey || idDetail);
-    console.log({ commentRef });
+
     const dataAdd = {
       user_id: dataUser.uid,
       user_name: "Anh reply",
       user_url: dataUser.photoUrl || "",
       content_reply: value_reply,
-      createAt: serverTimestamp(),
+      createAt: Timestamp.fromDate(new Date()),
       id_comment: idComment,
+      id_reply: uid(16),
     };
     formValue.resetFields();
     setValueComment("");
@@ -120,6 +172,80 @@ export const CommentMovie = ({
     setCommentSelect("");
     console.log(value);
   };
+  const handleSubmitUpdateReply = (data) => {
+    const dbfireStore = getFirestore();
+
+    const commentRef = doc(dbfireStore, "reply", idDetail);
+    const dataUpdate = {
+      ...replySelectUpdate,
+      content_reply: valueReplyUpdate,
+    };
+    formUpdateReply.resetFields();
+    setIndexUpdateReply("");
+
+    updateDoc(commentRef, {
+      reply: arrayRemove(replySelectUpdate),
+    });
+    updateDoc(commentRef, {
+      reply: arrayUnion(dataUpdate),
+    });
+  };
+  useEffect(() => {
+    replyRef?.current?.focus();
+    const elementInput = document.querySelector("#replyInput");
+    if (elementInput) {
+      elementInput.focus();
+    }
+    console.log("reply");
+  }, [commentSelect]);
+  useEffect(() => {
+    repUpdateComment?.current?.focus();
+    // const elementInput = document.querySelector("#replyInput");
+    // if (elementInput) {
+    //   elementInput.focus();
+    // }
+
+    console.log("commemnt");
+  }, [indexUpdate]);
+
+  useEffect(() => {
+    const elementInput = document.querySelector("#repUpdateRely");
+    if (elementInput) {
+      elementInput.focus();
+    }
+
+    console.log("commemnt");
+  }, [indexUpdateReply]);
+
+  const handleClickEsc = () => {
+    console.log("pressed Esc ✅");
+    setCommentSelect("");
+    setIndexUpdateReply("");
+    formReply.resetFields();
+
+    // update comment
+    setIndexUpdate("");
+  };
+
+  useEffect(() => {
+    const keyDownHandler = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+
+        // 👇️ your logic here
+        handleClickEsc();
+      }
+    };
+
+    document.addEventListener("keydown", keyDownHandler);
+    console.log("usef");
+
+    // 👇️ clean up event listener
+    // return () => {
+    //   console.log("clean up");
+    //   document.removeEventListener("keydown", keyDownHandler);
+    // };
+  }, []);
 
   return (
     <div>
@@ -142,6 +268,7 @@ export const CommentMovie = ({
                   setValueComment(value);
                 }}
                 value={valueComment}
+                className="bg-[#333335] border-none outline-none rounded-lg text-white text-[16px]"
               />
             </Form.Item>
             <Form.Item>
@@ -156,9 +283,9 @@ export const CommentMovie = ({
       {commentList?.length ? (
         <ul>
           {commentList?.map((comment, index) => {
-            console.log(commentSelect === comment.id_comment);
+            console.log({ comment });
             return (
-              <li key={index}>
+              <li key={index} className="mb-10">
                 <div className="flex gap-2">
                   <Avatar
                     src={
@@ -170,23 +297,88 @@ export const CommentMovie = ({
                   />
                   <div className="flex-1">
                     <div className="text-[18px] flex justify-between">
-                      <div>
+                      <div className="w-full">
                         <div>{comment.user_name}</div>
-                        <div className="text-[16px] flex gap-10">
-                          <p>{comment.content_comment}</p>
+                        <div className="text-[16px] flex gap-10 items-centers">
+                          {comment.id_comment === indexUpdate ? (
+                            <div className="flex-1">
+                              <Form
+                                onFinish={handleSubmitUpdateComment}
+                                // form={formValue}
+                                onFinishFailed={(errorValue) => {
+                                  console.log({ errorValue });
+                                }}
+                                form={formUpdateComment}
+                              >
+                                <div className="flex item-center">
+                                  <Form.Item
+                                    name="value_update_comment"
+                                    className="flex-1"
+                                  >
+                                    <input
+                                      ref={repUpdateComment}
+                                      type="text"
+                                      className="w-full outline-none border-none px-4 py-2 h-[42px] rounded-2xl bg-[#333335] text-white"
+                                      value={valueCommentUpdate}
+                                      onChange={(event) => {
+                                        const value = event.target.value;
+                                        setValueCommentUpdate(value);
+                                      }}
+                                    />
+                                    <div className="">
+                                      <p className="mt-2 text-blue-400">
+                                        Press Esc to cancel
+                                      </p>
+                                    </div>
+                                  </Form.Item>
+                                  <Form.Item className="mb-0 pt-[5px]">
+                                    <button htmlType="submit" className="ml-3">
+                                      <svg
+                                        stroke="currentColor"
+                                        fill="currentColor"
+                                        stroke-width="0"
+                                        viewBox="0 0 24 24"
+                                        className="text-primary "
+                                        height="30"
+                                        width="30"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          fill="none"
+                                          d="M0 0h24v24H0z"
+                                        ></path>
+                                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+                                      </svg>
+                                    </button>
+                                  </Form.Item>
+                                </div>
+                              </Form>
+                            </div>
+                          ) : (
+                            <p>{comment.content_comment}</p>
+                          )}
+
                           <div>
                             <Popover
                               placement="bottom"
                               content={
                                 <div className="text-black w-[40px] flex justify-center flex-col items-center">
-                                  <p className="text-black cursor-pointer hover:font-bold hover:duration-150">
-                                    {" "}
+                                  <p
+                                    className="text-black cursor-pointer hover:font-bold hover:duration-150"
+                                    onClick={() => {
+                                      setIndexUpdate(comment.id_comment);
+                                      setValueCommentUpdate(
+                                        comment.content_comment
+                                      );
+                                      setCommentSelectUpdate(comment);
+                                    }}
+                                  >
                                     Edit
                                   </p>
                                   <Popconfirm
                                     title="Are you sure to delete this comment?"
                                     onConfirm={() => {
-                                      handleConfirmDelete(comment);
+                                      handleConfirmDelete(comment, "comment");
                                     }}
                                     onCancel={handleCancelDelete}
                                     okText="Yes"
@@ -214,6 +406,7 @@ export const CommentMovie = ({
                           console.log("reply", comment);
                           setCommentSelect(comment.id_comment);
                           setIdComment(comment.id_comment);
+                          replyRef.current.focus();
                         }}
                       >
                         {t("Reply")}
@@ -221,7 +414,20 @@ export const CommentMovie = ({
                       <p>{moment(new Date()).format("YYYY-MM-DD")}</p>
                     </div>
                     {/* reply input */}
-                    <Form form={formReply} onFinish={handleAddReply}>
+                    <Form
+                      form={formReply}
+                      onFinish={handleAddReply}
+                      style={
+                        commentSelect === comment.id_comment
+                          ? {
+                              display: "block",
+                              marginTop: "16px",
+                            }
+                          : {
+                              display: "none",
+                            }
+                      }
+                    >
                       <Form.Item name="value_reply">
                         <div
                           className={`${
@@ -239,8 +445,11 @@ export const CommentMovie = ({
                             alt="user-img"
                             className="mr-4"
                           />
-                          <Input
-                            className="w-full outline-none border-none"
+                          <input
+                            id="replyInput"
+                            type="text"
+                            ref={replyRef}
+                            className="w-full outline-none border-none px-4 py-2 h-[42px] rounded-2xl bg-[#333335] text-white"
                             placeholder="Write reply..."
                             // onChange={(e) => {
                             //   const value = e.target.value;
@@ -248,7 +457,7 @@ export const CommentMovie = ({
                             // }}
                             // value={valueReply}
                           />
-                          <button htmlType="submit">
+                          <button htmlType="submit" className="ml-3">
                             <svg
                               stroke="currentColor"
                               fill="currentColor"
@@ -269,12 +478,11 @@ export const CommentMovie = ({
                     {/* reply */}
                     {dataReply ? (
                       <ul>
-                        {dataReply?.reply?.map((reply, indexReply) => {
-                          console.log({ indexReply });
+                        {dataReply?.reply?.map((reply, index) => {
                           return (
                             <li
-                              key={indexReply}
-                              className={`${
+                              key={index}
+                              className={`duration-200 ${
                                 reply.id_comment === comment.id_comment
                                   ? "block"
                                   : "hidden"
@@ -289,12 +497,122 @@ export const CommentMovie = ({
                                   }
                                   alt={reply?.user_name}
                                 />
-                                <div>
+                                <div className="w-full">
                                   <div className="text-[18px]">
                                     <p>{reply?.user_name}</p>
-                                    <p className="text-[16px]">
-                                      {reply?.content_reply}
-                                    </p>
+                                    <div className="text-[16px] flex gap-10 items-center">
+                                      {reply.id_comment === indexUpdateReply &&
+                                      currentReplyPosition === index ? (
+                                        <div className="flex-1">
+                                          <Form
+                                            onFinish={handleSubmitUpdateReply}
+                                            onFinishFailed={(errorValue) => {
+                                              console.log({ errorValue });
+                                            }}
+                                            form={formUpdateReply}
+                                          >
+                                            <div className="flex item-center">
+                                              <Form.Item
+                                                name="value_update_reply"
+                                                className="flex-1"
+                                              >
+                                                <input
+                                                  ref={repUpdateRely}
+                                                  id="repUpdateRely"
+                                                  type="text"
+                                                  className="w-full outline-none border-none px-4 py-2 h-[42px] rounded-2xl bg-[#333335] text-white"
+                                                  value={valueReplyUpdate}
+                                                  onChange={(event) => {
+                                                    const value =
+                                                      event.target.value;
+                                                    setValueReplyUpdate(value);
+                                                  }}
+                                                />
+                                                <div className="">
+                                                  <p className="mt-2 text-blue-400">
+                                                    Press Esc to cancel
+                                                  </p>
+                                                </div>
+                                              </Form.Item>
+                                              <Form.Item className="mb-0 pt-[5px]">
+                                                <button
+                                                  htmlType="submit"
+                                                  className="ml-3"
+                                                >
+                                                  <svg
+                                                    stroke="currentColor"
+                                                    fill="currentColor"
+                                                    stroke-width="0"
+                                                    viewBox="0 0 24 24"
+                                                    className="text-primary "
+                                                    height="30"
+                                                    width="30"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                  >
+                                                    <path
+                                                      fill="none"
+                                                      d="M0 0h24v24H0z"
+                                                    ></path>
+                                                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+                                                  </svg>
+                                                </button>
+                                              </Form.Item>
+                                            </div>
+                                          </Form>
+                                        </div>
+                                      ) : (
+                                        <p>{reply.content_reply}</p>
+                                      )}
+                                      {/* edit delete reply */}
+                                      <div>
+                                        <Popover
+                                          placement="bottom"
+                                          content={
+                                            <div className="text-black w-[40px] flex justify-center flex-col items-center">
+                                              <p
+                                                className="text-black cursor-pointer hover:font-bold hover:duration-150"
+                                                onClick={() => {
+                                                  setIndexUpdateReply(
+                                                    reply.id_comment
+                                                  );
+                                                  setCurrentReplyPosition(
+                                                    index
+                                                  );
+                                                  setValueReplyUpdate(
+                                                    reply.content_reply
+                                                  );
+                                                  setReplySelectUpdate(reply);
+                                                }}
+                                              >
+                                                {" "}
+                                                Edit
+                                              </p>
+                                              <Popconfirm
+                                                title="Are you sure to delete this comment?"
+                                                onConfirm={() => {
+                                                  handleConfirmDelete(
+                                                    reply,
+                                                    "reply"
+                                                  );
+                                                }}
+                                                onCancel={handleCancelDelete}
+                                                okText="Yes"
+                                                cancelText="No"
+                                              >
+                                                <p className="text-black cursor-pointer hover:font-bold hover:duration-150">
+                                                  Delete
+                                                </p>
+                                              </Popconfirm>
+                                            </div>
+                                          }
+                                          trigger="hover"
+                                        >
+                                          <div className="relative cursor-pointer">
+                                            ...
+                                          </div>
+                                        </Popover>
+                                      </div>
+                                    </div>
                                   </div>
                                   <div className="flex text-[14px] gap-2">
                                     <p>{t("Reaction")}</p>

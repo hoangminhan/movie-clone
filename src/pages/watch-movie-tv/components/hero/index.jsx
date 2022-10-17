@@ -30,7 +30,6 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
   const accessToken = localStorage.getItem("accessToken") || "";
   const { handlePopupNotification } = useNotification();
   const [replaceStatus, setReplaceStatus] = useState(false);
-  console.log({ dataUser });
 
   useEffect(() => {
     if (dataDetail.id) {

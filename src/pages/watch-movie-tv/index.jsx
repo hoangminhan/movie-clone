@@ -66,6 +66,7 @@ import {
   getDatabase,
   onChildAdded,
   onValue,
+  orderByChild,
   push,
   query,
   ref,
@@ -293,35 +294,61 @@ const WatchMovieTv = () => {
 
       const dbfireStoreRef = collection(dbfireStore, "detail");
       const checkDocumentComment = doc(dbfireStore, "detail", idDetail);
+      const querySnapsotComment = query(
+        collection(dbfireStore, "detail"),
+        where("id_detail", "==", idDetail)
+      );
+      const querySnapsotReply = query(
+        collection(dbfireStore, "reply"),
+        where("id_detail", "==", idDetail)
+      );
       const docSnap = await getDoc(checkDocumentComment);
       if (!docSnap.exists()) {
-        setDoc(doc(dbfireStore, "detail", idDetail), {}, { merge: true });
+        setDoc(
+          doc(dbfireStore, "detail", idDetail),
+          {
+            comment: [],
+            id_detail: idDetail,
+          },
+          { merge: true }
+        );
       } else {
-        console.log("1");
       }
       // check reply exits
       const checkDocumentReply = doc(dbfireStore, "reply", idDetail);
       const docSnapReply = await getDoc(checkDocumentReply);
       if (!docSnapReply.exists()) {
-        console.log("0");
-        setDoc(doc(dbfireStore, "reply", idDetail), {}, { merge: true });
+        setDoc(
+          doc(dbfireStore, "reply", idDetail),
+          {
+            reply: [],
+            id_detail: idDetail,
+          },
+          { merge: true }
+        );
       } else {
-        console.log("1");
       }
-      const replyRef = collection(dbfireStore, "reply");
-      onSnapshot(replyRef, (querySnapshot) => {
+
+      // listening db reply
+      onSnapshot(querySnapsotReply, (querySnapshot) => {
         querySnapshot.forEach((docs) => {
           console.log(docs.data());
-
-          setDataReply({ ...docs.data() });
+          setDataReply({
+            ...docs.data(),
+          });
         });
       });
 
-      onSnapshot(dbfireStoreRef, (querySnapshot) => {
-        console.log(querySnapshot);
-        console.log("hehe");
+      // listening db comment
+      onSnapshot(querySnapsotComment, (querySnapshot) => {
         querySnapshot.forEach((docs) => {
-          setDataComment({ ...docs.data() });
+          console.log(docs.data().comment);
+          setDataComment({
+            id_detail: docs.data().id_detail,
+            comment: docs.data().comment.sort(function (x, y) {
+              return y.createAt.seconds - x.createAt.seconds;
+            }),
+          });
           setCurrentKey(docs.data().id_detail);
         });
       });
