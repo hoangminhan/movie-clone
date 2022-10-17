@@ -29,33 +29,39 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
   const [tabGlobal, setTabGlobal] = currentTabGlobal;
   const accessToken = localStorage.getItem("accessToken") || "";
   const { handlePopupNotification } = useNotification();
+  const [replaceStatus, setReplaceStatus] = useState(false);
+  console.log({ dataUser });
 
   useEffect(() => {
     if (dataDetail.id) {
       const handleCheckIsFavorite = async (dataDetail) => {
-        let idCheck = "123";
+        console.log(dataDetail.id);
+        let checkExist = false;
         if (dataDetail?.id) {
           const db = getFirestore();
 
           const querySnapsot = query(
-            collection(db, "bookmark"),
-            where("user_id", "==", dataUser?.uid),
-            where("id", "==", dataDetail.id)
+            collection(db, "user"),
+            where("user_id", "==", dataUser?.uid)
           );
           const querySnapshot = await getDocs(querySnapsot);
-          querySnapshot.forEach((item, index) => {
-            if (item.data().id === dataDetail.id) {
-              idCheck = item.data().id;
-              // setIsFavorite(!isFavorite);
-              setIsFavorite(true);
-            }
+          querySnapshot.forEach((doc, index) => {
+            doc.data().bookmark.forEach((item) => {
+              if (item.id === dataDetail.id) {
+                checkExist = true;
+                setIsFavorite(true);
+              }
+            });
           });
         }
-        return idCheck;
+        if (!checkExist) {
+          setIsFavorite(false);
+        }
+        return checkExist;
       };
       handleCheckIsFavorite(dataDetail);
     }
-  }, [dataDetail, dataUser.uid, isFavorite]);
+  }, [dataDetail, dataUser.uid, isFavorite, replaceStatus]);
 
   useEffect(() => {
     const getData = async () => {};
@@ -103,8 +109,8 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
             className="absolute right-2 top-2 cursor-pointer hover:scale-110 duration-200"
             onClick={async () => {
               if (accessToken) {
-                setIsFavorite(!isFavorite);
                 await handleAddBookMarked(dataDetail);
+                setReplaceStatus(!replaceStatus);
               } else {
                 handlePopupNotification(
                   "You need to login to perform this function",

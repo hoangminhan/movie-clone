@@ -26,7 +26,6 @@ export const UserProviderContext = ({ children }) => {
       onAuthStateChanged(getAuth(), async (user) => {
         if (user) {
           setDataUser(user);
-          console.log(user);
           // ...
         } else {
         }

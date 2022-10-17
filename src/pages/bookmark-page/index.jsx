@@ -28,8 +28,10 @@ import {
   updateDoc,
   deleteField,
   deleteDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
-import { useTitle } from "hooks";
+import { useNotification, useTitle } from "hooks";
 import React, { useContext } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -81,54 +83,64 @@ const BookMarkedPage = () => {
     if (dataUser.uid) {
       const getData = async () => {
         setIsLoading(true);
-        let data = [];
         let dataQuery;
-        if (currentOption === "multi") {
-          dataQuery = query(
-            collection(db, "bookmark"),
-            where("user_id", "==", dataUser?.uid)
-          );
-        } else {
-          dataQuery = query(
-            collection(db, "bookmark"),
-            where("user_id", "==", dataUser?.uid),
-            where("type", "==", currentOption === "movie" ? "movie" : "tv")
-          );
-        }
+        dataQuery = query(
+          collection(db, "user"),
+          where("user_id", "==", dataUser?.uid)
+        );
 
         const querySnapshot = await getDocs(dataQuery);
         querySnapshot.forEach((item, index) => {
-          if (item.data().id) {
-            data.push({ ...item.data(), id_field: item.id });
+          console.log(item.data());
+          const result = [...item.data().bookmark];
+          if (currentOption === "multi") {
+            console.log(result);
+
+            setDataFavorite([...result]);
+          } else {
+            setDataFavorite([
+              ...result.filter((item) => item.type === currentOption),
+            ]);
           }
+          //  item.data().bookmark.filter(item=>)
         });
-        setDataFavorite([...data]);
         setIsLoading(false);
       };
       getData();
     }
   }, [dataUser, currentOption, isDelete]);
   const [isEdit, setIsEdit] = useState(false);
+  const { handlePopupNotification } = useNotification();
 
   const handleDeleteFavorite = async (dataDelete) => {
-    const itemDeleteRef = doc(db, "bookmark", dataDelete.id_field);
-    deleteDoc(itemDeleteRef)
-      .then((data) => {
-        message.success("Delete success");
-        setIsDelete(!isDelete);
-      })
-      .catch((error) => {
-        console.log(error);
+    console.log(dataDelete);
+    let indexCurrentUser = "";
+    const userRef = collection(db, "user");
+    const queryResult = query(userRef, where("user_id", "==", dataUser.uid));
+    const querySnapshot = await getDocs(queryResult);
+    querySnapshot.forEach((doc) => {
+      indexCurrentUser = doc.id;
+    });
+    console.log(indexCurrentUser);
+
+    const documentDelete = doc(db, "user", indexCurrentUser);
+
+    try {
+      await updateDoc(documentDelete, {
+        bookmark: arrayRemove(dataDelete),
       });
+      handlePopupNotification("Xoa that thanh cong", "success");
+      setIsDelete(!isDelete);
+    } catch (error) {
+      handlePopupNotification("Xoa that bai", "error");
+    }
   };
   const handleDeleteAll = async (dataDelete, type) => {
+    const dataQuery = query(
+      collection(db, "user"),
+      where("user_id", "==", dataUser?.uid)
+    );
     if (type !== "multi") {
-      const dataQuery = query(
-        collection(db, "bookmark"),
-        where("user_id", "==", dataUser?.uid),
-        where("type", "==", type)
-      );
-
       const querySnapshot = await getDocs(dataQuery);
       querySnapshot.forEach((item, index) => {
         console.log(item.data());
@@ -206,6 +218,7 @@ const BookMarkedPage = () => {
               <>
                 <div className="flex gap-10 flex-wrap">
                   {dataFavorite.map((favorite, index) => {
+                    console.log(favorite);
                     return (
                       <div
                         key={favorite.id}
