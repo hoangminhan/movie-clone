@@ -1123,6 +1123,11 @@
   "resolved" "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   "version" "0.2.3"
 
+"@charkour/react-reactions@^0.11.0":
+  "integrity" "sha512-a1AnfUzZ1jZZUvMI8w4D8EfwMohByKhW6RTnY4xQ1VFwNfYbcVbRT6MUO7Gkk9Q+LqyVsNNW9fU9rG58hOvGmg=="
+  "resolved" "https://registry.npmjs.org/@charkour/react-reactions/-/react-reactions-0.11.0.tgz"
+  "version" "0.11.0"
+
 "@craco/craco@^5.5.0":
   "integrity" "sha512-2Q8gIB4W0/nPiUxr9iAKUhGsFlXYN0/wngUdK1VWtfV2NtBv+yllNn2AjieaLbttgpQinuOYmDU65vocC0NMDg=="
   "resolved" "https://registry.npmjs.org/@craco/craco/-/craco-5.9.0.tgz"

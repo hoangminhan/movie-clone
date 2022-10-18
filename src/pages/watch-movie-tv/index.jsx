@@ -59,6 +59,7 @@ import {
   orderBy,
   setDoc,
   where,
+  limit,
 } from "firebase/firestore";
 
 import {
@@ -286,6 +287,7 @@ const WatchMovieTv = () => {
   }, [idDetail, season.currentEpisode, season.currentSeason]);
   const [dataComment, setDataComment] = useState({});
   const [dataReply, setDataReply] = useState({});
+  const [dataReaction, setDataReaction] = useState({});
   const [currentKey, setCurrentKey] = useState();
   const { handleCheckIsExist } = useFirebaseRealTime();
   const [nameCurrentUser, setNameCurrentUser] = useState();
@@ -303,13 +305,16 @@ const WatchMovieTv = () => {
       );
       const dataUserQuery = await getDocs(queryUser);
       dataUserQuery.forEach((doc) => {
-        console.log(doc.data());
         setNameCurrentUser(doc.data().name);
         setUrlImgUser(doc.data().url);
       });
     };
     getNameCurrentUser();
   }, [dataUser]);
+  const [lenghtShow, setLengthShow] = useState(5);
+  const handleChangeQuantityComment = (data) => {
+    setLengthShow((pre) => pre + data);
+  };
 
   // check movie have at realtime yet, to push item
   useEffect(() => {
@@ -325,6 +330,10 @@ const WatchMovieTv = () => {
         collection(dbfireStore, "reply"),
         where("id_detail", "==", idDetail)
       );
+      const querySnapsotReaction = query(
+        collection(dbfireStore, "reaction"),
+        where("id_detail", "==", idDetail)
+      );
       const docSnap = await getDoc(checkDocumentComment);
       if (!docSnap.exists()) {
         setDoc(
@@ -335,7 +344,6 @@ const WatchMovieTv = () => {
           },
           { merge: true }
         );
-      } else {
       }
       // check reply exits
       const checkDocumentReply = doc(dbfireStore, "reply", idDetail);
@@ -349,15 +357,33 @@ const WatchMovieTv = () => {
           },
           { merge: true }
         );
-      } else {
+      }
+      // check reaction exist
+      const checkDocumentReaction = doc(dbfireStore, "reaction", idDetail);
+      const docSnapReaction = await getDoc(checkDocumentReaction);
+
+      if (!docSnapReaction.exists()) {
+        setDoc(
+          doc(dbfireStore, "reaction", idDetail),
+          {
+            reaction: [],
+            id_detail: idDetail,
+          },
+          { merge: true }
+        );
       }
 
+      // listening db reaction
+      onSnapshot(querySnapsotReaction, (querySnapshot) => {
+        querySnapshot.forEach((docs) => {
+          setDataReaction({
+            ...docs.data(),
+          });
+        });
+      });
       // listening db reply
       onSnapshot(querySnapsotReply, (querySnapshot) => {
         querySnapshot.forEach((docs) => {
-          console.log(docs.data());
-          console.log(docs.data().createAt);
-          console.log(moment(docs.data().createAt).fromNow());
           setDataReply({
             ...docs.data(),
           });
@@ -367,9 +393,6 @@ const WatchMovieTv = () => {
       // listening db comment
       onSnapshot(querySnapsotComment, (querySnapshot) => {
         querySnapshot.forEach((docs) => {
-          console.log(docs.data().comment);
-          console.log(moment(docs.data().createAt).fromNow());
-
           setDataComment({
             id_detail: docs.data().id_detail,
             comment: docs.data().comment.sort(function (x, y) {
@@ -385,17 +408,15 @@ const WatchMovieTv = () => {
 
   // handle hide comment
   const handleHideComment = async (data) => {
-    console.log(data);
-    console.log(dataComment);
     const newDataComment = dataComment.comment.filter(
       (item) => item.id_comment !== data.id_comment
     );
-    console.log(newDataComment);
+
     setDataComment({ ...dataComment, comment: [...newDataComment] });
   };
+
   // handle hide reply
   const handleHideReply = async (data) => {
-    console.log(data);
     const newDataReply = dataReply.reply.filter(
       (item) => item.id_reply !== data.id_reply
     );
@@ -535,6 +556,7 @@ const WatchMovieTv = () => {
               <CommentMovie
                 dataComment={dataComment}
                 dataReply={dataReply}
+                dataReaction={dataReaction}
                 dataUser={dataUser}
                 idDetail={idDetail}
                 currentKey={currentKey}
@@ -542,6 +564,8 @@ const WatchMovieTv = () => {
                 urlImgUser={urlImgUser}
                 handleHideReply={handleHideReply}
                 handleHideComment={handleHideComment}
+                lenghtShow={lenghtShow}
+                handleChangeQuantityComment={handleChangeQuantityComment}
               />
             </div>
 

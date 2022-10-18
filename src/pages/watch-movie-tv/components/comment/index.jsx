@@ -10,6 +10,7 @@ import {
   Popover,
 } from "antd";
 import { UserContext } from "contexts";
+import { ReactionBarSelector } from "@charkour/react-reactions";
 
 import {
   addDoc,
@@ -45,12 +46,45 @@ export const CommentMovie = ({
   urlImgUser,
   handleHideReply,
   handleHideComment,
+  lenghtShow,
+  handleChangeQuantityComment,
+  dataReaction,
 }) => {
+  const handleGenerateTitleReaction = (data) => {
+    switch (data) {
+      case "satisfaction":
+        return <p className="text-[#498ae6]">{t("Like")}</p>;
+      case "love":
+        return <p className="text-[#e64949]">{t("Love")}</p>;
+      case "happy":
+        return <p className="text-[#d3df58]">{t("Happy")}</p>;
+      case "surprise":
+        return <p className="text-[#d3df58]">{t("Surprise")}</p>;
+      case "sad":
+        return <p className="text-[#d3df58]">{t("Sad")}</p>;
+      case "angry":
+        return <p className="text-[#e64949]">{t("Angry")}</p>;
+      default:
+        return <p>{t("Reaction")}</p>;
+    }
+  };
+  const findReactionOfComment = (dataReaction, comment) => {
+    return dataReaction?.reaction?.find(
+      (reaction) => reaction?.id_comment === comment?.id_comment
+    );
+  };
+  const [reactions, setReactions] = useState({
+    like: 0,
+    haha: 1,
+    angry: 0,
+    sad: 0,
+    wow: 0,
+  });
+  console.log({ dataReaction });
   const stateContext = useContext(UserContext);
   const { localeGlobal } = stateContext;
 
   const [globalLocale] = localeGlobal;
-  console.log(globalLocale);
 
   const { comment: commentList } = dataComment;
   const [t] = useTranslation();
@@ -76,7 +110,6 @@ export const CommentMovie = ({
   const [replySelectUpdate, setReplySelectUpdate] = useState();
   const [indexUpdateReply, setIndexUpdateReply] = useState();
   const [currentReplyPosition, setCurrentReplyPosition] = useState();
-  console.log({ nameCurrentUser });
 
   const handleSubmitComment = async (value) => {
     const dbfireStore = getFirestore();
@@ -91,13 +124,52 @@ export const CommentMovie = ({
       createAt: Timestamp.fromDate(new Date()),
       id_comment: uid(16),
     };
-    console.log({ dataAdd });
     formValue.resetFields();
     setValueComment("");
 
     await updateDoc(commentRef, {
       comment: arrayUnion(dataAdd),
     });
+  };
+  const handleAddReaction = async (value, idCommentReaction) => {
+    const dbfireStore = getFirestore();
+
+    const ReactionRef = doc(dbfireStore, "reaction", currentKey || idDetail);
+    const dataAdd = {
+      user_id: dataUser.uid,
+      user_name: nameCurrentUser,
+      user_url: urlImgUser || "",
+      reaction_value: value,
+      createAt: Timestamp.fromDate(new Date()),
+      id_comment: idCommentReaction,
+      id_reaction: uid(16),
+    };
+    if (!dataReaction.reaction.length) {
+      console.log("empty");
+      await updateDoc(ReactionRef, {
+        reaction: arrayUnion(dataAdd),
+      });
+    } else {
+      const checkExistReaction = dataReaction.reaction.find(
+        (item) =>
+          item.user_id === dataUser.uid && item.id_comment === idCommentReaction
+      );
+      console.log(checkExistReaction);
+      if (checkExistReaction) {
+        console.log("exits", dataAdd);
+        await updateDoc(ReactionRef, {
+          reaction: arrayRemove(checkExistReaction),
+        });
+        await updateDoc(ReactionRef, {
+          reaction: arrayUnion(dataAdd),
+        });
+      } else {
+        console.log("not e");
+        await updateDoc(ReactionRef, {
+          reaction: arrayUnion(dataAdd),
+        });
+      }
+    }
   };
 
   const onFinishFailed = (value) => {};
@@ -166,10 +238,9 @@ export const CommentMovie = ({
       user_url: urlImgUser || "",
       content_reply: value_reply,
       createAt: Timestamp.fromDate(new Date()),
-      id_comment: idComment,
+      id_comment: commentSelect,
       id_reply: uid(16),
     };
-    console.log({ dataAdd });
     formValue.resetFields();
     setValueComment("");
 
@@ -178,8 +249,8 @@ export const CommentMovie = ({
     });
     formReply.resetFields();
     setCommentSelect("");
-    console.log(value);
   };
+
   const handleSubmitUpdateReply = (data) => {
     const dbfireStore = getFirestore();
 
@@ -198,13 +269,13 @@ export const CommentMovie = ({
       reply: arrayUnion(dataUpdate),
     });
   };
+
   useEffect(() => {
     replyRef?.current?.focus();
     const elementInput = document.querySelector("#replyInput");
     if (elementInput) {
       elementInput.focus();
     }
-    console.log("reply");
   }, [commentSelect]);
   useEffect(() => {
     repUpdateComment?.current?.focus();
@@ -215,8 +286,6 @@ export const CommentMovie = ({
     if (elementInput) {
       elementInput.focus();
     }
-
-    console.log("commemnt");
   }, [indexUpdateReply]);
 
   const handleClickEsc = () => {
@@ -240,7 +309,6 @@ export const CommentMovie = ({
     };
 
     document.addEventListener("keydown", keyDownHandler);
-    console.log("usef");
 
     // 👇️ clean up event listener
     // return () => {
@@ -248,7 +316,6 @@ export const CommentMovie = ({
     //   document.removeEventListener("keydown", keyDownHandler);
     // };
   }, []);
-  console.log({ dataUser });
 
   return (
     <div>
@@ -284,9 +351,11 @@ export const CommentMovie = ({
       {commentList?.length ? (
         <ul>
           {commentList?.map((comment, index) => {
-            console.log({ comment });
             return (
-              <li key={index} className="mb-10">
+              <li
+                key={index}
+                className={`mb-10 ${index < lenghtShow ? "block" : "hidden"}`}
+              >
                 <div className="flex gap-2">
                   <Avatar src={comment.user_url} alt={comment.user_name} />
                   <div className="flex-1">
@@ -299,9 +368,7 @@ export const CommentMovie = ({
                               <Form
                                 onFinish={handleSubmitUpdateComment}
                                 // form={formValue}
-                                onFinishFailed={(errorValue) => {
-                                  console.log({ errorValue });
-                                }}
+                                onFinishFailed={(errorValue) => {}}
                                 form={formUpdateComment}
                               >
                                 <div className="flex item-center">
@@ -409,11 +476,28 @@ export const CommentMovie = ({
                       </div>
                     </div>
                     <div className="flex text-[14px] gap-2">
-                      <p className="text-[#b2a28e]">{t("Reaction")}</p>
+                      <div className="group relative text-[#b2a28e] cursor-pointer">
+                        {handleGenerateTitleReaction(
+                          findReactionOfComment(dataReaction, comment)
+                            ? findReactionOfComment(dataReaction, comment)
+                                ?.reaction_value
+                            : "Reaction"
+                        )}
+                        <p className="absolute top-[-45px] z-20 hidden group-hover:block">
+                          <ReactionBarSelector
+                            iconSize="25px"
+                            // reactions={reactions}
+                            onSelect={(key) => {
+                              console.log(key);
+                              handleAddReaction(key, comment.id_comment);
+                            }}
+                            style={{ backgroundColor: "#333335" }}
+                          />
+                        </p>
+                      </div>
                       <p
                         className="text-[#b2a28e] cursor-pointer"
                         onClick={() => {
-                          console.log("reply", comment);
                           setCommentSelect(comment.id_comment);
                           setIdComment(comment.id_comment);
                           replyRef.current.focus();
@@ -517,9 +601,7 @@ export const CommentMovie = ({
                                         <div className="flex-1">
                                           <Form
                                             onFinish={handleSubmitUpdateReply}
-                                            onFinishFailed={(errorValue) => {
-                                              console.log({ errorValue });
-                                            }}
+                                            onFinishFailed={(errorValue) => {}}
                                             form={formUpdateReply}
                                           >
                                             <div className="flex item-center">
@@ -668,12 +750,36 @@ export const CommentMovie = ({
                     ) : (
                       ""
                     )}
+                    {/* load more reply */}
                   </div>
                 </div>
               </li>
             );
           })}
         </ul>
+      ) : (
+        ""
+      )}
+      {/* load more */}
+      {dataComment?.comment?.length ? (
+        <div>
+          <p
+            className="cursor-pointer text-[#766f6f] text-[18px]"
+            onClick={() => {
+              const data = lenghtShow < dataComment?.comment?.length ? 5 : -5;
+              handleChangeQuantityComment(data);
+            }}
+          >
+            {lenghtShow < dataComment?.comment?.length
+              ? t("Load more comments")
+              : t("Show less comments")}{" "}
+            {`(${
+              lenghtShow < dataComment?.comment?.length
+                ? lenghtShow
+                : dataComment?.comment?.length
+            }/${dataComment?.comment?.length})`}
+          </p>
+        </div>
       ) : (
         ""
       )}

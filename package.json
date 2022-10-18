@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@charkour/react-reactions": "^0.11.0",
     "@craco/craco": "^6.4.5",
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
     "@fortawesome/free-brands-svg-icons": "^6.1.2",
