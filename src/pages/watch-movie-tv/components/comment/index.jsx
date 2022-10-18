@@ -9,16 +9,8 @@ import {
   Popconfirm,
   Popover,
 } from "antd";
-import {
-  child,
-  get,
-  getDatabase,
-  push,
-  ref,
-  serverTimestamp,
-  set,
-  update,
-} from "firebase/database";
+import { UserContext } from "contexts";
+
 import {
   addDoc,
   arrayRemove,
@@ -26,16 +18,19 @@ import {
   collection,
   doc,
   FieldValue,
+  getDocs,
   getFirestore,
   setDoc,
   Timestamp,
   updateDoc,
+  where,
 } from "firebase/firestore";
-import { t } from "i18next";
-import moment from "moment";
-import React, { useState } from "react";
+
+import React, { useContext, useState } from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
+import ReactTimeAgo from "react-time-ago";
 import { uid } from "uid";
 
 const { TextArea } = Input;
@@ -46,21 +41,33 @@ export const CommentMovie = ({
   idDetail,
   currentKey,
   dataReply,
+  nameCurrentUser,
+  urlImgUser,
+  handleHideReply,
+  handleHideComment,
 }) => {
-  const { comment: commentList } = dataComment;
+  const stateContext = useContext(UserContext);
+  const { localeGlobal } = stateContext;
 
-  const [valueComment, setValueComment] = useState("");
-  const [idComment, setIdComment] = useState(false);
-  const [valueReply, setValueReply] = useState("");
-  const replyRef = useRef();
-  const repUpdateRely = useRef();
-  const dbRealTime = getDatabase();
-  const repUpdateComment = useRef();
+  const [globalLocale] = localeGlobal;
+  console.log(globalLocale);
+
+  const { comment: commentList } = dataComment;
+  const [t] = useTranslation();
 
   const [formValue] = Form.useForm();
   const [formReply] = Form.useForm();
   const [formUpdateComment] = Form.useForm();
   const [formUpdateReply] = Form.useForm();
+
+  const [valueComment, setValueComment] = useState("");
+  const [idComment, setIdComment] = useState(false);
+  const [valueReply, setValueReply] = useState("");
+
+  const replyRef = useRef();
+  const repUpdateRely = useRef();
+  const repUpdateComment = useRef();
+
   const [commentSelect, setCommentSelect] = useState();
   const [valueCommentUpdate, setValueCommentUpdate] = useState();
   const [commentSelectUpdate, setCommentSelectUpdate] = useState();
@@ -69,22 +76,22 @@ export const CommentMovie = ({
   const [replySelectUpdate, setReplySelectUpdate] = useState();
   const [indexUpdateReply, setIndexUpdateReply] = useState();
   const [currentReplyPosition, setCurrentReplyPosition] = useState();
+  console.log({ nameCurrentUser });
 
   const handleSubmitComment = async (value) => {
     const dbfireStore = getFirestore();
-
-    // const intitalComment = collection(dbfireStore, "detail", idDetail);
 
     const commentRef = doc(dbfireStore, "detail", currentKey || idDetail);
     const { value_comment } = value;
     const dataAdd = {
       user_id: dataUser.uid,
-      user_name: "Anh",
-      user_url: dataUser.photoUrl || "",
+      user_name: nameCurrentUser,
+      user_url: urlImgUser || "",
       content_comment: value_comment,
       createAt: Timestamp.fromDate(new Date()),
       id_comment: uid(16),
     };
+    console.log({ dataAdd });
     formValue.resetFields();
     setValueComment("");
 
@@ -155,13 +162,14 @@ export const CommentMovie = ({
 
     const dataAdd = {
       user_id: dataUser.uid,
-      user_name: "Anh reply",
-      user_url: dataUser.photoUrl || "",
+      user_name: nameCurrentUser,
+      user_url: urlImgUser || "",
       content_reply: value_reply,
       createAt: Timestamp.fromDate(new Date()),
       id_comment: idComment,
       id_reply: uid(16),
     };
+    console.log({ dataAdd });
     formValue.resetFields();
     setValueComment("");
 
@@ -200,12 +208,6 @@ export const CommentMovie = ({
   }, [commentSelect]);
   useEffect(() => {
     repUpdateComment?.current?.focus();
-    // const elementInput = document.querySelector("#replyInput");
-    // if (elementInput) {
-    //   elementInput.focus();
-    // }
-
-    console.log("commemnt");
   }, [indexUpdate]);
 
   useEffect(() => {
@@ -246,13 +248,12 @@ export const CommentMovie = ({
     //   document.removeEventListener("keydown", keyDownHandler);
     // };
   }, []);
+  console.log({ dataUser });
 
   return (
     <div>
       <Comment
-        avatar={
-          <Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />
-        }
+        avatar={<Avatar src={urlImgUser} alt="Han Solo" />}
         content={
           <Form
             onFinish={handleSubmitComment}
@@ -287,14 +288,7 @@ export const CommentMovie = ({
             return (
               <li key={index} className="mb-10">
                 <div className="flex gap-2">
-                  <Avatar
-                    src={
-                      comment.url
-                        ? comment.url
-                        : "https://joeschmoe.io/api/v1/random"
-                    }
-                    alt={comment.user_name}
-                  />
+                  <Avatar src={comment.user_url} alt={comment.user_name} />
                   <div className="flex-1">
                     <div className="text-[18px] flex justify-between">
                       <div className="w-full">
@@ -363,31 +357,47 @@ export const CommentMovie = ({
                               placement="bottom"
                               content={
                                 <div className="text-black w-[40px] flex justify-center flex-col items-center">
-                                  <p
-                                    className="text-black cursor-pointer hover:font-bold hover:duration-150"
-                                    onClick={() => {
-                                      setIndexUpdate(comment.id_comment);
-                                      setValueCommentUpdate(
-                                        comment.content_comment
-                                      );
-                                      setCommentSelectUpdate(comment);
-                                    }}
-                                  >
-                                    Edit
-                                  </p>
-                                  <Popconfirm
-                                    title="Are you sure to delete this comment?"
-                                    onConfirm={() => {
-                                      handleConfirmDelete(comment, "comment");
-                                    }}
-                                    onCancel={handleCancelDelete}
-                                    okText="Yes"
-                                    cancelText="No"
-                                  >
-                                    <p className="text-black cursor-pointer hover:font-bold hover:duration-150">
-                                      Delete
+                                  {dataUser.uid === comment.user_id ? (
+                                    <>
+                                      <p
+                                        className="text-black cursor-pointer hover:font-bold hover:duration-150"
+                                        onClick={() => {
+                                          setIndexUpdate(comment.id_comment);
+                                          setValueCommentUpdate(
+                                            comment.content_comment
+                                          );
+                                          setCommentSelectUpdate(comment);
+                                        }}
+                                      >
+                                        Edit
+                                      </p>
+                                      <Popconfirm
+                                        title="Are you sure to delete this comment?"
+                                        onConfirm={() => {
+                                          handleConfirmDelete(
+                                            comment,
+                                            "comment"
+                                          );
+                                        }}
+                                        onCancel={handleCancelDelete}
+                                        okText="Yes"
+                                        cancelText="No"
+                                      >
+                                        <p className="text-black cursor-pointer hover:font-bold hover:duration-150">
+                                          Delete
+                                        </p>
+                                      </Popconfirm>
+                                    </>
+                                  ) : (
+                                    <p
+                                      className="text-black cursor-pointer"
+                                      onClick={() => {
+                                        handleHideComment(comment);
+                                      }}
+                                    >
+                                      {t("Hide")}
                                     </p>
-                                  </Popconfirm>
+                                  )}
                                 </div>
                               }
                               trigger="hover"
@@ -399,9 +409,9 @@ export const CommentMovie = ({
                       </div>
                     </div>
                     <div className="flex text-[14px] gap-2">
-                      <p>{t("Reaction")}</p>
+                      <p className="text-[#b2a28e]">{t("Reaction")}</p>
                       <p
-                        className="text-white cursor-pointer"
+                        className="text-[#b2a28e] cursor-pointer"
                         onClick={() => {
                           console.log("reply", comment);
                           setCommentSelect(comment.id_comment);
@@ -411,7 +421,14 @@ export const CommentMovie = ({
                       >
                         {t("Reply")}
                       </p>
-                      <p>{moment(new Date()).format("YYYY-MM-DD")}</p>
+                      {/* <p>{moment(comment.createAt)}</p> */}
+                      <p>
+                        <ReactTimeAgo
+                          className=""
+                          date={new Date(comment.createAt.seconds * 1000)}
+                          locale={globalLocale}
+                        />
+                      </p>
                     </div>
                     {/* reply input */}
                     <Form
@@ -437,11 +454,7 @@ export const CommentMovie = ({
                           }`}
                         >
                           <Avatar
-                            src={
-                              dataUser.url
-                                ? dataUser.url
-                                : "https://joeschmoe.io/api/v1/random"
-                            }
+                            src={comment.user_url}
                             alt="user-img"
                             className="mr-4"
                           />
@@ -490,16 +503,14 @@ export const CommentMovie = ({
                             >
                               <div className="flex gap-2">
                                 <Avatar
-                                  src={
-                                    comment.url
-                                      ? comment.url
-                                      : "https://joeschmoe.io/api/v1/random"
-                                  }
+                                  src={reply.user_url}
                                   alt={reply?.user_name}
                                 />
                                 <div className="w-full">
                                   <div className="text-[18px]">
-                                    <p>{reply?.user_name}</p>
+                                    <p className="text-[#989898]">
+                                      {reply?.user_name}
+                                    </p>
                                     <div className="text-[16px] flex gap-10 items-center">
                                       {reply.id_comment === indexUpdateReply &&
                                       currentReplyPosition === index ? (
@@ -569,40 +580,58 @@ export const CommentMovie = ({
                                           placement="bottom"
                                           content={
                                             <div className="text-black w-[40px] flex justify-center flex-col items-center">
-                                              <p
-                                                className="text-black cursor-pointer hover:font-bold hover:duration-150"
-                                                onClick={() => {
-                                                  setIndexUpdateReply(
-                                                    reply.id_comment
-                                                  );
-                                                  setCurrentReplyPosition(
-                                                    index
-                                                  );
-                                                  setValueReplyUpdate(
-                                                    reply.content_reply
-                                                  );
-                                                  setReplySelectUpdate(reply);
-                                                }}
-                                              >
-                                                {" "}
-                                                Edit
-                                              </p>
-                                              <Popconfirm
-                                                title="Are you sure to delete this comment?"
-                                                onConfirm={() => {
-                                                  handleConfirmDelete(
-                                                    reply,
-                                                    "reply"
-                                                  );
-                                                }}
-                                                onCancel={handleCancelDelete}
-                                                okText="Yes"
-                                                cancelText="No"
-                                              >
-                                                <p className="text-black cursor-pointer hover:font-bold hover:duration-150">
-                                                  Delete
+                                              {dataUser.uid ===
+                                              reply.user_id ? (
+                                                <>
+                                                  <p
+                                                    className="text-black cursor-pointer hover:font-bold hover:duration-150"
+                                                    onClick={() => {
+                                                      setIndexUpdateReply(
+                                                        reply.id_comment
+                                                      );
+                                                      setCurrentReplyPosition(
+                                                        index
+                                                      );
+                                                      setValueReplyUpdate(
+                                                        reply.content_reply
+                                                      );
+                                                      setReplySelectUpdate(
+                                                        reply
+                                                      );
+                                                    }}
+                                                  >
+                                                    {" "}
+                                                    Edit
+                                                  </p>
+                                                  <Popconfirm
+                                                    title="Are you sure to delete this comment?"
+                                                    onConfirm={() => {
+                                                      handleConfirmDelete(
+                                                        reply,
+                                                        "reply"
+                                                      );
+                                                    }}
+                                                    onCancel={
+                                                      handleCancelDelete
+                                                    }
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                  >
+                                                    <p className="text-black cursor-pointer hover:font-bold hover:duration-150">
+                                                      Delete
+                                                    </p>
+                                                  </Popconfirm>
+                                                </>
+                                              ) : (
+                                                <p
+                                                  className="text-black cursor-pointer"
+                                                  onClick={() => {
+                                                    handleHideReply(reply);
+                                                  }}
+                                                >
+                                                  {t("Hide")}
                                                 </p>
-                                              </Popconfirm>
+                                              )}
                                             </div>
                                           }
                                           trigger="hover"
@@ -615,9 +644,19 @@ export const CommentMovie = ({
                                     </div>
                                   </div>
                                   <div className="flex text-[14px] gap-2">
-                                    <p>{t("Reaction")}</p>
+                                    <p className="text-[#b2a28e]">
+                                      {t("Reaction")}
+                                    </p>
                                     <p>
-                                      {moment(new Date()).format("YYYY-MM-DD")}
+                                      <ReactTimeAgo
+                                        className="text-[#b2a28e]"
+                                        date={
+                                          new Date(
+                                            reply.createAt.seconds * 1000
+                                          )
+                                        }
+                                        locale={globalLocale}
+                                      />
                                     </p>
                                   </div>
                                 </div>

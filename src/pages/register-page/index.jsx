@@ -1,8 +1,8 @@
-import { Form, Input, message } from "antd";
+import { Form, Input, message, Spin } from "antd";
 import iconImg from "assets";
 import { LanguageProject } from "components/header/component";
 import { UserContext } from "contexts";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { useTranslation } from "react-i18next";
@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useTitle } from "hooks";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { AVATAR_EMPTY } from "constant";
 
 const StyleInput = styled(Input)`
   &.ant-input {
@@ -40,9 +41,18 @@ const StyleInputPassword = styled(Input.Password)`
 `;
 
 const RegisterPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [t] = useTranslation();
   const db = getFirestore();
   const onFinish = async (values) => {
+    const nameCheck = values.firstName ? values.firstName : "";
+    const nameUser = nameCheck.concat(
+      values.firstName ? " " : "",
+      values.lastname ? values.lastname : ""
+    );
+    setIsLoading(true);
+
     const { username: email, password } = values;
     const authentication = getAuth();
     try {
@@ -55,17 +65,21 @@ const RegisterPage = () => {
 
       const data = {
         user_id: response.user.uid || "",
-        url: response.user.photoURL || "",
-        name: response.user.displayName || "",
+        url: response.user.photoURL || AVATAR_EMPTY,
+        name: nameUser || values.username,
         email: response.user.email || "",
         bookmark: [],
         history: [],
       };
       addDoc(collection(db, "user"), data);
+      setIsLoading(false);
+
       localStorage.setItem("accessToken", accessToken);
       navigate("/");
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
+        setIsLoading(false);
+
         message.error("email already in use");
       }
     }
@@ -257,11 +271,15 @@ const RegisterPage = () => {
             </Form.Item>
 
             <button
+              disabled={isLoading ? true : false}
               type="primary"
               htmlType="submit"
-              className="bg-blue-600 hover:bg-blue-800 text-white hover:text-[#ccc] font-bold py-3 px-5 rounded-lg text-[18px] min-w-[110px] mt-4"
+              className={`bg-blue-600 hover:bg-blue-800 text-white hover:text-[#ccc] font-bold  w-[150px] py-2 rounded-lg text-[18px] min-w-[110px] mt-4
+              ${isLoading ? "cursor-not-allowed bg-[#ccc] hover:bg-[#ccc]" : ""}
+              
+              `}
             >
-              {t("Register")}
+              {isLoading ? <Spin className="text-white" /> : t("Register")}
               {/* <FontAwesomeIcon icon={faRightToBracket} className="ml-1" /> */}
             </button>
 

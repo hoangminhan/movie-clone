@@ -14,6 +14,13 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import "react-lazy-load-image-component/src/effects/opacity.css";
 import { UserProviderContext } from "contexts";
 
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en.json";
+import vi from "javascript-time-ago/locale/vi.json";
+
+TimeAgo.addDefaultLocale(en);
+TimeAgo.addLocale(vi);
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Suspense

@@ -53,6 +53,7 @@ import {
   collection,
   doc,
   getDoc,
+  getDocs,
   getFirestore,
   onSnapshot,
   orderBy,
@@ -72,6 +73,7 @@ import {
   ref,
   set,
 } from "firebase/database";
+import moment from "moment";
 
 const WatchMovieTv = () => {
   let { idDetail } = useParams();
@@ -286,13 +288,34 @@ const WatchMovieTv = () => {
   const [dataReply, setDataReply] = useState({});
   const [currentKey, setCurrentKey] = useState();
   const { handleCheckIsExist } = useFirebaseRealTime();
+  const [nameCurrentUser, setNameCurrentUser] = useState();
+  const [urlImgUser, setUrlImgUser] = useState(false);
+
+  // get name current user
+
+  useEffect(() => {
+    const getNameCurrentUser = async () => {
+      const dbfireStore = getFirestore();
+
+      const queryUser = query(
+        collection(dbfireStore, "user"),
+        where("user_id", "==", dataUser.uid)
+      );
+      const dataUserQuery = await getDocs(queryUser);
+      dataUserQuery.forEach((doc) => {
+        console.log(doc.data());
+        setNameCurrentUser(doc.data().name);
+        setUrlImgUser(doc.data().url);
+      });
+    };
+    getNameCurrentUser();
+  }, [dataUser]);
 
   // check movie have at realtime yet, to push item
   useEffect(() => {
     const handleGetdata = async () => {
       const dbfireStore = getFirestore();
 
-      const dbfireStoreRef = collection(dbfireStore, "detail");
       const checkDocumentComment = doc(dbfireStore, "detail", idDetail);
       const querySnapsotComment = query(
         collection(dbfireStore, "detail"),
@@ -333,6 +356,8 @@ const WatchMovieTv = () => {
       onSnapshot(querySnapsotReply, (querySnapshot) => {
         querySnapshot.forEach((docs) => {
           console.log(docs.data());
+          console.log(docs.data().createAt);
+          console.log(moment(docs.data().createAt).fromNow());
           setDataReply({
             ...docs.data(),
           });
@@ -343,6 +368,8 @@ const WatchMovieTv = () => {
       onSnapshot(querySnapsotComment, (querySnapshot) => {
         querySnapshot.forEach((docs) => {
           console.log(docs.data().comment);
+          console.log(moment(docs.data().createAt).fromNow());
+
           setDataComment({
             id_detail: docs.data().id_detail,
             comment: docs.data().comment.sort(function (x, y) {
@@ -356,7 +383,24 @@ const WatchMovieTv = () => {
     handleGetdata();
   }, [idDetail]);
 
-  // auto add data to detail collection at firebase
+  // handle hide comment
+  const handleHideComment = async (data) => {
+    console.log(data);
+    console.log(dataComment);
+    const newDataComment = dataComment.comment.filter(
+      (item) => item.id_comment !== data.id_comment
+    );
+    console.log(newDataComment);
+    setDataComment({ ...dataComment, comment: [...newDataComment] });
+  };
+  // handle hide reply
+  const handleHideReply = async (data) => {
+    console.log(data);
+    const newDataReply = dataReply.reply.filter(
+      (item) => item.id_reply !== data.id_reply
+    );
+    setDataReply({ ...dataReply, reply: [...newDataReply] });
+  };
 
   return (
     <div>
@@ -488,47 +532,16 @@ const WatchMovieTv = () => {
 
             {/* commment */}
             <div>
-              {/* <form action="">
-                <input
-                  type="text"
-                  className="outline-none border-none"
-                  value={valueComment}
-                  onChange={(e) => {
-                    setValueComment(e.target.value);
-                  }}
-                />
-                <p
-                  className="cursor-pointer"
-                  onClick={() => {
-                    const db = getFirestore();
-
-                    console.log(dataUser);
-                    console.log(dataDetail);
-                    const dataAdd = {
-                      id_post: dataDetail.id,
-
-                      comment: [
-                        {
-                          user_uid: dataUser.uid,
-                          url: dataUser.photoURL,
-                          title: valueComment,
-                        },
-                      ],
-                    };
-                    addDoc(collection(db, "posts"), dataAdd);
-                    console.log(valueComment);
-                  }}
-                >
-                  Submit
-                </p>
-              </form> */}
-
               <CommentMovie
                 dataComment={dataComment}
                 dataReply={dataReply}
                 dataUser={dataUser}
                 idDetail={idDetail}
                 currentKey={currentKey}
+                nameCurrentUser={nameCurrentUser}
+                urlImgUser={urlImgUser}
+                handleHideReply={handleHideReply}
+                handleHideComment={handleHideComment}
               />
             </div>
 
