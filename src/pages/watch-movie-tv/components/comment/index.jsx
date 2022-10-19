@@ -6,8 +6,10 @@ import {
   Input,
   List,
   message,
+  Modal,
   Popconfirm,
   Popover,
+  Tooltip,
 } from "antd";
 import { UserContext } from "contexts";
 import { ReactionBarSelector } from "@charkour/react-reactions";
@@ -33,6 +35,10 @@ import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import ReactTimeAgo from "react-time-ago";
 import { uid } from "uid";
+import { comment } from "postcss";
+import iconImg from "assets";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 const { TextArea } = Input;
 
@@ -68,10 +74,46 @@ export const CommentMovie = ({
         return <p>{t("Reaction")}</p>;
     }
   };
+  const handleFilterReactionOfComment = (dataReaction, comment) => {
+    const result = dataReaction.reaction.filter((data) => {
+      return data.id_comment === comment.id_comment;
+    });
+    console.log({ result });
+    return result;
+  };
+  const handleShowReactionOfComment = (type) => {
+    switch (type) {
+      case "happy":
+        return iconImg.lolImg;
+      case "satisfaction":
+        return iconImg.likeImg;
+      case "love":
+        return iconImg.loveImg;
+      case "surprise":
+        return iconImg.wowImg;
+      case "sad":
+        return iconImg.sadImg;
+      case "angry":
+        return iconImg.angryImg;
+      default:
+        return "";
+    }
+  };
   const findReactionOfComment = (dataReaction, comment) => {
     return dataReaction?.reaction?.find(
-      (reaction) => reaction?.id_comment === comment?.id_comment
+      (reaction) =>
+        reaction?.id_comment === comment?.id_comment &&
+        dataUser.uid === reaction?.user_id
     );
+  };
+  const handleCheckIsUserReaction = (dataReaction, comment) => {
+    const result = dataReaction?.reaction?.find((reaction) => {
+      return (
+        reaction?.user_id === dataUser?.uid &&
+        comment?.id_comment === reaction?.id_comment
+      );
+    });
+    return Object.keys(result || {}).length ? true : false;
   };
   const [reactions, setReactions] = useState({
     like: 0,
@@ -80,7 +122,6 @@ export const CommentMovie = ({
     sad: 0,
     wow: 0,
   });
-  console.log({ dataReaction });
   const stateContext = useContext(UserContext);
   const { localeGlobal } = stateContext;
 
@@ -110,6 +151,8 @@ export const CommentMovie = ({
   const [replySelectUpdate, setReplySelectUpdate] = useState();
   const [indexUpdateReply, setIndexUpdateReply] = useState();
   const [currentReplyPosition, setCurrentReplyPosition] = useState();
+  const [dataModal, setDataModal] = useState([]);
+  const [visibleModal, setVisibleModal] = useState(false);
 
   const handleSubmitComment = async (value) => {
     const dbfireStore = getFirestore();
@@ -157,10 +200,10 @@ export const CommentMovie = ({
       console.log(checkExistReaction);
       if (checkExistReaction) {
         console.log("exits", dataAdd);
-        await updateDoc(ReactionRef, {
+        updateDoc(ReactionRef, {
           reaction: arrayRemove(checkExistReaction),
         });
-        await updateDoc(ReactionRef, {
+        updateDoc(ReactionRef, {
           reaction: arrayUnion(dataAdd),
         });
       } else {
@@ -318,471 +361,578 @@ export const CommentMovie = ({
   }, []);
 
   return (
-    <div>
-      <Comment
-        avatar={<Avatar src={urlImgUser} alt="Han Solo" />}
-        content={
-          <Form
-            onFinish={handleSubmitComment}
-            form={formValue}
-            onFinishFailed={onFinishFailed}
-          >
-            <Form.Item name="value_comment">
-              <TextArea
-                rows={4}
-                placeholder="Write comment..."
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setValueComment(value);
-                }}
-                value={valueComment}
-                className="bg-[#333335] border-none outline-none rounded-lg text-white text-[16px]"
-              />
-            </Form.Item>
-            <Form.Item>
-              {/* <Button htmlType="submit" loading={submitting} type="primary"> */}
-              <Button htmlType="submit" type="primary">
-                Add Comment
-              </Button>
-            </Form.Item>
-          </Form>
-        }
-      />
-      {commentList?.length ? (
-        <ul>
-          {commentList?.map((comment, index) => {
-            return (
-              <li
-                key={index}
-                className={`mb-10 ${index < lenghtShow ? "block" : "hidden"}`}
-              >
-                <div className="flex gap-2">
-                  <Avatar src={comment.user_url} alt={comment.user_name} />
-                  <div className="flex-1">
-                    <div className="text-[18px] flex justify-between">
-                      <div className="w-full">
-                        <div>{comment.user_name}</div>
-                        <div className="text-[16px] flex gap-10 items-centers">
-                          {comment.id_comment === indexUpdate ? (
-                            <div className="flex-1">
-                              <Form
-                                onFinish={handleSubmitUpdateComment}
-                                // form={formValue}
-                                onFinishFailed={(errorValue) => {}}
-                                form={formUpdateComment}
-                              >
-                                <div className="flex item-center">
-                                  <Form.Item
-                                    name="value_update_comment"
-                                    className="flex-1"
-                                  >
-                                    <input
-                                      ref={repUpdateComment}
-                                      type="text"
-                                      className="w-full outline-none border-none px-4 py-2 h-[42px] rounded-2xl bg-[#333335] text-white"
-                                      value={valueCommentUpdate}
-                                      onChange={(event) => {
-                                        const value = event.target.value;
-                                        setValueCommentUpdate(value);
-                                      }}
-                                    />
-                                    <div className="">
-                                      <p className="mt-2 text-blue-400">
-                                        Press Esc to cancel
-                                      </p>
-                                    </div>
-                                  </Form.Item>
-                                  <Form.Item className="mb-0 pt-[5px]">
-                                    <button htmlType="submit" className="ml-3">
-                                      <svg
-                                        stroke="currentColor"
-                                        fill="currentColor"
-                                        stroke-width="0"
-                                        viewBox="0 0 24 24"
-                                        className="text-primary "
-                                        height="30"
-                                        width="30"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                      >
-                                        <path
-                                          fill="none"
-                                          d="M0 0h24v24H0z"
-                                        ></path>
-                                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
-                                      </svg>
-                                    </button>
-                                  </Form.Item>
-                                </div>
-                              </Form>
-                            </div>
-                          ) : (
-                            <p>{comment.content_comment}</p>
-                          )}
-
-                          <div>
-                            <Popover
-                              placement="bottom"
-                              content={
-                                <div className="text-black w-[40px] flex justify-center flex-col items-center">
-                                  {dataUser.uid === comment.user_id ? (
-                                    <>
-                                      <p
-                                        className="text-black cursor-pointer hover:font-bold hover:duration-150"
-                                        onClick={() => {
-                                          setIndexUpdate(comment.id_comment);
-                                          setValueCommentUpdate(
-                                            comment.content_comment
-                                          );
-                                          setCommentSelectUpdate(comment);
-                                        }}
-                                      >
-                                        Edit
-                                      </p>
-                                      <Popconfirm
-                                        title="Are you sure to delete this comment?"
-                                        onConfirm={() => {
-                                          handleConfirmDelete(
-                                            comment,
-                                            "comment"
-                                          );
-                                        }}
-                                        onCancel={handleCancelDelete}
-                                        okText="Yes"
-                                        cancelText="No"
-                                      >
-                                        <p className="text-black cursor-pointer hover:font-bold hover:duration-150">
-                                          Delete
-                                        </p>
-                                      </Popconfirm>
-                                    </>
-                                  ) : (
-                                    <p
-                                      className="text-black cursor-pointer"
-                                      onClick={() => {
-                                        handleHideComment(comment);
-                                      }}
+    <>
+      <div>
+        <Comment
+          avatar={<Avatar src={urlImgUser} alt="Han Solo" />}
+          content={
+            <Form
+              onFinish={handleSubmitComment}
+              form={formValue}
+              onFinishFailed={onFinishFailed}
+            >
+              <Form.Item name="value_comment">
+                <TextArea
+                  rows={4}
+                  placeholder="Write comment..."
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setValueComment(value);
+                  }}
+                  value={valueComment}
+                  className="bg-[#333335] border-none outline-none rounded-lg text-white text-[16px]"
+                />
+              </Form.Item>
+              <Form.Item>
+                {/* <Button htmlType="submit" loading={submitting} type="primary"> */}
+                <Button htmlType="submit" type="primary">
+                  Add Comment
+                </Button>
+              </Form.Item>
+            </Form>
+          }
+        />
+        {commentList?.length ? (
+          <ul>
+            {commentList?.map((comment, index) => {
+              return (
+                <li
+                  key={index}
+                  className={`mb-10 ${index < lenghtShow ? "block" : "hidden"}`}
+                >
+                  <div className="flex gap-2">
+                    <Avatar src={comment.user_url} alt={comment.user_name} />
+                    <div className="flex-1">
+                      <div className="text-[18px] flex justify-between">
+                        <div className="w-full">
+                          <div>{comment.user_name}</div>
+                          <div className="text-[16px] flex gap-10 items-centers">
+                            {comment.id_comment === indexUpdate ? (
+                              <div className="flex-1">
+                                <Form
+                                  onFinish={handleSubmitUpdateComment}
+                                  // form={formValue}
+                                  onFinishFailed={(errorValue) => {}}
+                                  form={formUpdateComment}
+                                >
+                                  <div className="flex item-center">
+                                    <Form.Item
+                                      name="value_update_comment"
+                                      className="flex-1"
                                     >
-                                      {t("Hide")}
-                                    </p>
-                                  )}
+                                      <input
+                                        ref={repUpdateComment}
+                                        type="text"
+                                        className="w-full outline-none border-none px-4 py-2 h-[42px] rounded-2xl bg-[#333335] text-white"
+                                        value={valueCommentUpdate}
+                                        onChange={(event) => {
+                                          const value = event.target.value;
+                                          setValueCommentUpdate(value);
+                                        }}
+                                      />
+                                      <div className="">
+                                        <p className="mt-2 text-blue-400">
+                                          Press Esc to cancel
+                                        </p>
+                                      </div>
+                                    </Form.Item>
+                                    <Form.Item className="mb-0 pt-[5px]">
+                                      <button
+                                        htmlType="submit"
+                                        className="ml-3"
+                                      >
+                                        <svg
+                                          stroke="currentColor"
+                                          fill="currentColor"
+                                          stroke-width="0"
+                                          viewBox="0 0 24 24"
+                                          className="text-primary "
+                                          height="30"
+                                          width="30"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                          <path
+                                            fill="none"
+                                            d="M0 0h24v24H0z"
+                                          ></path>
+                                          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+                                        </svg>
+                                      </button>
+                                    </Form.Item>
+                                  </div>
+                                </Form>
+                              </div>
+                            ) : (
+                              <p>{comment.content_comment}</p>
+                            )}
+
+                            <div>
+                              <Popover
+                                placement="bottom"
+                                content={
+                                  <div className="text-black w-[40px] flex justify-center flex-col items-center">
+                                    {dataUser.uid === comment.user_id ? (
+                                      <>
+                                        <p
+                                          className="text-black cursor-pointer hover:font-bold hover:duration-150"
+                                          onClick={() => {
+                                            setIndexUpdate(comment.id_comment);
+                                            setValueCommentUpdate(
+                                              comment.content_comment
+                                            );
+                                            setCommentSelectUpdate(comment);
+                                          }}
+                                        >
+                                          Edit
+                                        </p>
+                                        <Popconfirm
+                                          title="Are you sure to delete this comment?"
+                                          onConfirm={() => {
+                                            handleConfirmDelete(
+                                              comment,
+                                              "comment"
+                                            );
+                                          }}
+                                          onCancel={handleCancelDelete}
+                                          okText="Yes"
+                                          cancelText="No"
+                                        >
+                                          <p className="text-black cursor-pointer hover:font-bold hover:duration-150">
+                                            Delete
+                                          </p>
+                                        </Popconfirm>
+                                      </>
+                                    ) : (
+                                      <p
+                                        className="text-black cursor-pointer"
+                                        onClick={() => {
+                                          handleHideComment(comment);
+                                        }}
+                                      >
+                                        {t("Hide")}
+                                      </p>
+                                    )}
+                                  </div>
+                                }
+                                trigger="hover"
+                              >
+                                <div className="relative cursor-pointer">
+                                  ...
                                 </div>
-                              }
-                              trigger="hover"
-                            >
-                              <div className="relative cursor-pointer">...</div>
-                            </Popover>
+                              </Popover>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex text-[14px] gap-2">
-                      <div className="group relative text-[#b2a28e] cursor-pointer">
-                        {handleGenerateTitleReaction(
-                          findReactionOfComment(dataReaction, comment)
-                            ? findReactionOfComment(dataReaction, comment)
-                                ?.reaction_value
-                            : "Reaction"
-                        )}
-                        <p className="absolute top-[-45px] z-20 hidden group-hover:block">
-                          <ReactionBarSelector
-                            iconSize="25px"
-                            // reactions={reactions}
-                            onSelect={(key) => {
-                              console.log(key);
-                              handleAddReaction(key, comment.id_comment);
+                      {/* list reaction */}
+                      <div className="flex gap-2 mt-2 items-center justify-start max-w-[100px]">
+                        <Tooltip
+                          title={t(
+                            "Click to see detail reaction of this comment"
+                          )}
+                        >
+                          <div
+                            className="flex mb-0 cursor-pointer"
+                            onClick={() => {
+                              setVisibleModal(true);
+                              setDataModal((pre) => {
+                                return handleFilterReactionOfComment(
+                                  dataReaction,
+                                  comment
+                                );
+                              });
                             }}
-                            style={{ backgroundColor: "#333335" }}
+                          >
+                            {handleFilterReactionOfComment(
+                              dataReaction,
+                              comment
+                            ).map((action, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  className={`${
+                                    index > 0 ? "block" : "hidden"
+                                  }`}
+                                >
+                                  <img
+                                    style={{
+                                      width: "20px",
+                                      height: "20px",
+                                    }}
+                                    src={handleShowReactionOfComment(
+                                      action.reaction_value
+                                    )}
+                                    alt=""
+                                  />
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </Tooltip>
+                        <p className="text-[16px]">
+                          {
+                            handleFilterReactionOfComment(dataReaction, comment)
+                              .length
+                          }
+                        </p>
+                      </div>
+                      <div className="flex text-[14px] gap-2">
+                        <div className="group relative text-[#b2a28e] cursor-pointer">
+                          {handleGenerateTitleReaction(
+                            findReactionOfComment(dataReaction, comment) &&
+                              handleCheckIsUserReaction(dataReaction, comment)
+                              ? findReactionOfComment(dataReaction, comment)
+                                  ?.reaction_value
+                              : "Reaction"
+                          )}
+                          <p className="absolute top-[-45px] z-20 hidden group-hover:block">
+                            <ReactionBarSelector
+                              iconSize="25px"
+                              // reactions={reactions}
+                              onSelect={(key) => {
+                                console.log(key);
+                                handleAddReaction(key, comment.id_comment);
+                              }}
+                              style={{ backgroundColor: "#333335" }}
+                            />
+                          </p>
+                        </div>
+                        <p
+                          className="text-[#b2a28e] cursor-pointer"
+                          onClick={() => {
+                            setCommentSelect(comment.id_comment);
+                            setIdComment(comment.id_comment);
+                            replyRef.current.focus();
+                          }}
+                        >
+                          {t("Reply")}
+                        </p>
+                        {/* <p>{moment(comment.createAt)}</p> */}
+                        <p>
+                          <ReactTimeAgo
+                            className=""
+                            date={new Date(comment.createAt.seconds * 1000)}
+                            locale={globalLocale}
                           />
                         </p>
                       </div>
-                      <p
-                        className="text-[#b2a28e] cursor-pointer"
-                        onClick={() => {
-                          setCommentSelect(comment.id_comment);
-                          setIdComment(comment.id_comment);
-                          replyRef.current.focus();
-                        }}
+                      {/* reply input */}
+                      <Form
+                        form={formReply}
+                        onFinish={handleAddReply}
+                        style={
+                          commentSelect === comment.id_comment
+                            ? {
+                                display: "block",
+                                marginTop: "16px",
+                              }
+                            : {
+                                display: "none",
+                              }
+                        }
                       >
-                        {t("Reply")}
-                      </p>
-                      {/* <p>{moment(comment.createAt)}</p> */}
-                      <p>
-                        <ReactTimeAgo
-                          className=""
-                          date={new Date(comment.createAt.seconds * 1000)}
-                          locale={globalLocale}
-                        />
-                      </p>
-                    </div>
-                    {/* reply input */}
-                    <Form
-                      form={formReply}
-                      onFinish={handleAddReply}
-                      style={
-                        commentSelect === comment.id_comment
-                          ? {
-                              display: "block",
-                              marginTop: "16px",
-                            }
-                          : {
-                              display: "none",
-                            }
-                      }
-                    >
-                      <Form.Item name="value_reply">
-                        <div
-                          className={`${
-                            commentSelect === comment.id_comment
-                              ? "flex"
-                              : "hidden"
-                          }`}
-                        >
-                          <Avatar
-                            src={comment.user_url}
-                            alt="user-img"
-                            className="mr-4"
-                          />
-                          <input
-                            id="replyInput"
-                            type="text"
-                            ref={replyRef}
-                            className="w-full outline-none border-none px-4 py-2 h-[42px] rounded-2xl bg-[#333335] text-white"
-                            placeholder="Write reply..."
-                            // onChange={(e) => {
-                            //   const value = e.target.value;
-                            //   setValueReply(value);
-                            // }}
-                            // value={valueReply}
-                          />
-                          <button htmlType="submit" className="ml-3">
-                            <svg
-                              stroke="currentColor"
-                              fill="currentColor"
-                              stroke-width="0"
-                              viewBox="0 0 24 24"
-                              className="text-primary "
-                              height="30"
-                              width="30"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path fill="none" d="M0 0h24v24H0z"></path>
-                              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
-                            </svg>
-                          </button>
-                        </div>
-                      </Form.Item>
-                    </Form>
-                    {/* reply */}
-                    {dataReply ? (
-                      <ul>
-                        {dataReply?.reply?.map((reply, index) => {
-                          return (
-                            <li
-                              key={index}
-                              className={`duration-200 ${
-                                reply.id_comment === comment.id_comment
-                                  ? "block"
-                                  : "hidden"
-                              }`}
-                            >
-                              <div className="flex gap-2">
-                                <Avatar
-                                  src={reply.user_url}
-                                  alt={reply?.user_name}
-                                />
-                                <div className="w-full">
-                                  <div className="text-[18px]">
-                                    <p className="text-[#989898]">
-                                      {reply?.user_name}
-                                    </p>
-                                    <div className="text-[16px] flex gap-10 items-center">
-                                      {reply.id_comment === indexUpdateReply &&
-                                      currentReplyPosition === index ? (
-                                        <div className="flex-1">
-                                          <Form
-                                            onFinish={handleSubmitUpdateReply}
-                                            onFinishFailed={(errorValue) => {}}
-                                            form={formUpdateReply}
-                                          >
-                                            <div className="flex item-center">
-                                              <Form.Item
-                                                name="value_update_reply"
-                                                className="flex-1"
-                                              >
-                                                <input
-                                                  ref={repUpdateRely}
-                                                  id="repUpdateRely"
-                                                  type="text"
-                                                  className="w-full outline-none border-none px-4 py-2 h-[42px] rounded-2xl bg-[#333335] text-white"
-                                                  value={valueReplyUpdate}
-                                                  onChange={(event) => {
-                                                    const value =
-                                                      event.target.value;
-                                                    setValueReplyUpdate(value);
-                                                  }}
-                                                />
-                                                <div className="">
-                                                  <p className="mt-2 text-blue-400">
-                                                    Press Esc to cancel
-                                                  </p>
-                                                </div>
-                                              </Form.Item>
-                                              <Form.Item className="mb-0 pt-[5px]">
-                                                <button
-                                                  htmlType="submit"
-                                                  className="ml-3"
+                        <Form.Item name="value_reply">
+                          <div
+                            className={`${
+                              commentSelect === comment.id_comment
+                                ? "flex"
+                                : "hidden"
+                            }`}
+                          >
+                            <Avatar
+                              src={comment.user_url}
+                              alt="user-img"
+                              className="mr-4"
+                            />
+                            <input
+                              id="replyInput"
+                              type="text"
+                              ref={replyRef}
+                              className="w-full outline-none border-none px-4 py-2 h-[42px] rounded-2xl bg-[#333335] text-white"
+                              placeholder="Write reply..."
+                              // onChange={(e) => {
+                              //   const value = e.target.value;
+                              //   setValueReply(value);
+                              // }}
+                              // value={valueReply}
+                            />
+                            <button htmlType="submit" className="ml-3">
+                              <svg
+                                stroke="currentColor"
+                                fill="currentColor"
+                                stroke-width="0"
+                                viewBox="0 0 24 24"
+                                className="text-primary "
+                                height="30"
+                                width="30"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path fill="none" d="M0 0h24v24H0z"></path>
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+                              </svg>
+                            </button>
+                          </div>
+                        </Form.Item>
+                      </Form>
+                      {/* reply */}
+                      {dataReply ? (
+                        <ul>
+                          {dataReply?.reply?.map((reply, index) => {
+                            return (
+                              <li
+                                key={index}
+                                className={`duration-200 ${
+                                  reply.id_comment === comment.id_comment
+                                    ? "block"
+                                    : "hidden"
+                                }`}
+                              >
+                                <div className="flex gap-2">
+                                  <Avatar
+                                    src={reply.user_url}
+                                    alt={reply?.user_name}
+                                  />
+                                  <div className="w-full">
+                                    <div className="text-[18px]">
+                                      <p className="text-[#989898]">
+                                        {reply?.user_name}
+                                      </p>
+                                      <div className="text-[16px] flex gap-10 items-center">
+                                        {reply.id_comment ===
+                                          indexUpdateReply &&
+                                        currentReplyPosition === index ? (
+                                          <div className="flex-1">
+                                            <Form
+                                              onFinish={handleSubmitUpdateReply}
+                                              onFinishFailed={(
+                                                errorValue
+                                              ) => {}}
+                                              form={formUpdateReply}
+                                            >
+                                              <div className="flex item-center">
+                                                <Form.Item
+                                                  name="value_update_reply"
+                                                  className="flex-1"
                                                 >
-                                                  <svg
-                                                    stroke="currentColor"
-                                                    fill="currentColor"
-                                                    stroke-width="0"
-                                                    viewBox="0 0 24 24"
-                                                    className="text-primary "
-                                                    height="30"
-                                                    width="30"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                  >
-                                                    <path
-                                                      fill="none"
-                                                      d="M0 0h24v24H0z"
-                                                    ></path>
-                                                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
-                                                  </svg>
-                                                </button>
-                                              </Form.Item>
-                                            </div>
-                                          </Form>
-                                        </div>
-                                      ) : (
-                                        <p>{reply.content_reply}</p>
-                                      )}
-                                      {/* edit delete reply */}
-                                      <div>
-                                        <Popover
-                                          placement="bottom"
-                                          content={
-                                            <div className="text-black w-[40px] flex justify-center flex-col items-center">
-                                              {dataUser.uid ===
-                                              reply.user_id ? (
-                                                <>
-                                                  <p
-                                                    className="text-black cursor-pointer hover:font-bold hover:duration-150"
-                                                    onClick={() => {
-                                                      setIndexUpdateReply(
-                                                        reply.id_comment
-                                                      );
-                                                      setCurrentReplyPosition(
-                                                        index
-                                                      );
+                                                  <input
+                                                    ref={repUpdateRely}
+                                                    id="repUpdateRely"
+                                                    type="text"
+                                                    className="w-full outline-none border-none px-4 py-2 h-[42px] rounded-2xl bg-[#333335] text-white"
+                                                    value={valueReplyUpdate}
+                                                    onChange={(event) => {
+                                                      const value =
+                                                        event.target.value;
                                                       setValueReplyUpdate(
-                                                        reply.content_reply
-                                                      );
-                                                      setReplySelectUpdate(
-                                                        reply
+                                                        value
                                                       );
                                                     }}
-                                                  >
-                                                    {" "}
-                                                    Edit
-                                                  </p>
-                                                  <Popconfirm
-                                                    title="Are you sure to delete this comment?"
-                                                    onConfirm={() => {
-                                                      handleConfirmDelete(
-                                                        reply,
-                                                        "reply"
-                                                      );
-                                                    }}
-                                                    onCancel={
-                                                      handleCancelDelete
-                                                    }
-                                                    okText="Yes"
-                                                    cancelText="No"
-                                                  >
-                                                    <p className="text-black cursor-pointer hover:font-bold hover:duration-150">
-                                                      Delete
+                                                  />
+                                                  <div className="">
+                                                    <p className="mt-2 text-blue-400">
+                                                      Press Esc to cancel
                                                     </p>
-                                                  </Popconfirm>
-                                                </>
-                                              ) : (
-                                                <p
-                                                  className="text-black cursor-pointer"
-                                                  onClick={() => {
-                                                    handleHideReply(reply);
-                                                  }}
-                                                >
-                                                  {t("Hide")}
-                                                </p>
-                                              )}
-                                            </div>
-                                          }
-                                          trigger="hover"
-                                        >
-                                          <div className="relative cursor-pointer">
-                                            ...
+                                                  </div>
+                                                </Form.Item>
+                                                <Form.Item className="mb-0 pt-[5px]">
+                                                  <button
+                                                    htmlType="submit"
+                                                    className="ml-3"
+                                                  >
+                                                    <svg
+                                                      stroke="currentColor"
+                                                      fill="currentColor"
+                                                      stroke-width="0"
+                                                      viewBox="0 0 24 24"
+                                                      className="text-primary "
+                                                      height="30"
+                                                      width="30"
+                                                      xmlns="http://www.w3.org/2000/svg"
+                                                    >
+                                                      <path
+                                                        fill="none"
+                                                        d="M0 0h24v24H0z"
+                                                      ></path>
+                                                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+                                                    </svg>
+                                                  </button>
+                                                </Form.Item>
+                                              </div>
+                                            </Form>
                                           </div>
-                                        </Popover>
+                                        ) : (
+                                          <p>{reply.content_reply}</p>
+                                        )}
+                                        {/* edit delete reply */}
+                                        <div>
+                                          <Popover
+                                            placement="bottom"
+                                            content={
+                                              <div className="text-black w-[40px] flex justify-center flex-col items-center">
+                                                {dataUser.uid ===
+                                                reply.user_id ? (
+                                                  <>
+                                                    <p
+                                                      className="text-black cursor-pointer hover:font-bold hover:duration-150"
+                                                      onClick={() => {
+                                                        setIndexUpdateReply(
+                                                          reply.id_comment
+                                                        );
+                                                        setCurrentReplyPosition(
+                                                          index
+                                                        );
+                                                        setValueReplyUpdate(
+                                                          reply.content_reply
+                                                        );
+                                                        setReplySelectUpdate(
+                                                          reply
+                                                        );
+                                                      }}
+                                                    >
+                                                      {" "}
+                                                      Edit
+                                                    </p>
+                                                    <Popconfirm
+                                                      title="Are you sure to delete this comment?"
+                                                      onConfirm={() => {
+                                                        handleConfirmDelete(
+                                                          reply,
+                                                          "reply"
+                                                        );
+                                                      }}
+                                                      onCancel={
+                                                        handleCancelDelete
+                                                      }
+                                                      okText="Yes"
+                                                      cancelText="No"
+                                                    >
+                                                      <p className="text-black cursor-pointer hover:font-bold hover:duration-150">
+                                                        Delete
+                                                      </p>
+                                                    </Popconfirm>
+                                                  </>
+                                                ) : (
+                                                  <p
+                                                    className="text-black cursor-pointer"
+                                                    onClick={() => {
+                                                      handleHideReply(reply);
+                                                    }}
+                                                  >
+                                                    {t("Hide")}
+                                                  </p>
+                                                )}
+                                              </div>
+                                            }
+                                            trigger="hover"
+                                          >
+                                            <div className="relative cursor-pointer">
+                                              ...
+                                            </div>
+                                          </Popover>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                  <div className="flex text-[14px] gap-2">
-                                    <p className="text-[#b2a28e]">
-                                      {t("Reaction")}
-                                    </p>
-                                    <p>
-                                      <ReactTimeAgo
-                                        className="text-[#b2a28e]"
-                                        date={
-                                          new Date(
-                                            reply.createAt.seconds * 1000
-                                          )
-                                        }
-                                        locale={globalLocale}
-                                      />
-                                    </p>
+                                    <div className="flex text-[14px] gap-2">
+                                      <p className="text-[#b2a28e]">
+                                        {t("Reaction")}
+                                      </p>
+                                      <p>
+                                        <ReactTimeAgo
+                                          className="text-[#b2a28e]"
+                                          date={
+                                            new Date(
+                                              reply.createAt.seconds * 1000
+                                            )
+                                          }
+                                          locale={globalLocale}
+                                        />
+                                      </p>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    ) : (
-                      ""
-                    )}
-                    {/* load more reply */}
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      ) : (
+                        ""
+                      )}
+                      {/* load more reply */}
+                    </div>
                   </div>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        ""
-      )}
-      {/* load more */}
-      {dataComment?.comment?.length ? (
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          ""
+        )}
+        {/* load more */}
+        {dataComment?.comment?.length >= 5 ? (
+          <div>
+            <p
+              className="cursor-pointer text-[#766f6f] text-[18px]"
+              onClick={() => {
+                const data = lenghtShow < dataComment?.comment?.length ? 5 : -5;
+                handleChangeQuantityComment(data);
+              }}
+            >
+              {lenghtShow < dataComment?.comment?.length
+                ? t("Load more comments")
+                : t("Show less comments")}{" "}
+              {`(${
+                lenghtShow < dataComment?.comment?.length
+                  ? lenghtShow
+                  : dataComment?.comment?.length
+              }/${dataComment?.comment?.length})`}
+            </p>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
+
+      <Modal
+        footer={null}
+        closable={false}
+        visible={visibleModal}
+        wrapClassName="modal-config"
+        width={350}
+      >
         <div>
-          <p
-            className="cursor-pointer text-[#766f6f] text-[18px]"
-            onClick={() => {
-              const data = lenghtShow < dataComment?.comment?.length ? 5 : -5;
-              handleChangeQuantityComment(data);
-            }}
-          >
-            {lenghtShow < dataComment?.comment?.length
-              ? t("Load more comments")
-              : t("Show less comments")}{" "}
-            {`(${
-              lenghtShow < dataComment?.comment?.length
-                ? lenghtShow
-                : dataComment?.comment?.length
-            }/${dataComment?.comment?.length})`}
-          </p>
+          <div className="flex justify-between items-center">
+            <h2 className="text-[20px] text-white">
+              {t("People's reaction to this info")}
+            </h2>
+            <p>
+              <FontAwesomeIcon
+                icon={faClose}
+                color="white"
+                className="text-[20px] cursor-pointer"
+                onClick={() => {
+                  setVisibleModal(false);
+                }}
+              />
+            </p>
+          </div>
+          <div className="mt-5 px-5 min-h-[100px]">
+            {dataModal.map((item, index) => {
+              return (
+                <div key={index} className="flex justify-between mb-2">
+                  <p className="text-white">{item.user_name}</p>
+                  <p>
+                    <img
+                      className="w-[28px] h-[28px]"
+                      src={handleShowReactionOfComment(item.reaction_value)}
+                      alt=""
+                    />
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      ) : (
-        ""
-      )}
-    </div>
+      </Modal>
+    </>
   );
 };
