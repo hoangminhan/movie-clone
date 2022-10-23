@@ -2,7 +2,7 @@ import { faCaretRight, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Skeleton, Tooltip } from "antd";
 import iconImg from "assets";
-import { ButtonPlay, ImageCustom } from "components";
+import { ButtonPlay, ImageCustom, SkeletonCustom } from "components";
 import { UserContext } from "contexts";
 import { useHomePage } from "hooks/use-homepage";
 import React, { useContext } from "react";
@@ -102,7 +102,8 @@ export const ComponentSlider = React.memo(
           </Swiper>
         ) : (
           // <span className="mb-[64px] inline-block">{t("Updating")}...</span>
-          <Skeleton active />
+          // <Skeleton active />
+          <SkeletonCustom quantity={5} />
         )}
       </div>
     );

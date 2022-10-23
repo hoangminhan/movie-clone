@@ -288,6 +288,7 @@ const WatchMovieTv = () => {
   const [dataComment, setDataComment] = useState({});
   const [dataReply, setDataReply] = useState({});
   const [dataReaction, setDataReaction] = useState({});
+  const [dataReplyReaction, setDataReplyReaction] = useState({});
   const [currentKey, setCurrentKey] = useState();
   const { handleCheckIsExist } = useFirebaseRealTime();
   const [nameCurrentUser, setNameCurrentUser] = useState();
@@ -316,9 +317,12 @@ const WatchMovieTv = () => {
     setLengthShow((pre) => pre + data);
   };
 
+  const [isLoadingComment, setIsLoadingComment] = useState(false);
+
   // check movie have at realtime yet, to push item
   useEffect(() => {
     const handleGetdata = async () => {
+      setIsLoadingComment(true);
       const dbfireStore = getFirestore();
 
       const checkDocumentComment = doc(dbfireStore, "detail", idDetail);
@@ -334,6 +338,7 @@ const WatchMovieTv = () => {
         collection(dbfireStore, "reaction"),
         where("id_detail", "==", idDetail)
       );
+
       const docSnap = await getDoc(checkDocumentComment);
       if (!docSnap.exists()) {
         setDoc(
@@ -373,6 +378,32 @@ const WatchMovieTv = () => {
         );
       }
 
+      const checkReplyReactionExits = doc(
+        dbfireStore,
+        "reaction_reply",
+        idDetail
+      );
+      const refReplyReaction = await getDoc(checkReplyReactionExits);
+      if (!refReplyReaction.exists()) {
+        setDoc(doc(dbfireStore, "reaction_reply", idDetail), {
+          id_detail: idDetail,
+          reaction_reply: [],
+        });
+      }
+      // listent db reaction reply
+      const queryReplyReaction = query(
+        collection(dbfireStore, "reaction_reply"),
+        where("id_detail", "==", idDetail)
+      );
+      onSnapshot(queryReplyReaction, (querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          setDataReplyReaction({
+            ...dataReplyReaction,
+            ...doc.data(),
+          });
+        });
+      });
+
       // listening db reaction
       onSnapshot(querySnapsotReaction, (querySnapshot) => {
         querySnapshot.forEach((docs) => {
@@ -385,7 +416,10 @@ const WatchMovieTv = () => {
       onSnapshot(querySnapsotReply, (querySnapshot) => {
         querySnapshot.forEach((docs) => {
           setDataReply({
-            ...docs.data(),
+            id_detail: docs.data().id_detail,
+            reply: docs.data().reply.sort(function (x, y) {
+              return y.createAt.seconds - x.createAt.seconds;
+            }),
           });
         });
       });
@@ -402,6 +436,7 @@ const WatchMovieTv = () => {
           setCurrentKey(docs.data().id_detail);
         });
       });
+      setIsLoadingComment(false);
     };
     handleGetdata();
   }, [idDetail]);
@@ -557,6 +592,7 @@ const WatchMovieTv = () => {
                 dataComment={dataComment}
                 dataReply={dataReply}
                 dataReaction={dataReaction}
+                dataReplyReaction={dataReplyReaction}
                 dataUser={dataUser}
                 idDetail={idDetail}
                 currentKey={currentKey}
@@ -566,6 +602,7 @@ const WatchMovieTv = () => {
                 handleHideComment={handleHideComment}
                 lenghtShow={lenghtShow}
                 handleChangeQuantityComment={handleChangeQuantityComment}
+                isLoadingComment={isLoadingComment}
               />
             </div>
 

@@ -124,7 +124,8 @@ const GenresPage = () => {
                       navigate(`/${type}/${item.id}`);
                     }}
                   >
-                    <ImageCustom
+                    <img
+                      alt=""
                       src={
                         getImage(item.poster_path, "w185").includes("null")
                           ? iconImg.Img404

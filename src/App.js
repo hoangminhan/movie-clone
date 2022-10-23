@@ -1,4 +1,3 @@
-import { ComponentModalGlobal } from "modal";
 import { useLocation, useRoutes } from "react-router-dom";
 import RouteList from "routes";
 import AOS from "aos";

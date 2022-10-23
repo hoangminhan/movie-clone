@@ -1,5 +1,5 @@
 import { Col, Row } from "antd";
-import { Filter } from "components";
+import { Filter, SkeletonCustom } from "components";
 import { UserContext } from "contexts";
 import { useTitle } from "hooks";
 import { useHomePage } from "hooks/use-homepage";
@@ -158,12 +158,15 @@ const DiscoveryPage = () => {
     setSearchParams({ ...filters, language: locale, api_key: "" });
   }, [filters, stateContext, currentTab]);
 
+  const [isLoadingSkeleton, setIsLoadingSkeleton] = useState(false);
   // handle filters
   useEffect(() => {
     const getData = async () => {
+      setIsLoadingSkeleton(true);
       const type = currentTab ? "movie" : "tv";
 
       await handleGetDiscoverMovieTv(type, filters);
+      setIsLoadingSkeleton(false);
     };
     getData();
   }, [stateContext, filters, currentTab]);
@@ -187,16 +190,22 @@ const DiscoveryPage = () => {
   return (
     <div className="py-[12px] min-h-[100vh] ">
       <Row gutter={[12, 12]}>
-        <Col span={20}>
-          <ContentDiscovery
-            currentTab={currentTab}
-            handleChangeCurrentTab={handleChangeCurrentTab}
-            handleChangePage={handleChangePage}
-            dataDiscoverMovie={dataDiscoverMovie}
-            filters={filters}
-            isLoadingDiscover={isLoading}
-          />
-        </Col>
+        {isLoadingSkeleton ? (
+          <Col span={20}>
+            <SkeletonCustom quantity={10} />
+          </Col>
+        ) : (
+          <Col span={20}>
+            <ContentDiscovery
+              currentTab={currentTab}
+              handleChangeCurrentTab={handleChangeCurrentTab}
+              handleChangePage={handleChangePage}
+              dataDiscoverMovie={dataDiscoverMovie}
+              filters={filters}
+              isLoadingDiscover={isLoading}
+            />
+          </Col>
+        )}
         <Col span={4} className="mt-[75px]">
           <Filter
             listGenresMovie={listGenresMovie}

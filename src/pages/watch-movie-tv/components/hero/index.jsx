@@ -34,7 +34,6 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
   useEffect(() => {
     if (dataDetail.id) {
       const handleCheckIsFavorite = async (dataDetail) => {
-        console.log(dataDetail.id);
         let checkExist = false;
         if (dataDetail?.id) {
           const db = getFirestore();
@@ -159,7 +158,7 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
                     to={`/genres/${genre.id}-${genre.name}`}
                     state={{ genreName: genre.name }}
                   >
-                    <p className="max-w-[140px] line-clamp-1 py-1 px-3 border-solid border-white border-[1px] mr-3 rounded-3xl text-white text-[16px] uppercase cursor-pointer hover:scale-110 duration-150 stroke-text-sm">
+                    <p className="max-w-[140px] line-clamp-1 py-1 px-3 border-solid border-white border-[1px] mr-3 rounded-3xl text-white text-[16px] uppercase cursor-pointer hover:scale-110 duration-150 ">
                       {genre.name}
                     </p>
                   </Link>

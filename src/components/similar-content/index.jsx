@@ -20,10 +20,10 @@ export const SimilarContent = ({ dataSimilar }) => {
               <div className="rounded-global max-w-[185px] hover:scale-110 duration-300 delay-100 rounded-[6px] overflow-hidden">
                 {/* img */}
                 <div className="relative group ">
-                  <ImageCustom
-                    data-aos="zoom-in"
+                  <img
                     src={getImage(similar.poster_path, "w185")}
                     className="h-[278px]"
+                    alt=""
                   />
                   <p>
                     <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2  hidden group-hover:block delay-250 hover:scale-110 duration-300">

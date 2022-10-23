@@ -2,7 +2,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Col, Row } from "antd";
 import iconImg from "assets";
-import { StyledPagination } from "components";
+import { SkeletonCustom, StyledPagination } from "components";
 import { UserContext } from "contexts";
 import { UsePeople, useTitle } from "hooks";
 import React from "react";
@@ -51,14 +51,19 @@ const SearchPage = () => {
     });
   }, [filterSearch, stateContext]);
 
+  const [isLoadingSearch, setIsLoadingSearch] = useState(false);
+
   useEffect(() => {
     if (filterSearch.query) {
       const getData = async () => {
-        handleGetDataPageSearch(filterSearch.type, {
+        setIsLoadingSearch(true);
+        await handleGetDataPageSearch(filterSearch.type, {
           ...filterSearch,
           api_key: process.env.REACT_APP_API_KEY,
         });
+        setIsLoadingSearch(false);
       };
+
       getData();
     }
   }, [filterSearch, stateContext]);
@@ -110,11 +115,15 @@ const SearchPage = () => {
           </div>
           {filterSearch.query ? (
             <>
-              <ContentSearch
-                dataContentSearch={results}
-                isLoading={isLoadingPeople}
-                type={filterSearch.type}
-              />
+              {isLoadingSearch ? (
+                <SkeletonCustom quantity={10}></SkeletonCustom>
+              ) : (
+                <ContentSearch
+                  dataContentSearch={results}
+                  isLoading={isLoadingPeople}
+                  type={filterSearch.type}
+                />
+              )}
               {total_pages > 20 ? (
                 <div className="text-center my-10">
                   <StyledPagination

@@ -9,6 +9,7 @@ import {
   Modal,
   Popconfirm,
   Popover,
+  Skeleton,
   Tooltip,
 } from "antd";
 import { UserContext } from "contexts";
@@ -35,10 +36,14 @@ import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import ReactTimeAgo from "react-time-ago";
 import { uid } from "uid";
-import { comment } from "postcss";
-import iconImg from "assets";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
+import {
+  handleFilterReactionOfComment,
+  handleFilterReactionOfReply,
+  handleGenerateTitleReaction,
+  handleShowReactionOfComment,
+} from "./utils-comment";
 
 const { TextArea } = Input;
 
@@ -55,55 +60,14 @@ export const CommentMovie = ({
   lenghtShow,
   handleChangeQuantityComment,
   dataReaction,
+  dataReplyReaction,
+  isLoadingComment,
 }) => {
-  const handleGenerateTitleReaction = (data) => {
-    switch (data) {
-      case "satisfaction":
-        return <p className="text-[#498ae6]">{t("Like")}</p>;
-      case "love":
-        return <p className="text-[#e64949]">{t("Love")}</p>;
-      case "happy":
-        return <p className="text-[#d3df58]">{t("Happy")}</p>;
-      case "surprise":
-        return <p className="text-[#d3df58]">{t("Surprise")}</p>;
-      case "sad":
-        return <p className="text-[#d3df58]">{t("Sad")}</p>;
-      case "angry":
-        return <p className="text-[#e64949]">{t("Angry")}</p>;
-      default:
-        return <p>{t("Reaction")}</p>;
-    }
-  };
-  const handleFilterReactionOfComment = (dataReaction, comment) => {
-    const result = dataReaction.reaction.filter((data) => {
-      return data.id_comment === comment.id_comment;
-    });
-    console.log({ result });
-    return result;
-  };
-  const handleShowReactionOfComment = (type) => {
-    switch (type) {
-      case "happy":
-        return iconImg.lolImg;
-      case "satisfaction":
-        return iconImg.likeImg;
-      case "love":
-        return iconImg.loveImg;
-      case "surprise":
-        return iconImg.wowImg;
-      case "sad":
-        return iconImg.sadImg;
-      case "angry":
-        return iconImg.angryImg;
-      default:
-        return "";
-    }
-  };
   const findReactionOfComment = (dataReaction, comment) => {
     return dataReaction?.reaction?.find(
       (reaction) =>
         reaction?.id_comment === comment?.id_comment &&
-        dataUser.uid === reaction?.user_id
+        dataUser?.uid === reaction?.user_id
     );
   };
   const handleCheckIsUserReaction = (dataReaction, comment) => {
@@ -111,6 +75,22 @@ export const CommentMovie = ({
       return (
         reaction?.user_id === dataUser?.uid &&
         comment?.id_comment === reaction?.id_comment
+      );
+    });
+    return Object.keys(result || {}).length ? true : false;
+  };
+  const findReactionOfReply = (dataReplyReaction, dataReply) => {
+    return dataReplyReaction?.reaction_reply?.find(
+      (reply) =>
+        reply?.id_reply === dataReply?.id_reply &&
+        dataUser?.uid === reply?.user_id
+    );
+  };
+  const handleCheckIsUserReply = (dataReplyReaction, dataReply) => {
+    const result = dataReplyReaction?.reaction_reply?.find((reply) => {
+      return (
+        reply?.user_id === dataUser?.uid &&
+        dataReply?.id_reply === reply?.id_reply
       );
     });
     return Object.keys(result || {}).length ? true : false;
@@ -136,8 +116,6 @@ export const CommentMovie = ({
   const [formUpdateReply] = Form.useForm();
 
   const [valueComment, setValueComment] = useState("");
-  const [idComment, setIdComment] = useState(false);
-  const [valueReply, setValueReply] = useState("");
 
   const replyRef = useRef();
   const repUpdateRely = useRef();
@@ -174,6 +152,7 @@ export const CommentMovie = ({
       comment: arrayUnion(dataAdd),
     });
   };
+
   const handleAddReaction = async (value, idCommentReaction) => {
     const dbfireStore = getFirestore();
 
@@ -188,7 +167,6 @@ export const CommentMovie = ({
       id_reaction: uid(16),
     };
     if (!dataReaction.reaction.length) {
-      console.log("empty");
       await updateDoc(ReactionRef, {
         reaction: arrayUnion(dataAdd),
       });
@@ -197,9 +175,7 @@ export const CommentMovie = ({
         (item) =>
           item.user_id === dataUser.uid && item.id_comment === idCommentReaction
       );
-      console.log(checkExistReaction);
       if (checkExistReaction) {
-        console.log("exits", dataAdd);
         updateDoc(ReactionRef, {
           reaction: arrayRemove(checkExistReaction),
         });
@@ -207,9 +183,46 @@ export const CommentMovie = ({
           reaction: arrayUnion(dataAdd),
         });
       } else {
-        console.log("not e");
         await updateDoc(ReactionRef, {
           reaction: arrayUnion(dataAdd),
+        });
+      }
+    }
+  };
+  // add reaction reply
+  const handleAddReactionReply = async (value, idReplyReaction) => {
+    // debugger;
+    const dbfireStore = getFirestore();
+
+    const ReplyReactionRef = doc(dbfireStore, "reaction_reply", idDetail);
+    const dataAdd = {
+      user_id: dataUser.uid,
+      user_name: nameCurrentUser,
+      user_url: urlImgUser || "",
+      reply_reaction_value: value,
+      createAt: Timestamp.fromDate(new Date()),
+      id_reply: idReplyReaction,
+      id_reply_reaction: uid(16),
+    };
+    if (!dataReplyReaction.reaction_reply.length) {
+      await updateDoc(ReplyReactionRef, {
+        reaction_reply: arrayUnion(dataAdd),
+      });
+    } else {
+      const checkExistReaction = dataReplyReaction.reaction_reply.find(
+        (item) =>
+          item.user_id === dataUser.uid && item.id_reply === idReplyReaction
+      );
+      if (checkExistReaction) {
+        updateDoc(ReplyReactionRef, {
+          reaction_reply: arrayRemove(checkExistReaction),
+        });
+        updateDoc(ReplyReactionRef, {
+          reaction_reply: arrayUnion(dataAdd),
+        });
+      } else {
+        await updateDoc(ReplyReactionRef, {
+          reaction_reply: arrayUnion(dataAdd),
         });
       }
     }
@@ -385,14 +398,17 @@ export const CommentMovie = ({
               </Form.Item>
               <Form.Item>
                 {/* <Button htmlType="submit" loading={submitting} type="primary"> */}
-                <Button htmlType="submit" type="primary">
-                  Add Comment
-                </Button>
+                <button
+                  htmlType="submit"
+                  className="bg-transparent w-[130px] h-[35px] text-white rounded-md border-solid border-[#54a4f3] border-[1px] hover:bg-[#2690fa] hover:text-black"
+                >
+                  {t("Add Comment")}
+                </button>
               </Form.Item>
             </Form>
           }
         />
-        {commentList?.length ? (
+        {commentList?.length || !isLoadingComment ? (
           <ul>
             {commentList?.map((comment, index) => {
               return (
@@ -551,7 +567,7 @@ export const CommentMovie = ({
                                 <div
                                   key={index}
                                   className={`${
-                                    index > 0 ? "block" : "hidden"
+                                    index < 2 && index >= 0 ? "block" : "hidden"
                                   }`}
                                 >
                                   <img
@@ -570,10 +586,13 @@ export const CommentMovie = ({
                           </div>
                         </Tooltip>
                         <p className="text-[16px]">
-                          {
-                            handleFilterReactionOfComment(dataReaction, comment)
-                              .length
-                          }
+                          {handleFilterReactionOfComment(dataReaction, comment)
+                            .length
+                            ? handleFilterReactionOfComment(
+                                dataReaction,
+                                comment
+                              ).length
+                            : ""}
                         </p>
                       </div>
                       <div className="flex text-[14px] gap-2">
@@ -587,10 +606,8 @@ export const CommentMovie = ({
                           )}
                           <p className="absolute top-[-45px] z-20 hidden group-hover:block">
                             <ReactionBarSelector
-                              iconSize="25px"
-                              // reactions={reactions}
+                              iconSize="20px"
                               onSelect={(key) => {
-                                console.log(key);
                                 handleAddReaction(key, comment.id_comment);
                               }}
                               style={{ backgroundColor: "#333335" }}
@@ -601,7 +618,6 @@ export const CommentMovie = ({
                           className="text-[#b2a28e] cursor-pointer"
                           onClick={() => {
                             setCommentSelect(comment.id_comment);
-                            setIdComment(comment.id_comment);
                             replyRef.current.focus();
                           }}
                         >
@@ -787,6 +803,7 @@ export const CommentMovie = ({
                                                         setReplySelectUpdate(
                                                           reply
                                                         );
+                                                        replyRef.current.focus();
                                                       }}
                                                     >
                                                       {" "}
@@ -832,10 +849,99 @@ export const CommentMovie = ({
                                         </div>
                                       </div>
                                     </div>
-                                    <div className="flex text-[14px] gap-2">
-                                      <p className="text-[#b2a28e]">
-                                        {t("Reaction")}
+                                    {/* list reaction reply*/}
+                                    <div className="flex gap-2 mt-2 items-center justify-start max-w-[100px]">
+                                      <Tooltip
+                                        title={t(
+                                          "Click to see detail reaction of this comment"
+                                        )}
+                                      >
+                                        <div
+                                          className="flex mb-0 cursor-pointer"
+                                          onClick={() => {
+                                            setVisibleModal(true);
+                                            setDataModal((pre) => {
+                                              return handleFilterReactionOfReply(
+                                                dataReplyReaction,
+                                                reply
+                                              );
+                                            });
+                                          }}
+                                        >
+                                          {handleFilterReactionOfReply(
+                                            dataReplyReaction,
+                                            reply
+                                          ).map((action, index) => {
+                                            return (
+                                              <div
+                                                key={index}
+                                                className={`${
+                                                  index < 2 && index >= 0
+                                                    ? "block"
+                                                    : "hidden"
+                                                }`}
+                                              >
+                                                <img
+                                                  style={{
+                                                    width: "20px",
+                                                    height: "20px",
+                                                  }}
+                                                  src={handleShowReactionOfComment(
+                                                    action.reply_reaction_value
+                                                  )}
+                                                  alt=""
+                                                />
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      </Tooltip>
+                                      <p className="text-[16px]">
+                                        {handleFilterReactionOfComment(
+                                          dataReplyReaction,
+                                          reply
+                                        )?.length
+                                          ? handleFilterReactionOfComment(
+                                              dataReplyReaction,
+                                              reply
+                                            )?.length
+                                          : ""}
                                       </p>
+                                    </div>
+                                    <div className="flex text-[14px] gap-2">
+                                      {/* reaction reply */}
+                                      <div className="group relative text-[#b2a28e] cursor-pointer">
+                                        {handleGenerateTitleReaction(
+                                          findReactionOfReply(
+                                            dataReplyReaction,
+                                            reply
+                                          ) &&
+                                            handleCheckIsUserReply(
+                                              dataReplyReaction,
+                                              reply
+                                            )
+                                            ? findReactionOfReply(
+                                                dataReplyReaction,
+                                                reply
+                                              )?.reply_reaction_value
+                                            : "Reaction"
+                                        )}
+
+                                        <p className="absolute top-[-45px] z-20 hidden group-hover:block">
+                                          <ReactionBarSelector
+                                            iconSize="20px"
+                                            onSelect={(key) => {
+                                              handleAddReactionReply(
+                                                key,
+                                                reply.id_reply
+                                              );
+                                            }}
+                                            style={{
+                                              backgroundColor: "#333335",
+                                            }}
+                                          />
+                                        </p>
+                                      </div>
                                       <p>
                                         <ReactTimeAgo
                                           className="text-[#b2a28e]"
@@ -857,7 +963,6 @@ export const CommentMovie = ({
                       ) : (
                         ""
                       )}
-                      {/* load more reply */}
                     </div>
                   </div>
                 </li>
@@ -865,13 +970,13 @@ export const CommentMovie = ({
             })}
           </ul>
         ) : (
-          ""
+          <Skeleton paragraph={{ rows: 10 }} />
         )}
         {/* load more */}
         {dataComment?.comment?.length >= 5 ? (
           <div>
             <p
-              className="cursor-pointer text-[#766f6f] text-[18px]"
+              className="cursor-pointer text-[#fff] text-[18px]"
               onClick={() => {
                 const data = lenghtShow < dataComment?.comment?.length ? 5 : -5;
                 handleChangeQuantityComment(data);
@@ -879,7 +984,7 @@ export const CommentMovie = ({
             >
               {lenghtShow < dataComment?.comment?.length
                 ? t("Load more comments")
-                : t("Show less comments")}{" "}
+                : t("Show less comments")}
               {`(${
                 lenghtShow < dataComment?.comment?.length
                   ? lenghtShow
@@ -898,6 +1003,10 @@ export const CommentMovie = ({
         visible={visibleModal}
         wrapClassName="modal-config"
         width={350}
+        style={{
+          top: "50%",
+          transform: "translateY(-50%)",
+        }}
       >
         <div>
           <div className="flex justify-between items-center">
@@ -919,11 +1028,25 @@ export const CommentMovie = ({
             {dataModal.map((item, index) => {
               return (
                 <div key={index} className="flex justify-between mb-2">
-                  <p className="text-white">{item.user_name}</p>
+                  <div className="flex gap-2 items-center">
+                    <p>
+                      <img
+                        src={item.user_url}
+                        alt=""
+                        className="w-[30px] h-[30px] rounded-full"
+                      />
+                    </p>
+                    <p className="text-white">{item.user_name}</p>
+                  </div>
+
                   <p>
                     <img
                       className="w-[28px] h-[28px]"
-                      src={handleShowReactionOfComment(item.reaction_value)}
+                      src={handleShowReactionOfComment(
+                        item.reaction_value
+                          ? item.reaction_value
+                          : item.reply_reaction_value
+                      )}
                       alt=""
                     />
                   </p>

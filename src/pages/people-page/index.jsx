@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { getImage, handleScrollToTop } from "utils";
 import { UserContext } from "contexts";
 import { useRef } from "react";
-import { ImageCustom, StyledPagination } from "components";
+import { ImageCustom, SkeletonCustom, StyledPagination } from "components";
 import iconImg from "assets";
 import { useTranslation } from "react-i18next";
 const { Meta } = Card;
@@ -81,13 +81,6 @@ const PeoplePage = () => {
     <div className="min-h-[100vh]">
       <div className="flex justify-end mb-10">
         <div className="grow-[1] max-w-[350px]">
-          {/* <Search
-            placeholder="Search cast"
-            defaultValue={filters.query}
-            size="large"
-            loading={isLoading}
-            onChange={handleSearch}
-          /> */}
           <input
             type="text"
             placeholder={`${t("Search")}...`}
@@ -99,7 +92,8 @@ const PeoplePage = () => {
       </div>
 
       {isLoading ? (
-        <Skeleton active paragraph={{ rows: 20 }} />
+        // <Skeleton active paragraph={{ rows: 20 }} />
+        <SkeletonCustom quantity={10} />
       ) : (
         <div className="flex flex-wrap gap-10">
           {listPopularPeople.map((people, index) => {

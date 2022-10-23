@@ -71,7 +71,8 @@ export const ContentDiscovery = ({
                   }}
                 >
                   <div className="h-[100%] flex flex-col">
-                    <ImageCustom
+                    <img
+                      alt=""
                       src={
                         !getImage(itemMovie.poster_path, "w185").includes(
                           "null"
@@ -144,7 +145,8 @@ export const ContentDiscovery = ({
                   }}
                 >
                   <div className="h-[100%] flex flex-col">
-                    <ImageCustom
+                    <img
+                      alt=""
                       src={
                         !getImage(itemMovie.poster_path, "w185").includes(
                           "null"
@@ -202,8 +204,6 @@ export const ContentDiscovery = ({
               ""
             )}
           </div>
-
-          <div className="mt-5">asdasdasd</div>
         </StyledTabs.TabPane>
       </StyledTabs>
     </div>

@@ -75,7 +75,6 @@ const LoginPage = () => {
       localStorage.setItem("refreshToken", refreshToken);
       navigate("/");
     } catch (error) {
-      console.log(error.code);
       setIsLoading(false);
       if (error.code === "auth/wrong-password") {
         message.error("Please check the Password");
@@ -88,9 +87,7 @@ const LoginPage = () => {
     }
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log(errorInfo);
-  };
+  const onFinishFailed = (errorInfo) => {};
 
   // login with facebook
   const handleSignInWithfacebook = async () => {
@@ -113,9 +110,7 @@ const LoginPage = () => {
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
       navigate("/");
-    } catch (error) {
-      console.log("error", error.message);
-    }
+    } catch (error) {}
   };
   // login with google
   const handleSignInWithGoogle = async () => {
@@ -139,9 +134,7 @@ const LoginPage = () => {
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
       navigate("/");
-    } catch (error) {
-      console.log("error", error.message);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     handleChangeTitle(t("Login"));

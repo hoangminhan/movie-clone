@@ -41,7 +41,7 @@ export const ModalTrailer = ({
   const currentType =
     sessionStorage.getItem("currentTab") === "tab-tv-show" ? "tv" : "movie";
   const navigate = useNavigate();
-  const { handleAddBookMarked } = useAddList();
+  const { handleAddBookMarked, handleAddHistory } = useAddList();
   const [isFavorite, setIsFavorite] = useState(false);
   const accessToken = localStorage.getItem("accessToken") || "";
 
@@ -81,7 +81,7 @@ export const ModalTrailer = ({
       visible={visibleModal}
       wrapClassName="modal-config"
       style={{
-        top: 80,
+        top: 0,
       }}
       closable={false}
       footer={null}
@@ -132,7 +132,13 @@ export const ModalTrailer = ({
           <Row>
             <div className="mb-8">
               <Link to={`/${currentType}/${dataDetail.id}`}>
-                <ButtomCustom title="Play" nameIcon="iconPlay" />
+                <ButtomCustom
+                  title="Play"
+                  nameIcon="iconPlay"
+                  onClick={() => {
+                    handleAddHistory(dataDetail);
+                  }}
+                />
               </Link>
             </div>
             {/* add playlist */}
