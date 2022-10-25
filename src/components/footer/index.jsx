@@ -28,7 +28,7 @@ export const Footer = ({ toggleMenu }) => {
         <FontAwesomeIcon icon={faYoutube} className="hover:text-[#ccc]" />
       </div>
       <div className="text-[14px] lg:text-[16px] pt-2 md:pt-4">
-        <Row gutter={[6, 6]}>
+        <Row>
           <Col span={5}>
             <div>
               <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
