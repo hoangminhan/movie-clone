@@ -5,37 +5,17 @@ import {
   faThumbTack,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Col,
-  Empty,
-  message,
-  Progress,
-  Row,
-  Skeleton,
-  Spin,
-  Tooltip,
-} from "antd";
+import { Col, message, Row, Skeleton, Tooltip } from "antd";
 import ReactLoading from "react-loading";
 
-import {
-  ButtonAddList,
-  ComponentSlider,
-  ImageCustom,
-  LoadingSuspense,
-} from "components";
+import { ComponentSlider, SkeletonCustom } from "components";
 import { reducerClearSimilarMovie } from "features";
 import { useHomePage } from "hooks/use-homepage";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Iframe from "react-iframe";
 import { useDispatch } from "react-redux";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
-import styled from "styled-components";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import {
   embedMovie,
   embedTV,
@@ -47,38 +27,21 @@ import { BodyWatch, CommentMovie, EpisodeTv, Hero } from "./components";
 import { useContext } from "react";
 import { UserContext } from "contexts";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { useFirebaseRealTime, useTitle } from "hooks";
+import { useTitle } from "hooks";
 import {
-  addDoc,
   collection,
   doc,
   getDoc,
   getDocs,
   getFirestore,
   onSnapshot,
-  orderBy,
   setDoc,
   where,
-  limit,
 } from "firebase/firestore";
 
-import {
-  child,
-  get,
-  getDatabase,
-  onChildAdded,
-  onValue,
-  orderByChild,
-  push,
-  query,
-  ref,
-  set,
-} from "firebase/database";
-import moment from "moment";
+import { query } from "firebase/database";
 
 const WatchMovieTv = () => {
-  let { idDetail } = useParams();
-  const [t] = useTranslation();
   const {
     handleGetDetailMovie,
     dataDetail,
@@ -93,13 +56,47 @@ const WatchMovieTv = () => {
     handleGetEpisodeTv,
     listCastsMovie,
     listKeywordsMovie,
-    listReviewsMovie,
     listRecommendationMovie,
     infoTrailerMovie,
     dataSeasonTv,
     isLoading,
     dataEposideTv,
   } = useHomePage();
+  const { handleChangeTitle } = useTitle();
+
+  let { idDetail } = useParams();
+  const [t] = useTranslation();
+
+  const [isLoadingDetail, setIsLoadingDetail] = useState(true);
+  const [isLoadMore, setIsLoadMore] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams({});
+  const [season, setSeason] = useState({
+    numberSearson: 1,
+    currentSeason: searchParams.get("currentSeason") || 1,
+    currentEpisode: searchParams.get("currentEpisode") || 1,
+  });
+
+  const stateContext = useContext(UserContext);
+  const { currentTabGlobal, currentDataUser } = stateContext;
+  const [tabGlobal] = currentTabGlobal;
+  const [dataUser, setDataUser] = currentDataUser;
+
+  const [dataComment, setDataComment] = useState({});
+  const [dataReply, setDataReply] = useState({});
+  const [dataReaction, setDataReaction] = useState({});
+  const [dataReplyReaction, setDataReplyReaction] = useState({});
+  const [currentKey, setCurrentKey] = useState();
+  const [nameCurrentUser, setNameCurrentUser] = useState();
+  const [urlImgUser, setUrlImgUser] = useState(false);
+  const [lenghtShow, setLengthShow] = useState(5);
+  const [isLoadingComment, setIsLoadingComment] = useState(false);
+
+  const [currentUrl, setCurrentUrl] = useState("");
+  const handleChangeQuantityComment = (data) => {
+    setLengthShow((pre) => pre + data);
+  };
 
   // render season
   const handleRenderSeason = (number) => {
@@ -111,16 +108,6 @@ const WatchMovieTv = () => {
     }
     return i;
   };
-  const { handleChangeTitle } = useTitle();
-
-  const [currentUrl, setCurrentUrl] = useState("");
-  // const handleChangeUrl = (newUrl) => {
-  //   setCurrentUrl(newUrl);
-  // };
-  const [isLoadingDetail, setIsLoadingDetail] = useState(true);
-  const [isLoadMore, setIsLoadMore] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const dispatch = useDispatch();
 
   const executeScroll = () => {
     const elementToScroll = document.getElementById("similar-movie");
@@ -130,31 +117,6 @@ const WatchMovieTv = () => {
       });
     }
   };
-  const [searchParams, setSearchParams] = useSearchParams({});
-
-  const [season, setSeason] = useState({
-    numberSearson: 1,
-    currentSeason: searchParams.get("currentSeason") || 1,
-    currentEpisode: searchParams.get("currentEpisode") || 1,
-  });
-
-  useEffect(() => {
-    const type = sessionStorage.getItem("currentTab") || "/";
-    const currentType = type === "tab-tv-show" ? "tv" : "movie";
-    if (currentType === "tv") {
-      setSearchParams({
-        ...season,
-      });
-    }
-  }, [season]);
-  useEffect(() => {
-    handleChangeTitle(dataDetail.title ? dataDetail.title : dataDetail.name);
-  }, [dataDetail]);
-
-  const stateContext = useContext(UserContext);
-  const { currentTabGlobal, currentDataUser } = stateContext;
-  const [tabGlobal] = currentTabGlobal;
-  const [dataUser, setDataUser] = currentDataUser;
 
   const handleLoadMoreSimilar = async () => {
     setIsLoadMore(true);
@@ -176,8 +138,6 @@ const WatchMovieTv = () => {
     setIsLoadMore(false);
   };
 
-  // scroll
-
   // change episode
   const handleChangeEpisode = (episode) => {
     if (+episode !== +season.currentEpisode) {
@@ -187,6 +147,37 @@ const WatchMovieTv = () => {
       message.warning(`Bạn đang ở episode ${episode}`);
     }
   };
+
+  // handle hide comment
+  const handleHideComment = async (data) => {
+    const newDataComment = dataComment.comment.filter(
+      (item) => item.id_comment !== data.id_comment
+    );
+
+    setDataComment({ ...dataComment, comment: [...newDataComment] });
+  };
+
+  // handle hide reply
+  const handleHideReply = async (data) => {
+    const newDataReply = dataReply.reply.filter(
+      (item) => item.id_reply !== data.id_reply
+    );
+    setDataReply({ ...dataReply, reply: [...newDataReply] });
+  };
+
+  useEffect(() => {
+    const type = sessionStorage.getItem("currentTab") || "/";
+    const currentType = type === "tab-tv-show" ? "tv" : "movie";
+    if (currentType === "tv") {
+      setSearchParams({
+        ...season,
+      });
+    }
+  }, [season]);
+
+  useEffect(() => {
+    handleChangeTitle(dataDetail.title ? dataDetail.title : dataDetail.name);
+  }, [dataDetail]);
 
   //   get data detail movie
   useLayoutEffect(() => {
@@ -285,14 +276,6 @@ const WatchMovieTv = () => {
     };
     handleGetData();
   }, [idDetail, season.currentEpisode, season.currentSeason]);
-  const [dataComment, setDataComment] = useState({});
-  const [dataReply, setDataReply] = useState({});
-  const [dataReaction, setDataReaction] = useState({});
-  const [dataReplyReaction, setDataReplyReaction] = useState({});
-  const [currentKey, setCurrentKey] = useState();
-  const { handleCheckIsExist } = useFirebaseRealTime();
-  const [nameCurrentUser, setNameCurrentUser] = useState();
-  const [urlImgUser, setUrlImgUser] = useState(false);
 
   // get name current user
 
@@ -312,12 +295,6 @@ const WatchMovieTv = () => {
     };
     getNameCurrentUser();
   }, [dataUser]);
-  const [lenghtShow, setLengthShow] = useState(5);
-  const handleChangeQuantityComment = (data) => {
-    setLengthShow((pre) => pre + data);
-  };
-
-  const [isLoadingComment, setIsLoadingComment] = useState(false);
 
   // check movie have at realtime yet, to push item
   useEffect(() => {
@@ -441,23 +418,6 @@ const WatchMovieTv = () => {
     handleGetdata();
   }, [idDetail]);
 
-  // handle hide comment
-  const handleHideComment = async (data) => {
-    const newDataComment = dataComment.comment.filter(
-      (item) => item.id_comment !== data.id_comment
-    );
-
-    setDataComment({ ...dataComment, comment: [...newDataComment] });
-  };
-
-  // handle hide reply
-  const handleHideReply = async (data) => {
-    const newDataReply = dataReply.reply.filter(
-      (item) => item.id_reply !== data.id_reply
-    );
-    setDataReply({ ...dataReply, reply: [...newDataReply] });
-  };
-
   return (
     <div>
       <Row className="mr-[350px] h-full">
@@ -494,7 +454,7 @@ const WatchMovieTv = () => {
 
             {/* xem phim */}
             <div className="my-10 mx-4 overflow-hidden" id="movie-id">
-              {/* {currentUrl && (
+              {currentUrl && (
                 <Iframe
                   id="movie-id"
                   src={currentUrl}
@@ -502,7 +462,7 @@ const WatchMovieTv = () => {
                   width="100%"
                   allowFullScreen
                 ></Iframe>
-              )} */}
+              )}
             </div>
 
             {/* eposide tv */}
@@ -623,52 +583,46 @@ const WatchMovieTv = () => {
             <p id="similar-movie" className="text-white mt-6 mb-8 uppercase">
               {t("Similar")}
             </p>
-            <Skeleton active loading={isLoading} paragraph={{ rows: 30 }}>
-              <div className="flex flex-col gap-5">
-                {listSimilarMovie?.map((similarContent, index) => {
-                  return (
-                    <Link key={index} to={`/movie/${similarContent.id}`}>
-                      <div
-                        className="group flex gap-4 text-[#fff] cursor-pointer hover:brightness-125
+            <div className="flex flex-col gap-5">
+              {listSimilarMovie?.map((similarContent, index) => {
+                return (
+                  <Link key={index} to={`/movie/${similarContent.id}`}>
+                    <div
+                      className="group flex gap-4 text-[#fff] cursor-pointer hover:brightness-125
                 
                 "
-                        onClick={() => {
-                          // navigate(`movie/${similarContent.id}`);
-                        }}
-                      >
-                        <div className="max-w-[100px] w-full group-hover:scale-110 duration-200 delay-150">
-                          <img
-                            src={getImage(similarContent.poster_path, "w154")}
-                            className="w-[154px] object-contain rounded-lg rounded-global"
-                            alt=""
-                          />
-                        </div>
-                        <div className="grow">
-                          <p className="text-[18px] line-clamp-2">
-                            {similarContent.title
-                              ? similarContent.title
-                              : similarContent.name}
-                          </p>
-                          <p className="text-[15px] text-[#ccc]">
-                            {similarContent.release_date
-                              ? similarContent.release_date
-                              : similarContent.first_air_date}
-                          </p>
-                          <p className="text-[16px] text-yellow-400">
-                            {formatNumber(similarContent.vote_average, 10)}{" "}
-                            &nbsp;
-                            <FontAwesomeIcon icon={faStar} color="yellow" />
-                          </p>
-                        </div>
+                      onClick={() => {
+                        // navigate(`movie/${similarContent.id}`);
+                      }}
+                    >
+                      <div className="max-w-[100px] w-full group-hover:scale-110 duration-200 delay-150">
+                        <img
+                          src={getImage(similarContent.poster_path, "w154")}
+                          className="w-[154px] object-contain rounded-lg rounded-global"
+                          alt=""
+                        />
                       </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            </Skeleton>
-            {/* <div className="h-[100%] flex items-center justify-center">
-                <Empty />
-              </div> */}
+                      <div className="grow">
+                        <p className="text-[18px] line-clamp-2">
+                          {similarContent.title
+                            ? similarContent.title
+                            : similarContent.name}
+                        </p>
+                        <p className="text-[15px] text-[#ccc]">
+                          {similarContent.release_date
+                            ? similarContent.release_date
+                            : similarContent.first_air_date}
+                        </p>
+                        <p className="text-[16px] text-yellow-400">
+                          {formatNumber(similarContent.vote_average, 10)} &nbsp;
+                          <FontAwesomeIcon icon={faStar} color="yellow" />
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
 
             {listSimilarMovie?.length ? (
               <div className="my-8 text-center">
@@ -690,7 +644,9 @@ const WatchMovieTv = () => {
                 )}
               </div>
             ) : (
-              ""
+              <div>
+                <SkeletonCustom quantity={10} />
+              </div>
             )}
           </div>
         ) : (

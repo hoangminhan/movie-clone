@@ -54,7 +54,7 @@ export const useAddList = () => {
           user_id: dataUser.uid,
         }),
       });
-      notification.success({
+      notification.error({
         message: "Xoa khoi list bookmark",
       });
     } else {

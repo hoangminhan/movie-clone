@@ -57,6 +57,7 @@ const DiscoveryPage = () => {
   } = useHomePage();
 
   const handleChangeCurrentTab = (tab) => {
+    console.log({ tab });
     setCurrentTab(tab);
     if (tab) {
       setFilters({
@@ -178,6 +179,7 @@ const DiscoveryPage = () => {
     const getData = async () => {
       const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
       const type = currentTab ? "movie" : "tv";
+      console.log({ type });
 
       await handleGetListGenresMovie(type, {
         api_key: process.env.REACT_APP_API_KEY,
@@ -190,22 +192,18 @@ const DiscoveryPage = () => {
   return (
     <div className="py-[12px] min-h-[100vh] ">
       <Row gutter={[12, 12]}>
-        {isLoadingSkeleton ? (
-          <Col span={20}>
-            <SkeletonCustom quantity={10} />
-          </Col>
-        ) : (
-          <Col span={20}>
-            <ContentDiscovery
-              currentTab={currentTab}
-              handleChangeCurrentTab={handleChangeCurrentTab}
-              handleChangePage={handleChangePage}
-              dataDiscoverMovie={dataDiscoverMovie}
-              filters={filters}
-              isLoadingDiscover={isLoading}
-            />
-          </Col>
-        )}
+        <Col span={20}>
+          <ContentDiscovery
+            currentTab={currentTab}
+            handleChangeCurrentTab={handleChangeCurrentTab}
+            handleChangePage={handleChangePage}
+            dataDiscoverMovie={dataDiscoverMovie}
+            filters={filters}
+            isLoadingDiscover={isLoading}
+            isLoadingSkeleton={isLoadingSkeleton}
+          />
+        </Col>
+
         <Col span={4} className="mt-[75px]">
           <Filter
             listGenresMovie={listGenresMovie}

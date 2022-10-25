@@ -1,6 +1,7 @@
 import { UserContext } from "contexts";
 import { useHomePage } from "hooks/use-homepage";
 import React, { useContext, useEffect } from "react";
+import { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
 const HomePage = () => {

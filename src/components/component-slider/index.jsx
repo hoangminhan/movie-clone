@@ -38,6 +38,32 @@ export const ComponentSlider = React.memo(
             loopFillGroupWithBlank={true}
             navigation={true}
             modules={[Pagination, Navigation]}
+            breakpoints={{
+              300: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+              500: {
+                slidesPerView: 2,
+                spaceBetween: 10,
+              },
+              600: {
+                slidesPerView: 3,
+                spaceBetween: 20,
+              },
+              768: {
+                slidesPerView: 4,
+                spaceBetween: 40,
+              },
+              1024: {
+                slidesPerView: 5,
+                spaceBetween: 50,
+              },
+              1300: {
+                slidesPerView: 7.3,
+                spaceBetween: 30,
+              },
+            }}
             className="swiper-popular"
           >
             {dataPopular?.map((item, index) => {
@@ -103,7 +129,7 @@ export const ComponentSlider = React.memo(
         ) : (
           // <span className="mb-[64px] inline-block">{t("Updating")}...</span>
           // <Skeleton active />
-          <SkeletonCustom quantity={5} />
+          <SkeletonCustom quantity={4} />
         )}
       </div>
     );

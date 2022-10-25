@@ -28,7 +28,7 @@ export const LanguageProject = () => {
             width="25px"
           />
         </div>
-        <p className="text-[18px] ml-2 text-white">
+        <p className="text-[16px] ml-2 text-white">
           {globalLocale === "vi-VN" ? "Viet Nam" : "English"}
         </p>
       </div>

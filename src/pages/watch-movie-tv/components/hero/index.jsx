@@ -19,7 +19,7 @@ import { useAddList, useNotification } from "hooks";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
+export const Hero = ({ dataDetail }) => {
   const [t] = useTranslation();
   const { handleAddBookMarked, handleAddHistory } = useAddList();
   const [isFavorite, setIsFavorite] = useState(false);
@@ -30,6 +30,14 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
   const accessToken = localStorage.getItem("accessToken") || "";
   const { handlePopupNotification } = useNotification();
   const [replaceStatus, setReplaceStatus] = useState(false);
+  const { isLoading } = useHomePage();
+
+  const executeScroll = () => {
+    const elementToScroll = document.getElementById("movie-id");
+    elementToScroll.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
     if (dataDetail.id) {
@@ -61,18 +69,6 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
     }
   }, [dataDetail, dataUser.uid, isFavorite, replaceStatus]);
 
-  useEffect(() => {
-    const getData = async () => {};
-    getData();
-  }, []);
-  const { isLoading } = useHomePage();
-  const executeScroll = () => {
-    const elementToScroll = document.getElementById("movie-id");
-    elementToScroll.scrollIntoView({
-      behavior: "smooth",
-    });
-  };
-
   return (
     <div className="max-h-[500px]">
       {isLoading ? (
@@ -88,6 +84,7 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
             className="object-fill max-h-[500px] w-full rounded-b-lg"
             alt="hero"
           />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0b0b0bd9] to-transparent "></div>
 
           {/* poster */}
           <div className="absolute bottom-[-15%] left-[15%] max-w-[185px]">
@@ -97,7 +94,7 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
                   ? iconImg.Img404
                   : getImage(dataDetail.poster_path, "w185")
               }
-              className="rounded-global"
+              // className="rounded-global"
               alt="poster"
             />
           </div>
@@ -158,8 +155,8 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
                     to={`/genres/${genre.id}-${genre.name}`}
                     state={{ genreName: genre.name }}
                   >
-                    <p className="max-w-[140px] line-clamp-1 py-1 px-3 border-solid border-white border-[1px] mr-3 rounded-3xl text-white text-[16px] uppercase cursor-pointer hover:scale-110 duration-150 ">
-                      {genre.name}
+                    <p className="max-w-[120px] line-clamp-1 px-3 border-solid border-white border-[1px] mr-3 rounded-3xl text-white text-[14px] uppercase cursor-pointer hover:scale-110 duration-150 ">
+                      {genre.name.replace("Phim", "")}
                     </p>
                   </Link>
                 </Tooltip>
@@ -173,15 +170,13 @@ export const Hero = ({ dataDetail, handleChangeUrl, isLoadingDetail }) => {
             onClick={() => {
               executeScroll();
               handleAddHistory(dataDetail);
-
-              // handleChangeUrl(embedMovie(dataDetail.id));
             }}
           >
-            <div className="flex items-center justify-center px-4 py-3 bg-primary text-white rounded-[20px] hover:scale-110 duration-200 cursor-pointer">
-              <p className="w-5 h-5 bg-[red] flex items-center justify-center p-4 rounded-full">
+            <div className="flex items-center justify-center px-4 py-2 bg-primary text-white rounded-[20px] hover:scale-110 duration-200 cursor-pointer">
+              <p className="w-5 h-5 bg-[red] flex items-center justify-center p-3 rounded-full">
                 <FontAwesomeIcon icon={faPlay} fontSize="16px" />
               </p>
-              <p className="ml-2">{t("Watch now")}</p>
+              <p className="ml-2 text-[20px]">{t("Watch now")}</p>
             </div>
           </div>
         </div>

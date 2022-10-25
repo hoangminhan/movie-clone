@@ -11,15 +11,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { unwrapResult } from "@reduxjs/toolkit";
 import iconImg from "assets";
 import { ButtomCustom, ButtonPlay } from "components";
-import { useFirebaseRealTime, useModal } from "hooks";
+import { useModal } from "hooks";
 import { useHomePage } from "hooks/use-homepage";
 import { t } from "i18next";
 import { ModalTrailer } from "modal/components";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Autoplay, Navigation, Pagination } from "swiper";
 import { formatNumber, getImage, handleOpenNotification } from "utils";
-import { UserContext } from "contexts";
+import { Skeleton } from "antd";
 
 export const Banner = ({ listTrending, isLoading }) => {
   const {
@@ -29,9 +29,6 @@ export const Banner = ({ listTrending, isLoading }) => {
     handleGetSimilarMovie,
   } = useHomePage();
 
-  const stateContext = useContext(UserContext);
-  const { currentDataUser } = stateContext;
-  const [dataUser, setDataUser] = currentDataUser;
   const [visibleModal, setVisibleModal] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
   const [dataDetail, setDataDetail] = useState({});
@@ -43,6 +40,9 @@ export const Banner = ({ listTrending, isLoading }) => {
   const navigate = useNavigate();
   const { resultModal, handleToggleAutoBanner } = useModal();
   const { stopSlider } = resultModal;
+  const currentType =
+    sessionStorage.getItem("currentTab") === "tab-tv-show" ? "tv" : "movie";
+
   // get type movie
   const handleGetTypeMovie = (listId, listType) => {
     let newList = [];
@@ -58,8 +58,6 @@ export const Banner = ({ listTrending, isLoading }) => {
   const handleCloseModal = (data) => {
     setVisibleModal(data);
   };
-  const currentType =
-    sessionStorage.getItem("currentTab") === "tab-tv-show" ? "tv" : "movie";
 
   // handle click trailer
   const handleClickTrailer = async (slider) => {
@@ -67,6 +65,7 @@ export const Banner = ({ listTrending, isLoading }) => {
       sessionStorage.getItem("currentTab") === "tab-tv-show" ? "tv" : "movie";
     const currentLocale = sessionStorage.getItem("currentLocale") || "vi-VN";
     const { id: idMovie, media_type: type } = slider;
+
     handleGetListCasts(
       idMovie,
       {
@@ -151,7 +150,6 @@ export const Banner = ({ listTrending, isLoading }) => {
       getDataDetail();
     }
   }, [listTrending, setListType, currentActiveIndex]);
-  const { handleCheckIsExist } = useFirebaseRealTime();
 
   return (
     <>
@@ -197,23 +195,7 @@ export const Banner = ({ listTrending, isLoading }) => {
                     <FontAwesomeIcon icon={faStar} className="text-white" />
                   </div>
 
-                  <div className="absolute top-[-8px] right-[0px] text-[13px]">
-                    {/* <Badge.Ribbon
-                      size="large"
-                      color="#1890ff"
-                      text={
-                        <p className="rounded-[10px]  m-0 leading-6">
-                          {formatNumber(slider.vote_average, 10)}
-                          <span className="inline-block ml-1">
-                            <FontAwesomeIcon
-                              icon={faStar}
-                              className="text-white"
-                            />
-                          </span>
-                        </p>
-                      }
-                    ></Badge.Ribbon> */}
-                  </div>
+                  <div className="absolute top-[-8px] right-[0px] text-[13px]"></div>
                   {/* title */}
                   <div className="absolute top-[40%] left-[5%] -translate-y-1/2">
                     <h2 className="flex text-[32px] text-primary max-w-[500px]">
@@ -282,15 +264,6 @@ export const Banner = ({ listTrending, isLoading }) => {
                       >
                         <ButtomCustom nameIcon="iconPlay" />
                       </div>
-                      {/* play */}
-                      {/* <div
-                      className="ease-in-out delay-250 hover:scale-110 duration-300"
-                      onClick={() => {
-                        navigate(`movie/${slider.id}`);
-                      }}
-                    >
-                      <ButtomCustom nameIcon="iconPlay" title="Play" />
-                    </div> */}
                     </div>
                   </div>
 
@@ -308,10 +281,6 @@ export const Banner = ({ listTrending, isLoading }) => {
                     }}
                   >
                     <ButtonPlay size="large" sizeImg="30px" />
-                    {/* <FontAwesomeIcon
-                    icon={faCaretRight}
-                    className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2"
-                  /> */}
                   </div>
                 </div>
               </SwiperSlide>

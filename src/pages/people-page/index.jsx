@@ -9,6 +9,8 @@ import { useRef } from "react";
 import { ImageCustom, SkeletonCustom, StyledPagination } from "components";
 import iconImg from "assets";
 import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 const { Meta } = Card;
 
 const { Search } = Input;
@@ -79,7 +81,7 @@ const PeoplePage = () => {
   };
   return (
     <div className="min-h-[100vh]">
-      <div className="flex justify-end mb-10">
+      {/* <div className="flex justify-end mb-10">
         <div className="grow-[1] max-w-[350px]">
           <input
             type="text"
@@ -89,33 +91,51 @@ const PeoplePage = () => {
             onChange={handleSearch}
           />
         </div>
+      </div> */}
+      <div className="flex justify-end mb-10">
+        <div className="w-[250px] relative">
+          <input
+            ref={refSearch}
+            placeholder={`${t("Search")}...`}
+            defaultValue={filters.query}
+            type="text"
+            className="w-full  border-none outline-none px-4 pl-[50px] py-1 rounded-3xl bg-[#333335] text-white"
+            onChange={handleSearch}
+          />
+          <FontAwesomeIcon
+            icon={faSearch}
+            className="absolute left-[10px] top-[50%] -translate-y-1/2 text-white"
+          />
+        </div>
       </div>
 
       {isLoading ? (
         // <Skeleton active paragraph={{ rows: 20 }} />
         <SkeletonCustom quantity={10} />
       ) : (
-        <div className="flex flex-wrap gap-10">
-          {listPopularPeople.map((people, index) => {
-            return (
-              <Link to={`/cast/${people.id}`} key={index}>
-                <div className="rounded-lg overflow-hidden hover:scale-110 duration-200 max-w-[185px] h-full flex flex-col">
-                  <img
-                    alt="people"
-                    className="flex-1"
-                    src={
-                      getImage(people.profile_path, "w185").includes(null)
-                        ? iconImg.Img404
-                        : getImage(people.profile_path, "w185")
-                    }
-                  />
-                  <p className="text-[18px] text-center line-clamp-1">
-                    {people.name}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
+        <div className="flex justify-between">
+          <div className="flex flex-wrap gap-10 justify-center">
+            {listPopularPeople.map((people, index) => {
+              return (
+                <Link to={`/cast/${people.id}`} key={index}>
+                  <div className="rounded-lg overflow-hidden hover:scale-110 duration-200 max-w-[185px] h-full flex flex-col">
+                    <img
+                      alt="people"
+                      className="flex-1"
+                      src={
+                        getImage(people.profile_path, "w185").includes(null)
+                          ? iconImg.Img404
+                          : getImage(people.profile_path, "w185")
+                      }
+                    />
+                    <p className="text-[18px] text-center line-clamp-1">
+                      {people.name}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       )}
 

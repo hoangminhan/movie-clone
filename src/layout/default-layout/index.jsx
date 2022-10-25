@@ -28,7 +28,9 @@ export const DefaultLayout = ({
       <Sidebar isToggle={toggleMenu} handleToggleMenu={handleToggleMenu} />
       <div
         className={`${
-          toggleMenu ? "ml-[100px] duration-300 ease-in-out" : "ml-[270px]"
+          toggleMenu
+            ? "ml-[100px] duration-300 ease-in-out"
+            : "ml-0 sm:ml-[200px] lg:ml-[270px]"
         }`}
       >
         <section

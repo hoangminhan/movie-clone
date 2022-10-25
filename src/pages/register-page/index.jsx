@@ -106,8 +106,8 @@ const RegisterPage = () => {
       </video>
       <div className="bg-black/40 h-[100vh]"></div>
 
-      <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 max-w-[550px] w-[550px] text-center leading-relaxed ">
-        <p className="text-[white] text-[40px] font-bold">
+      <div className="px-3 sm:px-0 absolute top-[100px]  sm:top-[50%] left-0 right-0 sm:left-[50%] sm:-translate-x-1/2 sm:-translate-y-1/2 pb-8 sm:pb-0 max-w-[550px] w-full sm:w-[550px] text-center leading-relaxed ">
+        <p className="text-[white] text-[25px] sm:text-[40px] font-bold">
           {t("Register Account")}
         </p>
 
@@ -137,7 +137,7 @@ const RegisterPage = () => {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
-            <div className="flex gap-10 justify-between">
+            <div className="flex flex-col sm:flex-row gap-0 sm:gap-10 justify-between">
               <Form.Item
                 label={
                   <label

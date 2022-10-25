@@ -2,7 +2,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Empty, Pagination, Skeleton, Tabs, Tooltip } from "antd";
 import iconImg from "assets";
-import { ImageCustom, StyledPagination } from "components";
+import { ImageCustom, SkeletonCustom, StyledPagination } from "components";
 import { UserContext } from "contexts";
 import { useHomePage } from "hooks/use-homepage";
 import React from "react";
@@ -41,10 +41,12 @@ export const ContentDiscovery = ({
   dataDiscoverMovie,
   isLoadingDiscover,
   filters,
+  isLoadingSkeleton,
 }) => {
   const handleChangeTab = (activeKey) => {
+    console.log(typeof activeKey);
     if (handleChangeCurrentTab) {
-      handleChangeCurrentTab(activeKey === "1" ? true : false);
+      handleChangeCurrentTab(activeKey === "true" ? true : false);
     }
   };
   const { page, results: resultDiscover, total_pages } = dataDiscoverMovie;
@@ -55,62 +57,65 @@ export const ContentDiscovery = ({
   return (
     <div className="">
       <StyledTabs defaultActiveKey={currentTab} onChange={handleChangeTab}>
-        <StyledTabs.TabPane tab="Movie" key="1">
+        <StyledTabs.TabPane tab="Movie" key={true}>
           {/* content tab movie */}
-
-          <div className="mt-5 flex flex-wrap gap-x-10 gap-y-10">
-            {resultDiscover?.map((itemMovie, index) => {
-              return (
-                <div
-                  key={index}
-                  className="hover:scale-110 duration-200 cursor-pointer relative rounded-b-lg rounded-tl-lg overflow-hidden"
-                  onClick={() => {
-                    navigate(`/movie/${itemMovie.id}`);
-                    sessionStorage.setItem("currentTab", "/");
-                    setTabGlobal("/");
-                  }}
-                >
-                  <div className="h-[100%] flex flex-col">
-                    <img
-                      alt=""
-                      src={
-                        !getImage(itemMovie.poster_path, "w185").includes(
-                          "null"
-                        )
-                          ? getImage(itemMovie.poster_path, "w185")
-                          : iconImg.Img404
-                      }
-                      width="185px"
-                      height="100%"
-                      className="rounded-b-lg grow-[1]"
-                    />
-                    <Tooltip title={itemMovie.title}>
-                      <p className="pt-2 text-center text-[18px] max-w-[185px] bg-[#1c1c1e] line-clamp-1">
-                        {itemMovie.title}
-                      </p>
-                    </Tooltip>
-                  </div>
-                  {/* rate */}
-                  <div className="absolute top-[-8px] right-[0px] text-[13px]">
-                    <Badge.Ribbon
-                      color="#1890ff"
-                      text={
-                        <p className="rounded-[10px] leading-6">
-                          {formatNumber(itemMovie.vote_average, 10)}
-                          <span className="inline-block ml-1">
-                            <FontAwesomeIcon
-                              icon={faStar}
-                              className="text-white"
-                            />
-                          </span>
+          {isLoadingSkeleton ? (
+            <SkeletonCustom quantity={10} />
+          ) : (
+            <div className="mt-5 flex flex-wrap gap-x-10 gap-y-10 justify-center">
+              {resultDiscover?.map((itemMovie, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="hover:scale-110 duration-200 cursor-pointer relative rounded-b-lg rounded-tl-lg overflow-hidden"
+                    onClick={() => {
+                      navigate(`/movie/${itemMovie.id}`);
+                      sessionStorage.setItem("currentTab", "/");
+                      setTabGlobal("/");
+                    }}
+                  >
+                    <div className="h-[100%] flex flex-col">
+                      <img
+                        alt=""
+                        src={
+                          !getImage(itemMovie.poster_path, "w185").includes(
+                            "null"
+                          )
+                            ? getImage(itemMovie.poster_path, "w185")
+                            : iconImg.Img404
+                        }
+                        width="185px"
+                        height="100%"
+                        className="rounded-b-lg grow-[1]"
+                      />
+                      <Tooltip title={itemMovie.title}>
+                        <p className="pt-2 text-center text-[18px] max-w-[185px] bg-[#1c1c1e] line-clamp-1">
+                          {itemMovie.title}
                         </p>
-                      }
-                    ></Badge.Ribbon>
+                      </Tooltip>
+                    </div>
+                    {/* rate */}
+                    <div className="absolute top-[-8px] right-[0px] text-[13px]">
+                      <Badge.Ribbon
+                        color="#1890ff"
+                        text={
+                          <p className="rounded-[10px] leading-6">
+                            {formatNumber(itemMovie.vote_average, 10)}
+                            <span className="inline-block ml-1">
+                              <FontAwesomeIcon
+                                icon={faStar}
+                                className="text-white"
+                              />
+                            </span>
+                          </p>
+                        }
+                      ></Badge.Ribbon>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
 
           <div className="flex justify-center mt-6">
             {total_pages ? (
@@ -130,62 +135,67 @@ export const ContentDiscovery = ({
             )}
           </div>
         </StyledTabs.TabPane>
-        <StyledTabs.TabPane tab="TV show" key="0">
+        <StyledTabs.TabPane tab="TV show" key={false}>
           {/* content tab tv show */}
-          <div className="mt-5 flex flex-wrap gap-x-10 gap-y-10">
-            {resultDiscover?.map((itemMovie, index) => {
-              return (
-                <div
-                  key={index}
-                  className="hover:scale-110 duration-200 cursor-pointer relative rounded-b-lg rounded-tl-lg overflow-hidden"
-                  onClick={() => {
-                    navigate(`/tv/${itemMovie.id}`);
-                    sessionStorage.setItem("currentTab", "tab-tv-show");
-                    setTabGlobal("/tab-tv-show");
-                  }}
-                >
-                  <div className="h-[100%] flex flex-col">
-                    <img
-                      alt=""
-                      src={
-                        !getImage(itemMovie.poster_path, "w185").includes(
-                          "null"
-                        )
-                          ? getImage(itemMovie.poster_path, "w185")
-                          : iconImg.Img404
-                      }
-                      width="185px"
-                      height="100%"
-                      className="rounded-b-lg grow-[1]"
-                    />
-                    <Tooltip title={itemMovie.title}>
-                      <p className="pt-2 text-center text-[18px] max-w-[185px] bg-[#1c1c1e] line-clamp-1">
-                        {itemMovie.title}
-                      </p>
-                    </Tooltip>
-                  </div>
 
-                  {/* rate */}
-                  <div className="absolute top-[-8px] right-[0px] text-[13px]">
-                    <Badge.Ribbon
-                      color="#1890ff"
-                      text={
-                        <p className="rounded-[10px] leading-6">
-                          {formatNumber(itemMovie.vote_average, 10)}
-                          <span className="inline-block ml-1">
-                            <FontAwesomeIcon
-                              icon={faStar}
-                              className="text-white"
-                            />
-                          </span>
+          {isLoadingSkeleton ? (
+            <SkeletonCustom quantity={10} />
+          ) : (
+            <div className="mt-5 flex flex-wrap gap-x-10 gap-y-10 justify-center">
+              {resultDiscover?.map((itemMovie, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="hover:scale-110 duration-200 cursor-pointer relative rounded-b-lg rounded-tl-lg overflow-hidden"
+                    onClick={() => {
+                      navigate(`/tv/${itemMovie.id}`);
+                      sessionStorage.setItem("currentTab", "tab-tv-show");
+                      setTabGlobal("/tab-tv-show");
+                    }}
+                  >
+                    <div className="h-[100%] flex flex-col">
+                      <img
+                        alt=""
+                        src={
+                          !getImage(itemMovie.poster_path, "w185").includes(
+                            "null"
+                          )
+                            ? getImage(itemMovie.poster_path, "w185")
+                            : iconImg.Img404
+                        }
+                        width="185px"
+                        height="100%"
+                        className="rounded-b-lg grow-[1]"
+                      />
+                      <Tooltip title={itemMovie.title}>
+                        <p className="pt-2 text-center text-[18px] max-w-[185px] bg-[#1c1c1e] line-clamp-1">
+                          {itemMovie.title}
                         </p>
-                      }
-                    ></Badge.Ribbon>
+                      </Tooltip>
+                    </div>
+
+                    {/* rate */}
+                    <div className="absolute top-[-8px] right-[0px] text-[13px]">
+                      <Badge.Ribbon
+                        color="#1890ff"
+                        text={
+                          <p className="rounded-[10px] leading-6">
+                            {formatNumber(itemMovie.vote_average, 10)}
+                            <span className="inline-block ml-1">
+                              <FontAwesomeIcon
+                                icon={faStar}
+                                className="text-white"
+                              />
+                            </span>
+                          </p>
+                        }
+                      ></Badge.Ribbon>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
 
           <div className="flex justify-center mt-6">
             {total_pages ? (

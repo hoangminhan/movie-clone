@@ -78,10 +78,17 @@ function getItem(label, key, icon, children, title) {
 }
 
 export const Sidebar = ({ isToggle, handleToggleMenu }) => {
-  // const [isLogin, setIsLogin] = useState(true);
+  const accessToken = localStorage.getItem("accessToken");
   const { handlePopupNotification } = useNotification();
   const isLogin = localStorage.getItem("accessToken") || "";
   const { t } = useTranslation();
+  let navigate = useNavigate();
+  const location = useLocation();
+
+  const stateContext = useContext(UserContext);
+  const { currentTabGlobal } = stateContext;
+  const [tabGlobal, setTabGlobal] = currentTabGlobal;
+
   const items = [
     getItem("Home", "/", <HomeOutlined />),
     getItem(t("Discovery"), "/discovery", <FontAwesomeIcon icon={faCompass} />),
@@ -97,12 +104,6 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
       <FontAwesomeIcon icon={isLogin ? faRightFromBracket : faRightToBracket} />
     ),
   ];
-  let navigate = useNavigate();
-  const location = useLocation();
-
-  const stateContext = useContext(UserContext);
-  const { currentTabGlobal } = stateContext;
-  const [tabGlobal, setTabGlobal] = currentTabGlobal;
 
   //  check full sidebar
   const handleChangeStatusMenu = (event) => {
@@ -137,14 +138,14 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
 
   return (
     <aside
-      className={`fixed z-[2] top-0 bottom-0 left-0  bg-[#0d0c0f] duration-300 ease-in-out ${
-        !isToggle ? "w-[270px]" : "w-[100px]"
+      className={`fixed z-[2] top-0 bottom-0 left-0  bg-[#0d0c0f] duration-300 ease-in-out hidden sm:block ${
+        !isToggle ? "sm:w-[200px] lg:w-[270px]" : "w-[100px]"
       }`}
     >
       <div className="flex justify-center mt-5">
         <img
           src={iconImg.logoImg}
-          className="rounded-full w-[70px] h-[70px] object-cover cursor-pointer"
+          className="rounded-full w-[50px] h-[50px] object-cover cursor-pointer"
           alt=""
           onClick={() => {
             setTabGlobal("/");
@@ -174,7 +175,7 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
           />
         )}
       </section>
-      <div className="absolute bottom-[16px] left-[50%] translate-x-[-50%] cursor-pointer">
+      <div className="absolute bottom-[16px] left-[50%] translate-x-[-50%] cursor-pointer hidden lg:block">
         <div onClick={handleChangeStatusMenu}>
           {isToggle ? <RightOutlined /> : <LeftOutlined />}
         </div>

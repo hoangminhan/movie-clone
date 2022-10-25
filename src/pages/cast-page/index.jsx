@@ -102,21 +102,23 @@ const CastPage = () => {
                         .replace("/", "")}
                     </a>
                   ) : (
-                    <span className="font-[200]">
-                      {t("Homepage is updatting")}
-                    </span>
+                    <span className="font-[200]">{t("Updating")}...</span>
                   )}
                 </p>
                 <p>
                   <span className="text-[22px]">{t("Birthday")}:</span>
                   <span className="ml-1 text-[22px] font-[200]">
-                    {moment(dataDetailCast.birthday).format("DD-MM-YYYY")}
+                    {dataDetailCast.birthday
+                      ? moment(dataDetailCast.birthday).format("DD-MM-YYYY")
+                      : t("Updating")}
                   </span>
                 </p>
                 <p>
                   <span className="text-[22px]">{t("Place of birthday")}:</span>
                   <span className="ml-1 font-[200]">
-                    {dataDetailCast.place_of_birth}
+                    {dataDetailCast.place_of_birth
+                      ? dataDetailCast.place_of_birth
+                      : t("Updating")}
                   </span>
                 </p>
 

@@ -152,8 +152,8 @@ const LoginPage = () => {
       </video>
       <div className="bg-black/40 h-[100vh]"></div>
 
-      <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 max-w-[500px] text-center leading-relaxed ">
-        <p className="text-[white] text-[40px] font-bold">
+      <div className="absolute left-0 right-0 px-3 sm:p-0 top-[50%] sm:left-[50%] sm:-translate-x-1/2 -translate-y-1/2 max-w-[500px] text-center leading-relaxed ">
+        <p className="text-[white] text:[25px] sm:text-[40px] font-bold">
           {t("Login to Your Account")}
         </p>
 

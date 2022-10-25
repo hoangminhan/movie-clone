@@ -21,14 +21,14 @@ export const Footer = ({ toggleMenu }) => {
         !toggleMenu ? "pl-[310px]" : "pl-[130px]"
       } ${pathname === "/movie" ? "mr-[350px]" : ""}`}
     >
-      <div className="pt-[64px] flex gap-8 text-white text-[30px] cursor-pointer ">
+      <div className="pt-4 lg:pt-[64px] flex gap-8 text-white text-[30px] cursor-pointer ">
         <FontAwesomeIcon icon={faFacebookF} className="hover:text-[#ccc]" />
         <FontAwesomeIcon icon={faInstagram} className="hover:text-[#ccc]" />
         <FontAwesomeIcon icon={faTwitter} className="hover:text-[#ccc]" />
         <FontAwesomeIcon icon={faYoutube} className="hover:text-[#ccc]" />
       </div>
-      <div className="text-[16px] pt-4">
-        <Row>
+      <div className="text-[14px] lg:text-[16px] pt-2 md:pt-4">
+        <Row gutter={[6, 6]}>
           <Col span={5}>
             <div>
               <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
