@@ -11,7 +11,7 @@ const { TabPane } = Tabs;
 
 const StyledTabs = styled(Tabs)`
   .ant-tabs-tab {
-    color: #989898;
+    color: #ffffff80;
     font-size: 22px;
   }
   .ant-tabs-tab:hover {
@@ -32,7 +32,7 @@ const StyledTabs = styled(Tabs)`
   }
 `;
 
-export const Menu = () => {
+export const Menu = ({ setIsHiddenSidebar }) => {
   const stateContext = useContext(UserContext);
   const { currentTabGlobal } = stateContext;
   const [tabGlobal, setTabGlobal] = currentTabGlobal;
@@ -60,6 +60,14 @@ export const Menu = () => {
   };
   return (
     <nav className="basis-1/5">
+      {/* <div
+        className="block tablet:hidden"
+        onClick={() => {
+          setIsHiddenSidebar(false);
+        }}
+      >
+        Menu
+      </div> */}
       <StyledTabs
         defaultActiveKey={currentTab}
         activeKey={currentTab}

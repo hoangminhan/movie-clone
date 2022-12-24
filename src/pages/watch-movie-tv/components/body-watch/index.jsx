@@ -36,14 +36,13 @@ export const BodyWatch = ({
   return (
     <>
       <div className="mt-[128px] px-4 text-[#fff]">
-        <p className="uppercase underline font-medium text-primary">
+        <p className="uppercase underline font-medium text-primarybg text-[20px]">
           {t("information")}
         </p>
 
         {dataDetail ? (
           <div className="px-4 mt-6">
-            <h3 className="text-[#fff]">
-              Tóm tắt: &nbsp;
+            <h3 className="text-[#fff] text-[16px]">
               {currenTab !== "/" ? (
                 <>
                   <span>
@@ -56,21 +55,21 @@ export const BodyWatch = ({
               ) : (
                 ""
               )}
-              <span className="mt-3">
+              <span className="mt-3 text-[18px]">
                 {dataDetail?.title
                   ? dataDetail.title
                   : dataDetail.original_title}
               </span>
             </h3>
 
-            <p className={`text-[18px] ${dataDetail?.overview ? "mt-3" : ""}`}>
+            <p className={`text-[16px] ${dataDetail?.overview ? "mt-3" : ""}`}>
               {dataDetail?.overview && dataDetail.overview}
             </p>
             {/* genres */}
 
             {currenTab === "/" ? (
-              <div className="text-[18px] flex items-center">
-                <span className="mr-2 text-[24px]">{t("Genres")}:</span>
+              <div className="text-[16px] flex items-center">
+                <span className="mr-2 text-[16px]">{t("Genres")}:</span>
                 {dataDetail?.genres?.map((genre, index) => {
                   return (
                     <div key={index} className="cursor-pointer">
@@ -92,7 +91,7 @@ export const BodyWatch = ({
             {/* trailer */}
 
             <div className="mt-4 animate-pulse">
-              <p className="my-4 underline">Trailer:</p>
+              <p className="my-4 underline text-[16px]">Trailer:</p>
               {isLoadingDetail ? (
                 <Skeleton active paragraph={{ rows: 10 }} />
               ) : (
@@ -108,7 +107,7 @@ export const BodyWatch = ({
 
             {/* rating */}
             <div className="flex items-center gap-4 mt-9">
-              <p className="text-white text-[24px]">{t("Rating")}:</p>
+              <p className="text-white text-[16px]">{t("Rating")}:</p>
               {isLoadingDetail ? (
                 <Skeleton active avatar />
               ) : (
@@ -126,7 +125,7 @@ export const BodyWatch = ({
             </div>
             {/* casts */}
 
-            <h3 className="text-white text-[24px] mt-6">
+            <h3 className="text-white text-[16px] mt-6">
               {t("Cast")}: &nbsp;
               {!listCastsMovie?.length && (
                 <span className="text-[16px]">{t("Updating")}...</span>
@@ -171,7 +170,7 @@ export const BodyWatch = ({
 
             {/* key words */}
             <div className="flex flex-wrap gap-2 text-[14px] text-yellow-200 mt-8">
-              <p className="text-[24px]">{t("Keywords")}:</p>
+              <p className="text-[16px]">{t("Keywords")}:</p>
               {listKeywordsMovie.map((keyword) => {
                 const nameKeyword = keyword.name;
                 return (

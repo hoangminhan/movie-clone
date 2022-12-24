@@ -1,4 +1,5 @@
 import {
+  faArrowRight,
   faStar,
   faThumbsDown,
   faThumbsUp,
@@ -113,6 +114,7 @@ const WatchMovieTv = () => {
     const elementToScroll = document.getElementById("similar-movie");
     if (elementToScroll) {
       elementToScroll.scrollIntoView({
+        top: 0,
         behavior: "smooth",
       });
     }
@@ -205,7 +207,7 @@ const WatchMovieTv = () => {
       await handleGetTrailer(idDetail, currentType, {
         api_key: process.env.REACT_APP_API_KEY,
       });
-      executeScroll();
+      // executeScroll();
       if (currentType === "movie") {
         await handleGetSimilarMovie(
           idDetail,
@@ -420,7 +422,7 @@ const WatchMovieTv = () => {
 
   return (
     <div>
-      <Row className="mr-[350px] h-full">
+      <Row className="mr-[300px] h-full">
         <Col span={24}>
           {/* hero */}
           <Hero
@@ -577,12 +579,20 @@ const WatchMovieTv = () => {
           </div>
         </Col>
       </Row>
-      <div className="bg-black p-4 border-l-[#ccc] border-l-[1px] border-l-solid fixed z-[2] h-full overflow-y-auto top-0 right-0 w-[350px] scroll-smooth no-scrollbar">
+      <div className="bg-black p-4 border-l-[#ccc] border-l-[1px] border-l-solid fixed z-[2] h-full overflow-y-auto top-0 right-0 w-[300px] scroll-smooth no-scrollbar">
         {tabGlobal === "/" ? (
           <div className="h-[100%]">
-            <p id="similar-movie" className="text-white mt-6 mb-8 uppercase">
-              {t("Similar")}
-            </p>
+            <div className="flex justify-between items-center mb-2">
+              <p id="similar-movie" className="text-white uppercase">
+                {t("Similar")}
+              </p>
+              <div>
+                <FontAwesomeIcon
+                  icon={faArrowRight}
+                  className="cursor-pointer"
+                />
+              </div>
+            </div>
             <div className="flex flex-col gap-5">
               {listSimilarMovie?.map((similarContent, index) => {
                 return (
@@ -603,7 +613,7 @@ const WatchMovieTv = () => {
                         />
                       </div>
                       <div className="grow">
-                        <p className="text-[18px] line-clamp-2">
+                        <p className="text-[16px] line-clamp-2">
                           {similarContent.title
                             ? similarContent.title
                             : similarContent.name}
@@ -632,7 +642,7 @@ const WatchMovieTv = () => {
                   </div>
                 ) : (
                   <button
-                    className={`bg-primary min-w-[150px] px-2 py-2 rounded-lg cursor-pointer text-white text-[18px] ${
+                    className={`bg-primarybg min-w-[120px] px-1 py-1 rounded-lg cursor-pointer text-white text-[16px] mb-8 ${
                       isLoadMore && "cursor-not-allowed pointer-events-none	"
                     } ${!isLoadMore ? "hover:scale-110 duration-150" : ""}`}
                     onClick={() => {

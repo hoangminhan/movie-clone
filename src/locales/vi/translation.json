@@ -92,6 +92,12 @@
   "Please input your password":"Mật khẩu không được để trống",
   "Please confirm your passowrd":"Vui lòng xác thực mật khẩu",
   "The two passwords that you entered do not match!":"Xác thực không khớp",
-  "Please input Lastname":"Vui lòng nhập tên"
+  "Please input Lastname":"Vui lòng nhập tên",
+  "Search results for" :"Kết quả tìm kiếm của",
+  "results found":"kết quả tìm thấy",
+  "search filter":"Bộ lọc tìm kiếm",
+  "Watched":"Đã xem",
+  "Logout":"Đăng xuất"
+
 
 }

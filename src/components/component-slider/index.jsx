@@ -23,12 +23,10 @@ export const ComponentSlider = React.memo(
 
     const [t] = useTranslation();
     return (
-      <div className={`${title ? "mt-[64px]" : "mt-[128px]"}`}>
-        <div>
-          <p className="text-white uppercase font-[600] tracking-[2px] mb-4">
-            {t(`${title ? title : ""}`)}
-          </p>
-        </div>
+      <div className={`${title ? "mt-[64px]" : "mt-[0px]"}`}>
+        <p className="text-white uppercase font-[600] tracking-[2px] text-[20px] mb-3">
+          {t(`${title ? title : ""}`)}
+        </p>
         {dataPopular?.length ? (
           <Swiper
             slidesPerView={7.3}
@@ -41,7 +39,7 @@ export const ComponentSlider = React.memo(
             breakpoints={{
               300: {
                 slidesPerView: 1,
-                spaceBetween: 20,
+                spaceBetween: 10,
               },
               500: {
                 slidesPerView: 2,
@@ -53,11 +51,11 @@ export const ComponentSlider = React.memo(
               },
               768: {
                 slidesPerView: 4,
-                spaceBetween: 40,
+                spaceBetween: 10,
               },
               1024: {
-                slidesPerView: 5,
-                spaceBetween: 50,
+                slidesPerView: 6,
+                spaceBetween: 20,
               },
               1300: {
                 slidesPerView: 7.3,
@@ -95,7 +93,7 @@ export const ComponentSlider = React.memo(
                     {/* name film */}
                     <div className="absolute bottom-0 bg-[#0d0c0f] w-full rounded-b-[6px]">
                       <Tooltip title={!item?.title ? item?.name : item?.title}>
-                        <p className="text-[16px] line-clamp-1 text-center text-[#999898]">
+                        <p className="text-[16px] line-clamp-1 text-center text-textSecond">
                           {!item?.title ? item?.name : item?.title}
                         </p>
                       </Tooltip>
@@ -107,7 +105,7 @@ export const ComponentSlider = React.memo(
                     {/* rate */}
                     <div className="absolute top-[-8px] right-[0px] text-[13px]">
                       <Badge.Ribbon
-                        color="#1890ff"
+                        color="#158370"
                         text={
                           <p className="rounded-[10px]  m-0 leading-6">
                             {formatNumber(item.vote_average, 10)}

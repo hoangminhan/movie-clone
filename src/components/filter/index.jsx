@@ -77,7 +77,7 @@ export const Filter = ({
             key="1"
           >
             <div className="text-[red]">
-              <p className="text-white text-[18px]">{t("Sort Results By")}</p>
+              <p className="text-white text-[16px]">{t("Sort Results By")}</p>
               <div className="mt-2">
                 <Select
                   value={filters.sort_by}
@@ -115,15 +115,15 @@ export const Filter = ({
           >
             {/* genres */}
             <div className="">
-              <p className="text-white mb-4 text-[18px]">{t("Genres")}</p>
+              <p className="text-white mb-4 text-[16px]">{t("Genres")}</p>
               <div className="max-h-[150px] overflow-y-scroll flex flex-wrap gap-2 scroll-b scroll-custom">
                 {listGenresMovie?.map((genres, index) => (
                   <p
                     key={genres.id}
-                    className={`text-white rounded-md px-2 bg-slate-500 cursor-pointer line-clamp-1 hover:bg-[#01b4e4] hover:text-white
+                    className={`text-white rounded-md px-2 bg-slate-500 cursor-pointer line-clamp-1 hover:bg-primarybg hover:text-white
                     ${
                       handleCheckActiveGenres(listGenres, genres.id)
-                        ? "bg-[#01b4e4]"
+                        ? "bg-primarybg"
                         : ""
                     }
                     `}
@@ -159,7 +159,7 @@ export const Filter = ({
             </div>
             {/* search all releases */}
             <div className="mt-5 ">
-              <p className="text-white mb-4 text-[18px]">
+              <p className="text-white mb-4 text-[16px]">
                 {t("Search all releases")}
               </p>
               <div>
@@ -196,7 +196,7 @@ export const Filter = ({
 
             <div className="mt-4 w-[full]">
               <button
-                className="text-white bg-primary w-[100%] h-[30px] rounded-md cursor-pointer"
+                className="text-white bg-primarybg w-[100%] h-[30px] rounded-md cursor-pointer"
                 onClick={() => {
                   handelClearFilter();
                   setListGenres([]);

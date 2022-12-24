@@ -106,8 +106,8 @@ const RegisterPage = () => {
       </video>
       <div className="bg-black/40 h-[100vh]"></div>
 
-      <div className="px-3 sm:px-0 absolute top-[100px]  sm:top-[50%] left-0 right-0 sm:left-[50%] sm:-translate-x-1/2 sm:-translate-y-1/2 pb-8 sm:pb-0 max-w-[550px] w-full sm:w-[550px] text-center leading-relaxed ">
-        <p className="text-[white] text-[25px] sm:text-[40px] font-bold">
+      <div className="px-3 sm:px-0 absolute top-[70px] sm:top-[50%] left-0 right-0 sm:left-[50%] sm:-translate-x-1/2 sm:-translate-y-1/2 pb-8 sm:pb-0 w-full sm:max-w-[550px] sm:w-[550px] text-center leading-relaxed ">
+        <p className="text-[white] text-[25px] sm:text-[30px] font-bold">
           {t("Register Account")}
         </p>
 
@@ -143,7 +143,7 @@ const RegisterPage = () => {
                   <label
                     style={{
                       color: "white",
-                      fontSize: "18px",
+                      fontSize: "16px",
                       letterSpacing: "1px",
                     }}
                   >
@@ -161,7 +161,7 @@ const RegisterPage = () => {
                   <label
                     style={{
                       color: "white",
-                      fontSize: "18px",
+                      fontSize: "16px",
                       letterSpacing: "1px",
                     }}
                   >
@@ -180,7 +180,7 @@ const RegisterPage = () => {
                 <label
                   style={{
                     color: "white",
-                    fontSize: "18px",
+                    fontSize: "16px",
                     letterSpacing: "1px",
                   }}
                 >
@@ -207,7 +207,7 @@ const RegisterPage = () => {
                 <label
                   style={{
                     color: "white",
-                    fontSize: "18px",
+                    fontSize: "16px",
                     letterSpacing: "1px",
                   }}
                 >
@@ -237,7 +237,7 @@ const RegisterPage = () => {
                 <label
                   style={{
                     color: "white",
-                    fontSize: "18px",
+                    fontSize: "16px",
                     letterSpacing: "1px",
                   }}
                 >
@@ -274,7 +274,7 @@ const RegisterPage = () => {
               disabled={isLoading ? true : false}
               type="primary"
               htmlType="submit"
-              className={`bg-blue-600 hover:bg-blue-800 text-white hover:text-[#ccc] font-bold  w-[150px] py-2 rounded-lg text-[18px] min-w-[110px] mt-4
+              className={`bg-primarybg hover:opacity-90 text-white hover:text-[#ccc] font-bold  w-[150px] py-2 rounded-lg text-[18px] min-w-[110px] mt-4
               ${isLoading ? "cursor-not-allowed bg-[#ccc] hover:bg-[#ccc]" : ""}
               
               `}
@@ -283,10 +283,10 @@ const RegisterPage = () => {
               {/* <FontAwesomeIcon icon={faRightToBracket} className="ml-1" /> */}
             </button>
 
-            <div className="text-white text-[18px] mt-4">
+            <div className="text-white text-[16px] mt-4">
               <span>{t("Already have an account")} ?</span>{" "}
               <Link to="/login">
-                <span className="underline text-primary font-bold">
+                <span className="underline text-primarybg font-bold">
                   {t("Login")}
                 </span>
               </Link>

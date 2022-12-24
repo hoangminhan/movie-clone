@@ -19,7 +19,6 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Autoplay, Navigation, Pagination } from "swiper";
 import { formatNumber, getImage, handleOpenNotification } from "utils";
-import { Skeleton } from "antd";
 
 export const Banner = ({ listTrending, isLoading }) => {
   const {
@@ -155,18 +154,19 @@ export const Banner = ({ listTrending, isLoading }) => {
     <>
       <div
         onMouseEnter={() => swiperRef.current.swiper.autoplay.start()}
-        className="max-h-[450px]"
+        className="max-h-[400px] xl:max-h-[500px]"
       >
         <Swiper
           ref={swiperRef}
           autoplay={{
-            delay: 5000,
+            delay: 1000000,
             disableOnInteraction: false,
           }}
           className="banner-wrapper"
           pagination={false}
           navigation={true}
           modules={[Autoplay, Pagination, Navigation]}
+          // modules={[Autoplay, Pagination, Navigation]}
           // modules={[Pagination, Navigation]}
           onSlideChange={(event) => {
             setCurrentActiveIndex(event.activeIndex);
@@ -176,7 +176,7 @@ export const Banner = ({ listTrending, isLoading }) => {
           {listTrending?.map((slider, index) => {
             return (
               <SwiperSlide key={index}>
-                <div className="group relative">
+                <div className="group relative rounded-t-lg overflow-hidden">
                   <img
                     src={
                       getImage(slider.backdrop_path, "w1280").includes("null")
@@ -184,11 +184,11 @@ export const Banner = ({ listTrending, isLoading }) => {
                         : getImage(slider.backdrop_path, "w1280")
                     }
                     alt=""
-                    className="max-h-[600px] object-cover w-full"
+                    className="max-h-[400px] xl:max-h-[500px] object-fill w-full"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#0b0b0bd9] to-transparent "></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#000000] to-transparent "></div>
                   {/* vote_average */}
-                  <div className="flex justify-center items-center rounded-[8px] text-red absolute top-[4%] right-[2%] bg-primary px-3 text-[18px]">
+                  <div className="flex justify-center items-center rounded-[8px] text-red absolute top-[4%] right-[2%] bg-primarybg px-3 text-[18px]">
                     <p className="text-white m-0 pr-1 text-[16px]">
                       {formatNumber(slider.vote_average, 10)}
                     </p>
@@ -198,7 +198,7 @@ export const Banner = ({ listTrending, isLoading }) => {
                   <div className="absolute top-[-8px] right-[0px] text-[13px]"></div>
                   {/* title */}
                   <div className="absolute top-[40%] left-[5%] -translate-y-1/2">
-                    <h2 className="flex text-[32px] text-primary max-w-[500px]">
+                    <h2 className="flex text-[32px] text-primarybg max-w-[500px]">
                       {slider.title ? slider.title : slider.original_name}
                     </h2>
 

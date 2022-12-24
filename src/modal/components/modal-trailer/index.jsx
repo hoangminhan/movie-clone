@@ -79,7 +79,6 @@ export const ModalTrailer = ({
       handleCheckIsFavorite(dataDetail);
     }
   }, [dataDetail, dataUser?.uid, isFavorite]);
-  console.log(isFavorite);
 
   return (
     <Modal
@@ -172,14 +171,13 @@ export const ModalTrailer = ({
               >
                 <p
                   className={`group bg-transparent w-10 h-10 flex items-center justify-center rounded-full border-solid 
-              ${isFavorite ? "border-[#5179ff]" : "border-[white]"}
-              border-[2px] hover:border-[#5179ff]`}
+              ${isFavorite ? "border-primarybg" : "border-[white]"}
+              border-[2px] hover:border-primarybg`}
                 >
                   <FontAwesomeIcon
                     icon={faHeart}
-                    color="white"
-                    className={`text-[13px] ${
-                      isFavorite ? "text-[#5179ff]" : ""
+                    className={`text-[13px] group-hover:text-primarybg ${
+                      isFavorite ? "text-primarybg" : ""
                     }`}
                   />
                 </p>
@@ -336,7 +334,7 @@ export const ModalTrailer = ({
           {/*  similar content */}
           <Row>
             <div>
-              <h2 className="text-white text-[30px] mt-4">
+              <h2 className="text-white text-[24px] mt-4">
                 {t("Similar content")}
               </h2>
               <div className="mt-8">

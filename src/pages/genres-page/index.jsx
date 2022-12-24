@@ -140,7 +140,7 @@ const GenresPage = () => {
                     </Tooltip>
                     <div className="absolute top-[-8px] right-[0px] text-[13px]">
                       <Badge.Ribbon
-                        color="#1890ff"
+                        color="#158370"
                         text={
                           <p className="rounded-[10px]  m-0 leading-6">
                             {formatNumber(item.vote_average, 10)}
@@ -166,7 +166,7 @@ const GenresPage = () => {
           <div className="text-center mt-[80px]">
             <button
               id="button-show"
-              className="bg-primary text-white min-w-[160px] py-1 rounded-md cursor-pointer"
+              className="bg-primarybg text-white min-w-[160px] py-1 rounded-md cursor-pointer text-[18px] transition-all hover:scale-105 ease-linear"
               onClick={handleClickShow}
             >
               {isShowMore ? "Show more" : "Show less"}

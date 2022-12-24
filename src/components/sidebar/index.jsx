@@ -11,6 +11,8 @@ import styled from "styled-components";
 
 import { faClock, faCompass } from "@fortawesome/free-regular-svg-icons";
 import {
+  faArrowLeft,
+  faArrowRight,
   faRightFromBracket,
   faRightToBracket,
   faSearch,
@@ -23,10 +25,11 @@ import { useNotification } from "hooks";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import "./style.scss";
+import { useState } from "react";
 
 // styled
 const StyledMenu = styled(Menu)`
-  width: 100px !important;
+  width: 80px !important;
   border-right: none;
   .ant-menu-item .ant-menu-item-icon,
   .ant-menu-submenu-title .ant-menu-item-icon,
@@ -35,14 +38,27 @@ const StyledMenu = styled(Menu)`
     font-size: 20px !important;
   }
 
+  &.ant-menu.ant-menu-inline-collapsed {
+    background-color: #22354e !important;
+  }
+  /* &.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: #ccc;
+  } */
+
   /* close */
 `;
 const StyledMenuToggle = styled(Menu)`
+  &.ant-menu-inline {
+    background-color: #22354e !important;
+  }
   border-right: none;
   .ant-menu-item:hover {
     color: #fff !important;
-    background-color: #1f2737;
+    background-color: #394a60;
     cursor: pointer;
+  }
+  &.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: #394a60;
   }
   .ant-menu-item-selected {
     color: #fff;
@@ -58,7 +74,7 @@ const StyledMenuToggle = styled(Menu)`
     font-size: 20px !important;
   }
   .ant-menu-sub.ant-menu-inline {
-    background-color: #1c1c1e;
+    background-color: #22354e;
   }
   &.ant-menu-light .ant-menu-submenu-title:hover {
     color: #fff;
@@ -77,7 +93,12 @@ function getItem(label, key, icon, children, title) {
   };
 }
 
-export const Sidebar = ({ isToggle, handleToggleMenu }) => {
+export const Sidebar = ({
+  isToggle,
+  handleToggleMenu,
+  isHiddenSidebar,
+  setIsHiddenSidebar,
+}) => {
   const accessToken = localStorage.getItem("accessToken");
   const { handlePopupNotification } = useNotification();
   const isLogin = localStorage.getItem("accessToken") || "";
@@ -90,14 +111,14 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
   const [tabGlobal, setTabGlobal] = currentTabGlobal;
 
   const items = [
-    getItem("Home", "/", <HomeOutlined />),
+    getItem(t("Home page"), "/", <HomeOutlined />),
     getItem(t("Discovery"), "/discovery", <FontAwesomeIcon icon={faCompass} />),
     getItem(t("Search"), "/search", <FontAwesomeIcon icon={faSearch} />),
     getItem(t("Favorite"), "/favorite", <ContainerOutlined />),
     getItem(t("History"), "/history", <FontAwesomeIcon icon={faClock} />),
-    getItem(t("Settings"), "/settings", <SettingOutlined />, [
-      getItem(t("Profile"), "/account", <FontAwesomeIcon icon={faUserTie} />),
-    ]),
+    // getItem(t("Settings"), "/settings", <SettingOutlined />, [
+    //   getItem(t("Profile"), "/account", <FontAwesomeIcon icon={faUserTie} />),
+    // ]),
     getItem(
       `${isLogin ? t("Logout") : t("Login")}`,
       `${isLogin ? "/login" : "/login"}`,
@@ -134,18 +155,15 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
       sessionStorage.setItem("currentTab", "/");
       navigate(key);
     }
+    setIsHiddenSidebar(true);
   };
 
   return (
-    <aside
-      className={`fixed z-[2] top-0 bottom-0 left-0  bg-[#0d0c0f] duration-300 ease-in-out hidden sm:block ${
-        !isToggle ? "sm:w-[200px] lg:w-[270px]" : "w-[100px]"
-      }`}
-    >
-      <div className="flex justify-center mt-5">
+    <>
+      <div className="flex justify-center pt-5">
         <img
           src={iconImg.logoImg}
-          className="rounded-full w-[50px] h-[50px] object-cover cursor-pointer"
+          className="rounded-full w-[50px] h-[50px] object-cover cursor-pointer mb-3 tablet:mb-0"
           alt=""
           onClick={() => {
             setTabGlobal("/");
@@ -154,7 +172,7 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
           }}
         />
       </div>
-      <section className="mt-[64px] text-[18px]">
+      <section className="hidden tablet:block mt-[64px] text-[18px]">
         {!isToggle ? (
           <StyledMenuToggle
             defaultSelectedKeys={[location.pathname]}
@@ -175,11 +193,24 @@ export const Sidebar = ({ isToggle, handleToggleMenu }) => {
           />
         )}
       </section>
+      {/* menu mobile */}
+      <section
+        className={`sss ${isHiddenSidebar ? "hidden" : "block tablet:hidden"}`}
+      >
+        <StyledMenuToggle
+          defaultSelectedKeys={[location.pathname]}
+          selectedKeys={[location.pathname]}
+          mode="inline"
+          // inlineCollapsed={isToggle}
+          items={items}
+          onSelect={handleChangeCurrentMenu}
+        />
+      </section>
       <div className="absolute bottom-[16px] left-[50%] translate-x-[-50%] cursor-pointer hidden lg:block">
         <div onClick={handleChangeStatusMenu}>
           {isToggle ? <RightOutlined /> : <LeftOutlined />}
         </div>
       </div>
-    </aside>
+    </>
   );
 };

@@ -41,7 +41,7 @@ export const ContentSearch = ({ dataContentSearch, isLoading, type }) => {
   return (
     <>
       <div>
-        <div className="flex flex-wrap gap-10">
+        <div className="flex flex-wrap justify-evenly gap-2 lg:gap-3">
           {dataContentSearch?.map((item, index) => {
             return (
               <Link
@@ -72,14 +72,14 @@ export const ContentSearch = ({ dataContentSearch, isLoading, type }) => {
                     }
                     alt=""
                   />
-                  <p className="text-[18px] text-center line-clamp-1">
+                  <p className="text-[16px] text-center line-clamp-1">
                     {item.name ? item.name : item.title}
                   </p>
                   <div className="absolute top-[-8px] right-[0px] text-[13px]">
                     <Badge.Ribbon
-                      color="#1890ff"
+                      color="#158370"
                       text={
-                        <p className="rounded-[10px]  m-0 leading-6">
+                        <p className="rounded-[10px] m-0 leading-6">
                           {formatNumber(item.vote_average, 10)}
                           <span className="inline-block ml-1">
                             <FontAwesomeIcon

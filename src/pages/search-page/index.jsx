@@ -82,20 +82,25 @@ const SearchPage = () => {
       <Row gutter={[24, 24]} className="my-[32px]">
         {filterSearch.query ? (
           <div className="ml-4">
-            <p>{`Search results for ${filterSearch.query} (${total_results}) results found`}</p>
+            <p className="text-[20px]">
+              {t("Search results for")}&nbsp;
+              {`${filterSearch.query} (${total_results})`}&nbsp;
+              {t("results found")}
+            </p>
           </div>
         ) : (
           ""
         )}
-        <Col span={19}>
+        {/*  */}
+        <div className="w-full px-3">
           <div className="my-7 flex justify-center">
-            <div className="w-[800px] relative">
+            <div className="w-[800px] relative mt-3">
               <input
                 ref={refSearch}
                 placeholder={`${t("Search")}...`}
                 value={valueInput}
                 type="text"
-                className="w-full  border-none outline-none px-4 pl-[50px] py-3 rounded-3xl bg-[#333335] text-white"
+                className="w-full border-none outline-none px-4 pl-[50px] py-3 rounded-3xl bg-[#333335] text-white text-[18px]"
                 onChange={(event) => {
                   const { value } = event.target;
                   setValueInput(value);
@@ -113,38 +118,8 @@ const SearchPage = () => {
               />
             </div>
           </div>
-          {filterSearch.query ? (
-            <>
-              {isLoadingSearch ? (
-                <SkeletonCustom quantity={10}></SkeletonCustom>
-              ) : (
-                <ContentSearch
-                  dataContentSearch={results}
-                  isLoading={isLoadingPeople}
-                  type={filterSearch.type}
-                />
-              )}
-              {total_pages > 20 ? (
-                <div className="text-center my-10">
-                  <StyledPagination
-                    current={+filterSearch.page}
-                    defaultCurrent={+filterSearch.page}
-                    showSizeChanger={false}
-                    total={total_pages}
-                    onChange={(page, _) => {
-                      setFilterSearch({
-                        ...filterSearch,
-                        page,
-                      });
-                      handleScrollToTop();
-                    }}
-                  />
-                </div>
-              ) : (
-                ""
-              )}
-            </>
-          ) : (
+
+          {!filterSearch.query && (
             <div className="flex justify-center">
               <img
                 src={iconImg.skyImg}
@@ -153,13 +128,62 @@ const SearchPage = () => {
               />
             </div>
           )}
-        </Col>
-        <Col span={5}>
-          <FilterSearch
-            filterSearch={filterSearch}
-            handleChangeFilterType={handleChangeFilterType}
-          />
-        </Col>
+        </div>
+        <div className="px-3">
+          <Row gutter={[12, 12]} className="flex-wrap-reverse gap-y-8">
+            <Col xs={24} md={24} lg={18} xl={19} xxl={20}>
+              {filterSearch.query ? (
+                <>
+                  {isLoadingSearch ? (
+                    <SkeletonCustom quantity={10}></SkeletonCustom>
+                  ) : (
+                    <ContentSearch
+                      dataContentSearch={results}
+                      isLoading={isLoadingPeople}
+                      type={filterSearch.type}
+                    />
+                  )}
+                  {total_pages > 20 ? (
+                    <div className="text-center my-10">
+                      <StyledPagination
+                        current={+filterSearch.page}
+                        defaultCurrent={+filterSearch.page}
+                        showSizeChanger={false}
+                        total={total_pages}
+                        onChange={(page, _) => {
+                          setFilterSearch({
+                            ...filterSearch,
+                            page,
+                          });
+                          handleScrollToTop();
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </>
+              ) : (
+                ""
+              )}
+            </Col>
+            {filterSearch.query && (
+              <Col
+                xs={24}
+                md={24}
+                lg={6}
+                xl={5}
+                xxl={4}
+                className="mb-4 sm:mb-8 lg:mb-0"
+              >
+                <FilterSearch
+                  filterSearch={filterSearch}
+                  handleChangeFilterType={handleChangeFilterType}
+                />
+              </Col>
+            )}
+          </Row>
+        </div>
       </Row>
     </div>
   );

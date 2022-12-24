@@ -207,9 +207,9 @@ const BookMarkedPage = () => {
         ) : (
           // <Skeleton active paragraph={{ rows: 20 }} />
           <>
-            <Row gutter={[24, 24]} className="mt-8">
+            <Row gutter={[24, 24]} className="mt-8 flex-wrap-reverse">
               {dataFavorite?.length ? (
-                <Col span={19}>
+                <Col xs={24} md={24} lg={18} xl={19} xxl={20}>
                   {dataFavorite?.length ? (
                     <>
                       {isEdit ? (
@@ -339,13 +339,13 @@ const BookMarkedPage = () => {
                   </>
                 </Col>
               ) : (
-                <Col span={19}>
+                <Col xs={24} md={24} lg={18} xl={19} xxl={20}>
                   <div className="h-[100vh] flex justify-center items-center">
                     <Empty />
                   </div>
                 </Col>
               )}
-              <Col span={5}>
+              <Col xs={24} md={24} lg={6} xl={5} xxl={4}>
                 <StyledCollapse
                   defaultActiveKey={["1"]}
                   expandIconPosition="end"
@@ -354,7 +354,7 @@ const BookMarkedPage = () => {
                     header={
                       <div className="">
                         <p className="text-white text-[20px] font-medium">
-                          {t("Search results")}
+                          {t("search filter")}
                         </p>
                       </div>
                     }

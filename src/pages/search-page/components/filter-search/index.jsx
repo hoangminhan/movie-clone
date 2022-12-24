@@ -1,3 +1,5 @@
+import { faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Collapse, Select } from "antd";
 import React from "react";
 import { useEffect } from "react";
@@ -40,9 +42,9 @@ export const FilterSearch = ({ filterSearch, handleChangeFilterType }) => {
       >
         <Panel
           header={
-            <div className="">
+            <div>
               <p className="text-white text-[20px] font-medium">
-                {t("Search results")}
+                {t("search filter")}
               </p>
             </div>
           }

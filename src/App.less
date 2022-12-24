@@ -1,5 +1,9 @@
 @import "~antd/dist/antd.less";
 
+:root {
+  --primary-color:#158370;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -92,6 +96,26 @@
     padding: 12px 24px;
   }
   
+}
+.ant-menu-item-selected {
+  color: white !important;
+}
+.ant-menu-light .ant-menu-item:hover,
+.ant-menu-light .ant-menu-submenu-title:hover ,
+.ant-menu-light .ant-menu-submenu-active
+{
+  color: white !important;
+
+}
+
+.ant-menu-vertical.ant-menu-sub > .ant-menu-item:hover {
+  background-color: #ccc;
+}
+
+// menu
+
+.ant-menu-inline.ant-menu-root .ant-menu-item > .ant-menu-title-content {
+  font-size: 16px !important;
 }
 
 

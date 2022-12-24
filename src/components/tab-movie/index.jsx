@@ -24,8 +24,10 @@ export const TabMovie = React.memo(() => {
     <>
       <Row gutter={[12, 12]}>
         <Col span={24}>
-          <Banner listTrending={listTrending} isLoading={isLoading} />
-          <ComponentSlider dataPopular={listMovie} type="movie" />
+          <div className="relative">
+            <Banner listTrending={listTrending} isLoading={isLoading} />
+            <ComponentSlider dataPopular={listMovie} type="movie" />
+          </div>
           <ComponentSlider
             dataPopular={listMovieUpComing}
             title="Up Coming"

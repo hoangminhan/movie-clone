@@ -22,7 +22,7 @@ export const ButtomCustom = ({
       `}
     >
       <FontAwesomeIcon icon={icons[nameIcon]} className="text-2xl" />
-      <button className="font-medium ease-in-out duration-300 text-[24px]">
+      <button className="font-medium ease-in-out duration-300 text-[20px]">
         {t(title)}
       </button>
     </div>

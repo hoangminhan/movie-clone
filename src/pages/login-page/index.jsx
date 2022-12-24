@@ -152,8 +152,8 @@ const LoginPage = () => {
       </video>
       <div className="bg-black/40 h-[100vh]"></div>
 
-      <div className="absolute left-0 right-0 px-3 sm:p-0 top-[50%] sm:left-[50%] sm:-translate-x-1/2 -translate-y-1/2 max-w-[500px] text-center leading-relaxed ">
-        <p className="text-[white] text:[25px] sm:text-[40px] font-bold">
+      <div className="absolute left-0 right-0 px-3 sm:p-0 top-[50%] sm:left-[50%] sm:-translate-x-1/2 -translate-y-1/2 w-full sm:max-w-[500px] text-center leading-relaxed ">
+        <p className="text-[white] text:[25px] sm:text-[30px] font-bold">
           {t("Login to Your Account")}
         </p>
 
@@ -196,7 +196,7 @@ const LoginPage = () => {
                 <label
                   style={{
                     color: "white",
-                    fontSize: "18px",
+                    fontSize: "16px",
                     letterSpacing: "1px",
                   }}
                 >
@@ -223,7 +223,7 @@ const LoginPage = () => {
                 <label
                   style={{
                     color: "white",
-                    fontSize: "18px",
+                    fontSize: "16px",
                     letterSpacing: "1px",
                   }}
                 >
@@ -246,7 +246,7 @@ const LoginPage = () => {
               disabled={isLoading ? true : false}
               type="primary"
               htmlType="submit"
-              className={`bg-blue-600 hover:bg-blue-800 text-white hover:text-[#ccc] font-bold  w-[150px] py-2 rounded-lg text-[18px] min-w-[110px] mt-4
+              className={`bg-primarybg hover:opacity-90 text-white hover:text-[#ccc] font-bold  w-[150px] py-2 rounded-lg text-[18px] min-w-[110px] mt-4
               ${isLoading ? "cursor-not-allowed bg-[#ccc] hover:bg-[#ccc]" : ""}
               
               `}
@@ -255,10 +255,10 @@ const LoginPage = () => {
               {/* <FontAwesomeIcon icon={faRightToBracket} className="ml-1" /> */}
             </button>
 
-            <div className="text-white text-[18px] mt-4">
+            <div className="text-white text-[16px] mt-4">
               <span>{t("Not a member?")}</span>{" "}
               <Link to="/register">
-                <span className="underline text-primary font-bold">
+                <span className="underline text-primarybg font-bold">
                   {t("Register")}
                 </span>
               </Link>

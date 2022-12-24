@@ -44,7 +44,6 @@ export const ContentDiscovery = ({
   isLoadingSkeleton,
 }) => {
   const handleChangeTab = (activeKey) => {
-    console.log(typeof activeKey);
     if (handleChangeCurrentTab) {
       handleChangeCurrentTab(activeKey === "true" ? true : false);
     }
@@ -62,7 +61,7 @@ export const ContentDiscovery = ({
           {isLoadingSkeleton ? (
             <SkeletonCustom quantity={10} />
           ) : (
-            <div className="mt-5 flex flex-wrap gap-x-10 gap-y-10 justify-center">
+            <div className="mt-5 flex flex-wrap gap-x-0 sm:gap-x-1 lg:gap-x-1 gap-y-10 justify-evenly">
               {resultDiscover?.map((itemMovie, index) => {
                 return (
                   <div
@@ -89,7 +88,7 @@ export const ContentDiscovery = ({
                         className="rounded-b-lg grow-[1]"
                       />
                       <Tooltip title={itemMovie.title}>
-                        <p className="pt-2 text-center text-[18px] max-w-[185px] bg-[#1c1c1e] line-clamp-1">
+                        <p className="pt-2 text-center text-[16px] max-w-[185px] bg-[#1c1c1e] line-clamp-1">
                           {itemMovie.title}
                         </p>
                       </Tooltip>
@@ -97,7 +96,7 @@ export const ContentDiscovery = ({
                     {/* rate */}
                     <div className="absolute top-[-8px] right-[0px] text-[13px]">
                       <Badge.Ribbon
-                        color="#1890ff"
+                        color="#158370"
                         text={
                           <p className="rounded-[10px] leading-6">
                             {formatNumber(itemMovie.vote_average, 10)}
@@ -141,7 +140,7 @@ export const ContentDiscovery = ({
           {isLoadingSkeleton ? (
             <SkeletonCustom quantity={10} />
           ) : (
-            <div className="mt-5 flex flex-wrap gap-x-10 gap-y-10 justify-center">
+            <div className="mt-5 flex flex-wrap gap-x-0 sm:gap-x-1 lg:gap-x-1 gap-y-10 justify-evenly">
               {resultDiscover?.map((itemMovie, index) => {
                 return (
                   <div
@@ -167,9 +166,9 @@ export const ContentDiscovery = ({
                         height="100%"
                         className="rounded-b-lg grow-[1]"
                       />
-                      <Tooltip title={itemMovie.title}>
-                        <p className="pt-2 text-center text-[18px] max-w-[185px] bg-[#1c1c1e] line-clamp-1">
-                          {itemMovie.title}
+                      <Tooltip title={itemMovie.name}>
+                        <p className="pt-2 px-1 text-center text-[16px] max-w-[185px] bg-[#1c1c1e] line-clamp-1">
+                          {itemMovie.name}
                         </p>
                       </Tooltip>
                     </div>
@@ -177,7 +176,7 @@ export const ContentDiscovery = ({
                     {/* rate */}
                     <div className="absolute top-[-8px] right-[0px] text-[13px]">
                       <Badge.Ribbon
-                        color="#1890ff"
+                        color="#158370"
                         text={
                           <p className="rounded-[10px] leading-6">
                             {formatNumber(itemMovie.vote_average, 10)}

@@ -99,12 +99,12 @@ const PeoplePage = () => {
             placeholder={`${t("Search")}...`}
             defaultValue={filters.query}
             type="text"
-            className="w-full  border-none outline-none px-4 pl-[50px] py-1 rounded-3xl bg-[#333335] text-white"
+            className="w-full border-none outline-none px-4 pl-[50px] py-1 rounded-3xl bg-[#333335] text-white text-[16px]"
             onChange={handleSearch}
           />
           <FontAwesomeIcon
             icon={faSearch}
-            className="absolute left-[10px] top-[50%] -translate-y-1/2 text-white"
+            className="absolute left-[10px] top-[50%] -translate-y-1/2 text-white text-[20px]"
           />
         </div>
       </div>
@@ -128,7 +128,7 @@ const PeoplePage = () => {
                           : getImage(people.profile_path, "w185")
                       }
                     />
-                    <p className="text-[18px] text-center line-clamp-1">
+                    <p className="text-[16px] text-center line-clamp-1">
                       {people.name}
                     </p>
                   </div>

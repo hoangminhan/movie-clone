@@ -92,5 +92,10 @@
   "Please input your password":"Please input password",
   "Please confirm your passowrd":"Please confirm your passowrd",
   "The two passwords that you entered do not match!":"The two passwords that you entered do not match!",
-  "Please input Lastname":"Please input Lastname"
+  "Please input Lastname":"Please input Lastname",
+  "Search results for":"Search results for",
+  "results found":"results found",
+  "search filter":"Search filter",
+  "Watched":"Watched",
+  "Logout":"Logout"
 }

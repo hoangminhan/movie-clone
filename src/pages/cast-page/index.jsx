@@ -70,7 +70,7 @@ const CastPage = () => {
     <div className="min-h-[100vh]">
       <div className="px-5 py-10 flex justify-center text-[20px]">
         <div className="w-[1000px]">
-          <h3 className="text-center uppercase text-white text-[35px] mb-8">
+          <h3 className="text-center uppercase text-primarybg text-[35px] mb-8">
             {dataDetailCast.name}
           </h3>
           <StyleSkeleton avatar active loading={isLoading}>
@@ -84,11 +84,11 @@ const CastPage = () => {
                 />
               </div>
               <div className="grow-[1]">
-                <h3 className="text-white text-[24px]">
+                <h3 className="text-white text-[18px]">
                   {t("Personal info")}:{" "}
                 </h3>
                 <p>
-                  <span className="mr-1 text-[22px]">{t("Homepage")}:</span>
+                  <span className="mr-1 text-[16px]">{t("Homepage")}:</span>
                   {dataDetailCast.homepage ? (
                     <a
                       href={dataDetailCast.homepage}
@@ -102,20 +102,22 @@ const CastPage = () => {
                         .replace("/", "")}
                     </a>
                   ) : (
-                    <span className="font-[200]">{t("Updating")}...</span>
+                    <span className="font-[200] text-[16px]">
+                      {t("Updating")}...
+                    </span>
                   )}
                 </p>
                 <p>
-                  <span className="text-[22px]">{t("Birthday")}:</span>
-                  <span className="ml-1 text-[22px] font-[200]">
+                  <span className="text-[16px]">{t("Birthday")}:</span>
+                  <span className="ml-1 text-[16px] font-[200]">
                     {dataDetailCast.birthday
                       ? moment(dataDetailCast.birthday).format("DD-MM-YYYY")
                       : t("Updating")}
                   </span>
                 </p>
                 <p>
-                  <span className="text-[22px]">{t("Place of birthday")}:</span>
-                  <span className="ml-1 font-[200]">
+                  <span className="text-[16px]">{t("Place of birthday")}:</span>
+                  <span className="ml-1 font-[200] text-[16px]">
                     {dataDetailCast.place_of_birth
                       ? dataDetailCast.place_of_birth
                       : t("Updating")}
@@ -123,20 +125,20 @@ const CastPage = () => {
                 </p>
 
                 <p>
-                  <span className="text-[22px]">{t("Gender")}:</span>
-                  <span className="ml-1  font-[200]">
+                  <span className="text-[16px]">{t("Gender")}:</span>
+                  <span className="ml-1  font-[200] text-[16px]">
                     {dataDetailCast.gender === 2 ? t("Male") : "Female"}
                   </span>
                 </p>
                 <p>
-                  <span className="text-[22px]">{t("Popularity ")}:</span>
-                  <span className="ml-1  font-[200]">
+                  <span className="text-[16px]">{t("Popularity")}:</span>
+                  <span className="ml-1 font-[200] text-[16px]">
                     {formatNumber(dataDetailCast.popularity, 100)}
                   </span>
                 </p>
                 <p>
-                  <span className="text-[22px]">{t("Known For")}:</span>
-                  <span className="ml-1 font-[200]">
+                  <span className="text-[16px]">{t("Known For")}:</span>
+                  <span className="ml-1 font-[200] text-[16px]">
                     {dataDetailCast.known_for_department}
                   </span>
                 </p>
@@ -179,7 +181,7 @@ const CastPage = () => {
         </div>
       </div>
 
-      <div className="px-5 pb-8  flex justify-center text-[20px]">
+      <div className="px-5 pb-8  flex justify-center text-[16px]">
         <div className="w-[1000px]">
           <StyleSkeleton
             active
@@ -189,25 +191,29 @@ const CastPage = () => {
             <h3 className="text-white ">
               {t("Biography")} {t("Of")} {dataDetailCast.name}:
             </h3>
-            <ShowMoreText
-              /* Default options */
-              lines={5}
-              more={
-                <span className="text-[#45b1df] font-bold">
-                  {t("Read more")}
-                </span>
-              }
-              less={
-                <span className="text-[#45b1df] font-bold">
-                  {t("Read less")}
-                </span>
-              }
-              expanded={isExpand}
-              truncatedEndingComponent={"...    "}
-              onClick={executeOnClick}
-            >
-              <p className="text-white">{dataDetailCast.biography}</p>
-            </ShowMoreText>
+            {dataDetailCast.biography ? (
+              <ShowMoreText
+                /* Default options */
+                lines={5}
+                more={
+                  <span className="text-[#45b1df] font-bold">
+                    {t("Read more")}
+                  </span>
+                }
+                less={
+                  <span className="text-[#45b1df] font-bold">
+                    {t("Read less")}
+                  </span>
+                }
+                expanded={isExpand}
+                truncatedEndingComponent={"...    "}
+                onClick={executeOnClick}
+              >
+                <p className="text-white">{dataDetailCast.biography}</p>
+              </ShowMoreText>
+            ) : (
+              <span>{t("Updating")}...</span>
+            )}
           </StyleSkeleton>
         </div>
       </div>

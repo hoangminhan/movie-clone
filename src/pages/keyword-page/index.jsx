@@ -87,8 +87,8 @@ const KeywordPage = () => {
   return (
     <>
       <div className="flex justify-between mt-4">
-        <p className="capitalize">{dataDetailKeyword.name || ""}</p>
-        <p>
+        <p className="capitalize text-[20px]">{dataDetailKeyword.name || ""}</p>
+        <p className="text-[20px]">
           {total_results} {t("movies")}
         </p>
       </div>
@@ -112,12 +112,12 @@ const KeywordPage = () => {
                   className="rounded-md flex-1"
                 />
 
-                <p className="line-clamp-1 text-[18px] text-center">
+                <p className="line-clamp-1 text-[16px] text-center">
                   {result.title}
                 </p>
                 <div className="absolute top-[-8px] right-[0px] text-[13px]">
                   <Badge.Ribbon
-                    color="#1890ff"
+                    color="#158370"
                     text={
                       <p className="rounded-[10px]  m-0 leading-6">
                         {formatNumber(result.vote_average, 10)}
@@ -195,7 +195,7 @@ const KeywordPage = () => {
               </Link>
               <div className="absolute top-[-8px] right-[0px] text-[13px]">
                 <Badge.Ribbon
-                  color="#1890ff"
+                  color="#158370"
                   text={
                     <p className="rounded-[10px]  m-0 leading-6">
                       {formatNumber(dataModal.vote_average, 10)}

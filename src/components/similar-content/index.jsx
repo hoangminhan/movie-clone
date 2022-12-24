@@ -17,9 +17,9 @@ export const SimilarContent = ({ dataSimilar }) => {
               : "movie";
           return (
             <Link key={index} to={`/${currentType}/${similar.id}`}>
-              <div className="rounded-global max-w-[185px] hover:scale-110 duration-300 delay-100 rounded-[6px] overflow-hidden">
+              <div className="max-w-[185px] hover:scale-110 duration-300 delay-100 rounded-[6px] overflow-hidden">
                 {/* img */}
-                <div className="relative group ">
+                <div className="relative group">
                   <img
                     src={getImage(similar.poster_path, "w185")}
                     className="h-[278px]"
@@ -34,9 +34,9 @@ export const SimilarContent = ({ dataSimilar }) => {
                   {/* rating */}
                   <div className="absolute top-[-8px] right-0">
                     <Badge.Ribbon
-                      color="#1890ff"
+                      color="#158370"
                       text={
-                        <p className="rounded-[10px]  m-0 leading-6">
+                        <p className="rounded-[10px] m-0 leading-6">
                           {formatNumber(similar.vote_average, 10)}
                           <span className="inline-block ml-1">
                             <FontAwesomeIcon
@@ -54,7 +54,7 @@ export const SimilarContent = ({ dataSimilar }) => {
                   className="
             bg-[#2f2f2f]
             w-full
-            h-[100px] text-center px-2 pt-[8px] pb-1
+            h-[80px] text-center px-2 pt-[8px] pb-1
             "
                 >
                   <p className="line-clamp-2">

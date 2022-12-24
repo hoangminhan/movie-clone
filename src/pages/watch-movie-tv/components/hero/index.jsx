@@ -125,14 +125,13 @@ export const Hero = ({ dataDetail }) => {
             >
               <p
                 className={`group bg-transparent w-10 h-10 flex items-center justify-center rounded-full border-solid 
-              ${isFavorite ? "border-[#5179ff]" : "border-[white]"}
-              border-[2px] hover:border-[#5179ff]`}
+              ${isFavorite ? "border-primarybg" : "border-[white]"}
+              border-[2px] hover:border-primarybg`}
               >
                 <FontAwesomeIcon
                   icon={faHeart}
-                  color="white"
-                  className={`text-[13px] ${
-                    isFavorite ? "text-[#5179ff]" : ""
+                  className={`text-[13px] group-hover:text-primarybg ${
+                    isFavorite ? "text-primarybg" : ""
                   }`}
                 />
               </p>
@@ -141,7 +140,7 @@ export const Hero = ({ dataDetail }) => {
 
           {/* name phim */}
           <div className="absolute  left-[30%] bottom-[20%] max-w-[500px] ">
-            <p className="text-white text-[40px] font-medium drop-shadow-2xl shadow-[red]  p-5 ml-3 pr-0  leading-10 stroke-text">
+            <p className="text-white text-[30px] font-medium drop-shadow-2xl shadow-[red]  p-5 ml-3 pr-0  leading-10 stroke-text">
               {dataDetail?.title ? dataDetail?.title : dataDetail?.name}
             </p>
           </div>
@@ -155,7 +154,7 @@ export const Hero = ({ dataDetail }) => {
                     to={`/genres/${genre.id}-${genre.name}`}
                     state={{ genreName: genre.name }}
                   >
-                    <p className="max-w-[120px] line-clamp-1 px-3 border-solid border-white border-[1px] mr-3 rounded-3xl text-white text-[14px] uppercase cursor-pointer hover:scale-110 duration-150 ">
+                    <p className="max-w-[120px] line-clamp-1 px-3 border-solid border-white border-[1px] mr-3 rounded-3xl text-white text-[13px] uppercase cursor-pointer hover:scale-110 duration-150 ">
                       {genre.name.replace("Phim", "")}
                     </p>
                   </Link>
@@ -172,7 +171,7 @@ export const Hero = ({ dataDetail }) => {
               handleAddHistory(dataDetail);
             }}
           >
-            <div className="flex items-center justify-center px-4 py-2 bg-primary text-white rounded-[20px] hover:scale-110 duration-200 cursor-pointer">
+            <div className="flex items-center justify-center px-4 py-1 bg-primarybg text-white rounded-[20px] hover:scale-110 duration-200 cursor-pointer">
               <p className="w-5 h-5 bg-[red] flex items-center justify-center p-3 rounded-full">
                 <FontAwesomeIcon icon={faPlay} fontSize="16px" />
               </p>

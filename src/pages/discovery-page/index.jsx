@@ -57,7 +57,6 @@ const DiscoveryPage = () => {
   } = useHomePage();
 
   const handleChangeCurrentTab = (tab) => {
-    console.log({ tab });
     setCurrentTab(tab);
     if (tab) {
       setFilters({
@@ -179,7 +178,6 @@ const DiscoveryPage = () => {
     const getData = async () => {
       const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
       const type = currentTab ? "movie" : "tv";
-      console.log({ type });
 
       await handleGetListGenresMovie(type, {
         api_key: process.env.REACT_APP_API_KEY,
@@ -191,8 +189,8 @@ const DiscoveryPage = () => {
 
   return (
     <div className="py-[12px] min-h-[100vh] ">
-      <Row gutter={[12, 12]}>
-        <Col span={20}>
+      <Row gutter={[12, 12]} className="flex-wrap-reverse">
+        <Col xs={24} md={24} lg={18} xl={19} xxl={20}>
           <ContentDiscovery
             currentTab={currentTab}
             handleChangeCurrentTab={handleChangeCurrentTab}
@@ -204,7 +202,7 @@ const DiscoveryPage = () => {
           />
         </Col>
 
-        <Col span={4} className="mt-[75px]">
+        <Col xs={24} md={24} lg={6} xl={5} xxl={4} className="mt-[75px]">
           <Filter
             listGenresMovie={listGenresMovie}
             handleSelectSort={handleSelectSort}

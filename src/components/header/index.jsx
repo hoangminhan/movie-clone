@@ -1,9 +1,11 @@
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Menu } from "components";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { LanguageProject, Profile } from "./component";
 
-export const Header = ({ page }) => {
+export const Header = ({ page, setIsHiddenSidebar, isHiddenSidebar }) => {
   const [t] = useTranslation();
   const location = useLocation();
   const { pathname } = location;
@@ -22,20 +24,30 @@ export const Header = ({ page }) => {
       case "Search":
         return t("Search");
       case "Favorite":
-        return t("My Favorite");
+        return t("Favorite");
       case "History":
         return t("Watched");
       case "Account Settings":
         return t("Account Settings");
       default:
-        return <Menu />;
+        return <Menu setIsHiddenSidebar={setIsHiddenSidebar} />;
     }
   };
   return (
-    <header className="flex justify-between items-center h-[80px]  before:absolute before:h-[1px] before:w-[100%] before:left-[0px] before:right-[0px] before:top-[80px] before:bg-[#4f4e4e] text-white">
-      {handleContentHeader(page)}
+    <header className="flex justify-between items-center h-[80px] before:absolute before:h-[1px] before:w-[100%] before:left-[0px] before:right-[0px] before:top-[80px] before:bg-[#4f4e4e] text-white">
+      <p className="text-[20px] whitespace-nowrap">
+        {handleContentHeader(page)}
+      </p>
 
       <div className="flex justify-end items-center gap-[20px] basis-3/5">
+        <div
+          className="block tablet:hidden"
+          onClick={() => {
+            setIsHiddenSidebar(false);
+          }}
+        >
+          <FontAwesomeIcon icon={faBars} />
+        </div>
         <LanguageProject />
         <Profile />
       </div>
