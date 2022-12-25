@@ -44,6 +44,8 @@ import {
   handleGenerateTitleReaction,
   handleShowReactionOfComment,
 } from "./utils-comment";
+import { useNotification } from "hooks";
+import { AVATAR_EMPTY } from "constant";
 
 const { TextArea } = Input;
 
@@ -63,38 +65,6 @@ export const CommentMovie = ({
   dataReplyReaction,
   isLoadingComment,
 }) => {
-  const findReactionOfComment = (dataReaction, comment) => {
-    return dataReaction?.reaction?.find(
-      (reaction) =>
-        reaction?.id_comment === comment?.id_comment &&
-        dataUser?.uid === reaction?.user_id
-    );
-  };
-  const handleCheckIsUserReaction = (dataReaction, comment) => {
-    const result = dataReaction?.reaction?.find((reaction) => {
-      return (
-        reaction?.user_id === dataUser?.uid &&
-        comment?.id_comment === reaction?.id_comment
-      );
-    });
-    return Object.keys(result || {}).length ? true : false;
-  };
-  const findReactionOfReply = (dataReplyReaction, dataReply) => {
-    return dataReplyReaction?.reaction_reply?.find(
-      (reply) =>
-        reply?.id_reply === dataReply?.id_reply &&
-        dataUser?.uid === reply?.user_id
-    );
-  };
-  const handleCheckIsUserReply = (dataReplyReaction, dataReply) => {
-    const result = dataReplyReaction?.reaction_reply?.find((reply) => {
-      return (
-        reply?.user_id === dataUser?.uid &&
-        dataReply?.id_reply === reply?.id_reply
-      );
-    });
-    return Object.keys(result || {}).length ? true : false;
-  };
   const [reactions, setReactions] = useState({
     like: 0,
     haha: 1,
@@ -131,62 +101,114 @@ export const CommentMovie = ({
   const [currentReplyPosition, setCurrentReplyPosition] = useState();
   const [dataModal, setDataModal] = useState([]);
   const [visibleModal, setVisibleModal] = useState(false);
+  const accessToken = localStorage.getItem("accessToken") || "";
+
+  const { handlePopupNotification } = useNotification();
+  const findReactionOfComment = (dataReaction, comment) => {
+    return dataReaction?.reaction?.find(
+      (reaction) =>
+        reaction?.id_comment === comment?.id_comment &&
+        dataUser?.uid === reaction?.user_id
+    );
+  };
+  const handleCheckIsUserReaction = (dataReaction, comment) => {
+    const result = dataReaction?.reaction?.find((reaction) => {
+      return (
+        reaction?.user_id === dataUser?.uid &&
+        comment?.id_comment === reaction?.id_comment
+      );
+    });
+    return Object.keys(result || {}).length ? true : false;
+  };
+  const findReactionOfReply = (dataReplyReaction, dataReply) => {
+    return dataReplyReaction?.reaction_reply?.find(
+      (reply) =>
+        reply?.id_reply === dataReply?.id_reply &&
+        dataUser?.uid === reply?.user_id
+    );
+  };
+  const handleCheckIsUserReply = (dataReplyReaction, dataReply) => {
+    const result = dataReplyReaction?.reaction_reply?.find((reply) => {
+      return (
+        reply?.user_id === dataUser?.uid &&
+        dataReply?.id_reply === reply?.id_reply
+      );
+    });
+    return Object.keys(result || {}).length ? true : false;
+  };
 
   const handleSubmitComment = async (value) => {
-    const dbfireStore = getFirestore();
+    const accessToken = localStorage.getItem("accessToken") || "";
+    if (Boolean(accessToken)) {
+      const dbfireStore = getFirestore();
 
-    const commentRef = doc(dbfireStore, "detail", currentKey || idDetail);
-    const { value_comment } = value;
-    const dataAdd = {
-      user_id: dataUser.uid,
-      user_name: nameCurrentUser,
-      user_url: urlImgUser || "",
-      content_comment: value_comment,
-      createAt: Timestamp.fromDate(new Date()),
-      id_comment: uid(16),
-    };
-    formValue.resetFields();
-    setValueComment("");
+      const commentRef = doc(dbfireStore, "detail", currentKey || idDetail);
+      const { value_comment } = value;
+      const dataAdd = {
+        user_id: dataUser.uid,
+        user_name: nameCurrentUser,
+        user_url: urlImgUser || "",
+        content_comment: value_comment,
+        createAt: Timestamp.fromDate(new Date()),
+        id_comment: uid(16),
+      };
+      formValue.resetFields();
+      setValueComment("");
 
-    await updateDoc(commentRef, {
-      comment: arrayUnion(dataAdd),
-    });
+      await updateDoc(commentRef, {
+        comment: arrayUnion(dataAdd),
+      });
+    } else {
+      handlePopupNotification(
+        "You need to login to perform this function",
+        "warning"
+      );
+    }
   };
 
   const handleAddReaction = async (value, idCommentReaction) => {
-    const dbfireStore = getFirestore();
+    const accessToken = localStorage.getItem("accessToken") || "";
+    if (Boolean(accessToken)) {
+      const dbfireStore = getFirestore();
 
-    const ReactionRef = doc(dbfireStore, "reaction", currentKey || idDetail);
-    const dataAdd = {
-      user_id: dataUser.uid,
-      user_name: nameCurrentUser,
-      user_url: urlImgUser || "",
-      reaction_value: value,
-      createAt: Timestamp.fromDate(new Date()),
-      id_comment: idCommentReaction,
-      id_reaction: uid(16),
-    };
-    if (!dataReaction.reaction.length) {
-      await updateDoc(ReactionRef, {
-        reaction: arrayUnion(dataAdd),
-      });
-    } else {
-      const checkExistReaction = dataReaction.reaction.find(
-        (item) =>
-          item.user_id === dataUser.uid && item.id_comment === idCommentReaction
-      );
-      if (checkExistReaction) {
-        updateDoc(ReactionRef, {
-          reaction: arrayRemove(checkExistReaction),
-        });
-        updateDoc(ReactionRef, {
-          reaction: arrayUnion(dataAdd),
-        });
-      } else {
+      const ReactionRef = doc(dbfireStore, "reaction", currentKey || idDetail);
+      const dataAdd = {
+        user_id: dataUser.uid,
+        user_name: nameCurrentUser,
+        user_url: urlImgUser || "",
+        reaction_value: value,
+        createAt: Timestamp.fromDate(new Date()),
+        id_comment: idCommentReaction,
+        id_reaction: uid(16),
+      };
+      if (!dataReaction.reaction.length) {
         await updateDoc(ReactionRef, {
           reaction: arrayUnion(dataAdd),
         });
+      } else {
+        const checkExistReaction = dataReaction.reaction.find(
+          (item) =>
+            item.user_id === dataUser.uid &&
+            item.id_comment === idCommentReaction
+        );
+        if (checkExistReaction) {
+          updateDoc(ReactionRef, {
+            reaction: arrayRemove(checkExistReaction),
+          });
+          updateDoc(ReactionRef, {
+            reaction: arrayUnion(dataAdd),
+          });
+        } else {
+          await updateDoc(ReactionRef, {
+            reaction: arrayUnion(dataAdd),
+          });
+        }
       }
+    } else {
+      handlePopupNotification(
+        "You need to login to perform this function",
+        "warning"
+      );
     }
   };
   // add reaction reply
@@ -377,7 +399,12 @@ export const CommentMovie = ({
     <>
       <div>
         <Comment
-          avatar={<Avatar src={urlImgUser} alt="Han Solo" />}
+          avatar={
+            <Avatar
+              src={accessToken ? urlImgUser : AVATAR_EMPTY}
+              alt="Han Solo"
+            />
+          }
           content={
             <Form
               onFinish={handleSubmitComment}
@@ -387,7 +414,7 @@ export const CommentMovie = ({
               <Form.Item name="value_comment">
                 <TextArea
                   rows={4}
-                  placeholder="Write comment..."
+                  placeholder={t("Write comment...")}
                   onChange={(e) => {
                     const value = e.target.value;
                     setValueComment(value);
@@ -492,11 +519,20 @@ export const CommentMovie = ({
                                         <p
                                           className="text-black cursor-pointer hover:font-bold hover:duration-150"
                                           onClick={() => {
-                                            setIndexUpdate(comment.id_comment);
-                                            setValueCommentUpdate(
-                                              comment.content_comment
-                                            );
-                                            setCommentSelectUpdate(comment);
+                                            if (Boolean(accessToken)) {
+                                              setIndexUpdate(
+                                                comment.id_comment
+                                              );
+                                              setValueCommentUpdate(
+                                                comment.content_comment
+                                              );
+                                              setCommentSelectUpdate(comment);
+                                            } else {
+                                              handlePopupNotification(
+                                                "You need to login to perform this function",
+                                                "warning"
+                                              );
+                                            }
                                           }}
                                         >
                                           Edit
@@ -504,10 +540,17 @@ export const CommentMovie = ({
                                         <Popconfirm
                                           title="Are you sure to delete this comment?"
                                           onConfirm={() => {
-                                            handleConfirmDelete(
-                                              comment,
-                                              "comment"
-                                            );
+                                            if (Boolean(accessToken)) {
+                                              handleConfirmDelete(
+                                                comment,
+                                                "comment"
+                                              );
+                                            } else {
+                                              handlePopupNotification(
+                                                "You need to login to perform this function",
+                                                "warning"
+                                              );
+                                            }
                                           }}
                                           onCancel={handleCancelDelete}
                                           okText="Yes"
@@ -608,7 +651,14 @@ export const CommentMovie = ({
                             <ReactionBarSelector
                               iconSize="20px"
                               onSelect={(key) => {
-                                handleAddReaction(key, comment.id_comment);
+                                if (Boolean(accessToken)) {
+                                  handleAddReaction(key, comment.id_comment);
+                                } else {
+                                  handlePopupNotification(
+                                    "You need to login to perform this function",
+                                    "warning"
+                                  );
+                                }
                               }}
                               style={{ backgroundColor: "#333335" }}
                             />
@@ -617,8 +667,17 @@ export const CommentMovie = ({
                         <p
                           className="text-[#b2a28e] cursor-pointer"
                           onClick={() => {
-                            setCommentSelect(comment.id_comment);
-                            replyRef.current.focus();
+                            const accessToken =
+                              localStorage.getItem("accessToken") || "";
+                            if (Boolean(accessToken)) {
+                              setCommentSelect(comment.id_comment);
+                              replyRef.current.focus();
+                            } else {
+                              handlePopupNotification(
+                                "You need to login to perform this function",
+                                "warning"
+                              );
+                            }
                           }}
                         >
                           {t("Reply")}
@@ -791,19 +850,28 @@ export const CommentMovie = ({
                                                     <p
                                                       className="text-black cursor-pointer hover:font-bold hover:duration-150"
                                                       onClick={() => {
-                                                        setIndexUpdateReply(
-                                                          reply.id_comment
-                                                        );
-                                                        setCurrentReplyPosition(
-                                                          index
-                                                        );
-                                                        setValueReplyUpdate(
-                                                          reply.content_reply
-                                                        );
-                                                        setReplySelectUpdate(
-                                                          reply
-                                                        );
-                                                        replyRef.current.focus();
+                                                        if (
+                                                          Boolean(accessToken)
+                                                        ) {
+                                                          setIndexUpdateReply(
+                                                            reply.id_comment
+                                                          );
+                                                          setCurrentReplyPosition(
+                                                            index
+                                                          );
+                                                          setValueReplyUpdate(
+                                                            reply.content_reply
+                                                          );
+                                                          setReplySelectUpdate(
+                                                            reply
+                                                          );
+                                                          replyRef.current.focus();
+                                                        } else {
+                                                          handlePopupNotification(
+                                                            "You need to login to perform this function",
+                                                            "warning"
+                                                          );
+                                                        }
                                                       }}
                                                     >
                                                       {" "}
@@ -812,10 +880,19 @@ export const CommentMovie = ({
                                                     <Popconfirm
                                                       title="Are you sure to delete this comment?"
                                                       onConfirm={() => {
-                                                        handleConfirmDelete(
-                                                          reply,
-                                                          "reply"
-                                                        );
+                                                        if (
+                                                          Boolean(accessToken)
+                                                        ) {
+                                                          handleConfirmDelete(
+                                                            reply,
+                                                            "reply"
+                                                          );
+                                                        } else {
+                                                          handlePopupNotification(
+                                                            "You need to login to perform this function",
+                                                            "warning"
+                                                          );
+                                                        }
                                                       }}
                                                       onCancel={
                                                         handleCancelDelete
@@ -931,10 +1008,17 @@ export const CommentMovie = ({
                                           <ReactionBarSelector
                                             iconSize="20px"
                                             onSelect={(key) => {
-                                              handleAddReactionReply(
-                                                key,
-                                                reply.id_reply
-                                              );
+                                              if (Boolean(accessToken)) {
+                                                handleAddReactionReply(
+                                                  key,
+                                                  reply.id_reply
+                                                );
+                                              } else {
+                                                handlePopupNotification(
+                                                  "You need to login to perform this function",
+                                                  "warning"
+                                                );
+                                              }
                                             }}
                                             style={{
                                               backgroundColor: "#333335",

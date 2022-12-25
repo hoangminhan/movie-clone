@@ -23,7 +23,7 @@ export const DefaultLayout = ({
       sessionStorage.setItem("isToggleMenu", true);
       setToggleMenu(sessionStorage.getItem("isToggleMenu"));
     }
-  }, []);
+  }, [location.pathname]);
 
   const [isHiddenSidebar, setIsHiddenSidebar] = useState(true);
   const handleClickLeftArrow = () => {

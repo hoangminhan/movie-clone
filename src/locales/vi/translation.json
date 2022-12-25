@@ -106,7 +106,11 @@
   "This will remove all your films from this bookmark list":"Thao tác này sẽ xóa toàn bộ phim của bạn khỏi danh sách",
   "Are you sure?":"Bạn có chắc không?",
   "Yes":"Có",
-  "All":"Tất cả"
+  "All":"Tất cả",
+  "Logout success":"Đăng xuất thành công",
+  "Login success":"Đăng nhập thành công",
+  "Register success":"Đăng kí thành công",
+  "Write comment...":"Viết bình luận"
 
 
 

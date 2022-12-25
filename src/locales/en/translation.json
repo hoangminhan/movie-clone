@@ -105,6 +105,10 @@
   "This will remove your films from this bookmark list":"This will remove your films from this bookmark list",
   "Are you sure?":"Are you sure?",
   "Yes":"Yes",
-  "All":"All"
+  "All":"All",
+  "Logout success":"Logout success",
+  "Login success":"Login success",
+  "Register success":"Register success",
+  "Write comment...":"Write comment..."
 
 }

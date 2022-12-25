@@ -17,7 +17,7 @@ import {
 } from "firebase/auth";
 
 import { useState } from "react";
-import { useFirebaseRealTime, useTitle } from "hooks";
+import { useFirebaseRealTime, useNotification, useTitle } from "hooks";
 import { app } from "firebase-custom";
 import {
   addDoc,
@@ -68,6 +68,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { handleChangeTitle } = useTitle();
   const { handleCheckUserExist } = useFirebaseRealTime();
+  const { handlePopupNotification } = useNotification();
 
   // login with user and password
   const onFinish = async (values) => {
@@ -85,6 +86,7 @@ const LoginPage = () => {
       localStorage.setItem("accessToken", accessToken);
       setIsLoading(false);
       localStorage.setItem("refreshToken", refreshToken);
+      handlePopupNotification("Login success", "success");
       navigate("/");
     } catch (error) {
       setIsLoading(false);
@@ -149,6 +151,8 @@ const LoginPage = () => {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      handlePopupNotification("Login success", "success");
+
       navigate("/");
     } catch (error) {}
   };

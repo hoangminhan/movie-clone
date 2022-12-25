@@ -131,9 +131,7 @@ export const useFirebaseRealTime = () => {
       // reference to doc of collection user
       const snapshot = await getDoc(doc(db, "user", user.uid));
       if (snapshot.exists()) {
-        console.log("yes");
       } else {
-        console.log("no");
         const data = {
           user_id: user.uid || "",
           url: user.photoURL || AVATAR_EMPTY,

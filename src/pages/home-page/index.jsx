@@ -52,7 +52,7 @@ const HomePage = () => {
     getDataApi();
   }, [stateContext]);
   return (
-    <div className="py-8">
+    <div className="py-6">
       <Outlet />
     </div>
   );

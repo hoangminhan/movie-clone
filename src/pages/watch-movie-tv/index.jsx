@@ -423,9 +423,17 @@ const WatchMovieTv = () => {
     handleGetdata();
   }, [idDetail]);
 
+  const [isHiddenDrawer, setIsHiddenDrawer] = useState(
+    sessionStorage.getItem("isHiddenDrawer") === "true" ? true : false
+  );
+
   return (
     <div>
-      <Row className="mr-[300px] h-full">
+      <Row
+        className={`h-full transition-all duration-150 ease-linear ${
+          isHiddenDrawer ? "mr-[0px]" : "mr-[250px]"
+        }`}
+      >
         <Col span={24}>
           {/* hero */}
           <Hero
@@ -433,6 +441,22 @@ const WatchMovieTv = () => {
             // handleChangeUrl={handleChangeUrl}
             isLoadingDetail={isLoadingDetail}
           />
+
+          <div
+            className={`flex justify-end mt-3 transition-all duration-200 ease-linear ${
+              isHiddenDrawer ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <p
+              className="text-[16px] cursor-pointer"
+              onClick={() => {
+                setIsHiddenDrawer(false);
+                sessionStorage.setItem("isHiddenDrawer", false);
+              }}
+            >
+              Open similar content
+            </p>
+          </div>
 
           <div className="w-full mt-10">
             <BodyWatch
@@ -459,15 +483,15 @@ const WatchMovieTv = () => {
 
             {/* xem phim */}
             <div className="my-10 mx-4 overflow-hidden" id="movie-id">
-              {/* {currentUrl && (
+              {currentUrl && (
                 <Iframe
                   id="movie-id"
                   src={currentUrl}
-                  height="600px"
+                  className="h-[300px] tablet:h-[500px] overflow-hidden"
                   width="100%"
                   allowFullScreen
                 ></Iframe>
-              )} */}
+              )}
             </div>
 
             {/* eposide tv */}
@@ -582,14 +606,29 @@ const WatchMovieTv = () => {
           </div>
         </Col>
       </Row>
-      <div className="bg-black p-4 border-l-[#ccc] border-l-[1px] border-l-solid fixed z-[2] h-full overflow-y-auto top-0 right-0 w-[300px] scroll-smooth no-scrollbar">
+      <div
+        className={`
+      bg-black  border-l-[#ccc] border-l-[1px] border-l-solid fixed z-[2] h-full overflow-y-auto top-0 right-0 scroll-smooth no-scrollbar
+      transition-all duration-150 ease-linear ${
+        isHiddenDrawer ? "w-[0px] p-0" : "w-[250px] p-4"
+      }
+      `}
+      >
         {tabGlobal === "/" ? (
           <div className="h-[100%]">
             <div className="flex justify-between items-center mb-2">
-              <p id="similar-movie" className="text-white uppercase">
+              <p
+                id="similar-movie"
+                className="text-white uppercase text-[22px]"
+              >
                 {t("Similar")}
               </p>
-              <div>
+              <div
+                onClick={() => {
+                  setIsHiddenDrawer(true);
+                  sessionStorage.setItem("isHiddenDrawer", true);
+                }}
+              >
                 <FontAwesomeIcon
                   icon={faArrowRight}
                   className="cursor-pointer"
@@ -616,11 +655,19 @@ const WatchMovieTv = () => {
                         />
                       </div>
                       <div className="grow">
-                        <p className="text-[16px] line-clamp-2">
-                          {similarContent.title
-                            ? similarContent.title
-                            : similarContent.name}
-                        </p>
+                        <Tooltip
+                          title={
+                            similarContent.title
+                              ? similarContent.title
+                              : similarContent.name
+                          }
+                        >
+                          <p className="text-[14px] line-clamp-2">
+                            {similarContent.title
+                              ? similarContent.title
+                              : similarContent.name}
+                          </p>
+                        </Tooltip>
                         <p className="text-[15px] text-[#ccc]">
                           {similarContent.release_date
                             ? similarContent.release_date

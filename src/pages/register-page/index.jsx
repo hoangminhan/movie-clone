@@ -8,8 +8,14 @@ import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useTitle } from "hooks";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { useNotification, useTitle } from "hooks";
+import {
+  addDoc,
+  collection,
+  doc,
+  getFirestore,
+  setDoc,
+} from "firebase/firestore";
 import { AVATAR_EMPTY } from "constant";
 
 const StyleInput = styled(Input)`
@@ -42,6 +48,7 @@ const StyleInputPassword = styled(Input.Password)`
 
 const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const { handlePopupNotification } = useNotification();
 
   const [t] = useTranslation();
   const db = getFirestore();
@@ -71,10 +78,14 @@ const RegisterPage = () => {
         bookmark: [],
         history: [],
       };
-      addDoc(collection(db, "user", response.user.uid), data);
+      // addDoc(collection(db, "user", response.user.uid), data);
+      setDoc(doc(db, "user", response.user.uid), data);
+
       setIsLoading(false);
 
       localStorage.setItem("accessToken", accessToken);
+      handlePopupNotification("Register success", "success");
+
       navigate("/");
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {

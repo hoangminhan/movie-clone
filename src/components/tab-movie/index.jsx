@@ -1,5 +1,5 @@
 import { Col, Row, Skeleton } from "antd";
-import { Banner, ComponentSlider, Filter } from "components";
+import { Banner, ComponentSlider, Filter, SkeletonCustom } from "components";
 import { useTitle } from "hooks";
 import { useHomePage } from "hooks/use-homepage";
 import React, { useEffect } from "react";
@@ -22,29 +22,33 @@ export const TabMovie = React.memo(() => {
 
   return (
     <>
-      <Row gutter={[12, 12]}>
-        <Col span={24}>
-          <div className="relative">
-            <Banner listTrending={listTrending} isLoading={isLoading} />
-            <ComponentSlider dataPopular={listMovie} type="movie" />
-          </div>
-          <ComponentSlider
-            dataPopular={listMovieUpComing}
-            title="Up Coming"
-            type="movie"
-          />
-          <ComponentSlider
-            dataPopular={listTrending}
-            title="Trending"
-            type="movie"
-          />
-          <ComponentSlider
-            dataPopular={listMovieTopRated}
-            title="Top Rated"
-            type="movie"
-          />
-        </Col>
-      </Row>
+      {listTrending.length ? (
+        <Row gutter={[12, 12]}>
+          <Col span={24}>
+            <div className="relative">
+              <Banner listTrending={listTrending} isLoading={isLoading} />
+              <ComponentSlider dataPopular={listMovie} type="movie" />
+            </div>
+            <ComponentSlider
+              dataPopular={listMovieUpComing}
+              title="Up Coming"
+              type="movie"
+            />
+            <ComponentSlider
+              dataPopular={listTrending}
+              title="Trending"
+              type="movie"
+            />
+            <ComponentSlider
+              dataPopular={listMovieTopRated}
+              title="Top Rated"
+              type="movie"
+            />
+          </Col>
+        </Row>
+      ) : (
+        <SkeletonCustom quantity={15} />
+      )}
     </>
   );
 });

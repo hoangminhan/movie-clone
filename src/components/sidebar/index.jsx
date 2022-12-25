@@ -26,6 +26,7 @@ import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import "./style.scss";
 import { useState } from "react";
+import { getAuth, signOut } from "firebase/auth";
 
 // styled
 const StyledMenu = styled(Menu)`
@@ -139,7 +140,22 @@ export const Sidebar = ({
     domEvent,
   }) => {
     const accessToken = localStorage.getItem("accessToken") || "";
-    if (
+    if (key === "/login") {
+      if (Boolean(accessToken)) {
+        const auth = getAuth();
+        signOut(auth)
+          .then((data) => {
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            localStorage.removeItem("userInfo");
+            handlePopupNotification("Logout success", "success");
+            navigate("/login");
+          })
+          .catch((error) => {});
+      } else {
+        navigate(key);
+      }
+    } else if (
       (key === "/favorite" ||
         key === "/history" ||
         key === "/settings" ||
@@ -195,7 +211,7 @@ export const Sidebar = ({
       </section>
       {/* menu mobile */}
       <section
-        className={`sss ${isHiddenSidebar ? "hidden" : "block tablet:hidden"}`}
+        className={`${isHiddenSidebar ? "hidden" : "block tablet:hidden"}`}
       >
         <StyledMenuToggle
           defaultSelectedKeys={[location.pathname]}
@@ -207,9 +223,13 @@ export const Sidebar = ({
         />
       </section>
       <div className="absolute bottom-[16px] left-[50%] translate-x-[-50%] cursor-pointer hidden lg:block">
-        <div onClick={handleChangeStatusMenu}>
-          {isToggle ? <RightOutlined /> : <LeftOutlined />}
-        </div>
+        {location.pathname.includes("/movie/") ? (
+          ""
+        ) : (
+          <div onClick={handleChangeStatusMenu}>
+            {isToggle ? <RightOutlined /> : <LeftOutlined />}
+          </div>
+        )}
       </div>
     </>
   );
