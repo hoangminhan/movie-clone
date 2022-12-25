@@ -63,6 +63,7 @@ const BookMarkedPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [dataDeleteOne, setDataDeleteOne] = useState({});
   const [typeDelete, setTypeDelete] = useState("one");
+  const [typeDeleteModal, setTypeDeleteModal] = useState();
   const {
     handleDeleteOneBookmarkOrHistory,
     handleDeleteAllBookmarkOrHistory,
@@ -112,15 +113,15 @@ const BookMarkedPage = () => {
   }, []);
   useEffect(() => {
     if (dataUser.uid) {
-      setIsLoading(true);
       const getData = async () => {
+        setIsLoading(true);
         const dbfireStore = getFirestore();
 
         const queryReplyReaction = query(
           collection(dbfireStore, "user"),
           where("user_id", "==", dataUser?.uid)
         );
-        onSnapshot(queryReplyReaction, (querySnapshot) => {
+        await onSnapshot(queryReplyReaction, (querySnapshot) => {
           querySnapshot.forEach((doc) => {
             if (currentOption === "multi") {
               setDataFavorite([...doc.data().bookmark]);
@@ -135,9 +136,9 @@ const BookMarkedPage = () => {
             }
           });
         });
+        setIsLoading(true);
       };
       getData();
-      setIsLoading(false);
     }
   }, [dataUser, currentOption, isDelete]);
   const [isEdit, setIsEdit] = useState(false);
@@ -198,81 +199,84 @@ const BookMarkedPage = () => {
       message.success("Xóa thành công");
     }
   };
-
   return (
     <>
       <div className="min-h-[100vh]">
-        {isLoading ? (
-          <SkeletonCustom quantity={dataFavorite?.length} />
-        ) : (
-          // <Skeleton active paragraph={{ rows: 20 }} />
-          <>
+        <>
+          {!isLoading ? (
+            <SkeletonCustom quantity={15} />
+          ) : (
             <Row gutter={[24, 24]} className="mt-8 flex-wrap-reverse">
-              {dataFavorite?.length ? (
-                <Col xs={24} md={24} lg={18} xl={19} xxl={20}>
-                  {dataFavorite?.length ? (
-                    <>
-                      {isEdit ? (
-                        <div className="mb-7 flex items-center gap-4">
-                          <div
-                            className="group hover:cursor-pointer flex"
-                            onClick={() => {
-                              setIsEdit(false);
-                            }}
-                          >
-                            <p className="">
-                              <FontAwesomeIcon
-                                icon={faClose}
-                                className=" text-[#ccc] text-[22px] border-[#ccc] border-solid border-[1px] rounded-full w-[18px] h-[18px] "
-                              />
-                            </p>
-                            <span className="ml-1 text-[22px]">
-                              {t("Cancel")}
-                            </span>
-                          </div>
-
-                          <div
-                            className="group hover:cursor-pointer"
-                            onClick={() => {
-                              handleClickDelete(dataFavorite, "all");
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faTrash}
-                              className=" text-[#ccc] text-[22px]"
-                            />
-                            <span className="ml-1 text-[22px]">
-                              {t("Remove all")}
-                            </span>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="mb-7">
-                          <p
-                            className="group hover:cursor-pointer hover:underline"
-                            onClick={() => {
-                              setIsEdit(true);
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faPenToSquare}
-                              className="group-hover:underline"
-                            />
-                            <span className="ml-1">{t("Edit")}</span>
-                          </p>
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    ""
-                  )}
+              <Col xs={24} md={24} lg={18} xl={19} xxl={20}>
+                {/* edit */}
+                {dataFavorite?.length ? (
                   <>
+                    {isEdit ? (
+                      <div className="mb-7 flex items-center gap-4">
+                        <div
+                          className="group hover:cursor-pointer flex"
+                          onClick={() => {
+                            setIsEdit(false);
+                          }}
+                        >
+                          <p className="">
+                            <FontAwesomeIcon
+                              icon={faClose}
+                              className=" text-[#ccc] text-[18px] border-[#ccc] border-solid border-[1px] rounded-full w-[18px] h-[18px] "
+                            />
+                          </p>
+                          <span className="ml-1 text-[18px]">
+                            {t("Cancel")}
+                          </span>
+                        </div>
+
+                        <div
+                          className="group hover:cursor-pointer"
+                          onClick={() => {
+                            handleClickDelete(dataFavorite, "all");
+                            setTypeDeleteModal("all");
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            className=" text-[#ccc] text-[18px]"
+                          />
+                          <span className="ml-1 text-[18px]">
+                            {t("Delete all")}
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mb-7">
+                        <p
+                          className="group hover:cursor-pointer hover:underline"
+                          onClick={() => {
+                            setIsEdit(true);
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faPenToSquare}
+                            className="group-hover:underline text-[18px] text-[#ccc]"
+                          />
+                          <span className="ml-1 text-[18px] text-[#ccc]">
+                            {t("Edit")}
+                          </span>
+                        </p>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  ""
+                )}
+                {/* content */}
+                <>
+                  {dataFavorite?.length ? (
                     <div className="flex gap-10 flex-wrap">
                       {dataFavorite.map((favorite, index) => {
                         return (
                           <div
                             key={favorite.id}
-                            className="max-w-[185px] relative flex flex-col cursor-pointer hover:scale-110 hover:duration-200"
+                            className="max-w-[185px] relative flex flex-col cursor-pointer hover:scale-110 hover:duration-200 transition-all ease-linear"
                           >
                             <img
                               alt=""
@@ -293,9 +297,11 @@ const BookMarkedPage = () => {
                               }}
                             />
                             <div>
-                              <p className="text-[18px] text-center line-clamp-1">
-                                {favorite.title}
-                              </p>
+                              <Tooltip title={favorite.title}>
+                                <p className="text-[18px] text-center line-clamp-1">
+                                  {favorite.title}
+                                </p>
+                              </Tooltip>
                             </div>
                             <div className="absolute top-[-8px] right-[0px] text-[13px]">
                               <Badge.Ribbon
@@ -323,9 +329,11 @@ const BookMarkedPage = () => {
                                   className="hover:scale-110 hover:duration-150"
                                   onClick={() => {
                                     handleClickDelete(favorite, "one");
+                                    setTypeDeleteModal("one");
                                   }}
                                 >
                                   <FontAwesomeIcon
+                                    beat
                                     icon={faClose}
                                     className="w-[24px] h-[24px] bg-[red] rounded-full"
                                   />
@@ -336,15 +344,29 @@ const BookMarkedPage = () => {
                         );
                       })}
                     </div>
-                  </>
-                </Col>
-              ) : (
-                <Col xs={24} md={24} lg={18} xl={19} xxl={20}>
-                  <div className="h-[100vh] flex justify-center items-center">
+                  ) : (
+                    <div
+                      className={`h-[100vh] justify-center items-center ${
+                        isLoading ? "hidden" : "flex"
+                      }`}
+                    >
+                      <Empty />
+                    </div>
+                  )}
+                </>
+              </Col>
+
+              {/* <Col xs={24} md={24} lg={18} xl={19} xxl={20}>
+                  <div
+                    className={`h-[100vh] justify-center items-center ${
+                      isLoading ? "hidden" : "flex"
+                    }`}
+                  >
                     <Empty />
                   </div>
-                </Col>
-              )}
+                </Col> */}
+
+              {/* filter */}
               <Col xs={24} md={24} lg={6} xl={5} xxl={4}>
                 <StyledCollapse
                   defaultActiveKey={["1"]}
@@ -378,7 +400,7 @@ const BookMarkedPage = () => {
                                 }
                               }}
                             >
-                              {item.name}
+                              {t(item.name)}
                             </div>
                           );
                         })}
@@ -388,10 +410,11 @@ const BookMarkedPage = () => {
                 </StyledCollapse>
               </Col>
             </Row>
-          </>
-        )}
+          )}
+        </>
       </div>
       <ModalConfirm
+        typeDeleteModal={typeDeleteModal}
         showModal={showModal}
         handleClickCancel={handleClickCancel}
         handleClickAccept={handleClickAccept}

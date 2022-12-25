@@ -2,14 +2,13 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAydFzXWkpbJMHeFSpkOEEfxVv3PG-dv3o",
-  authDomain: "movie-clone-50ae6.firebaseapp.com",
-  databaseURL: "https://movie-clone-50ae6-default-rtdb.firebaseio.com",
-  projectId: "movie-clone-50ae6",
-  storageBucket: "movie-clone-50ae6.appspot.com",
-  messagingSenderId: "624345456391",
-  appId: "1:624345456391:web:9c41c8ce0c5c52f166afa2",
-  measurementId: "G-DRWQ6LWLGK",
+  apiKey: "AIzaSyCIrxAHU2FSoIiVeCUKtjtWFhn5m5MA9ag",
+  authDomain: "movie-demo-fe607.firebaseapp.com",
+  projectId: "movie-demo-fe607",
+  storageBucket: "movie-demo-fe607.appspot.com",
+  messagingSenderId: "796250366453",
+  appId: "1:796250366453:web:68e59a7c1da86fa08880bc",
+  measurementId: "G-THC1RP8P6G",
 };
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);

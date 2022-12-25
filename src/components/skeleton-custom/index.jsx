@@ -13,7 +13,7 @@ const StyledSkeleton = styled(Skeleton)`
 
 export const SkeletonCustom = ({ quantity = 5 }) => {
   return (
-    <div className="flex gap-10 flex-wrap my-5">
+    <div className="flex justify-evenly gap-x-2 gap-y-8 flex-wrap my-5">
       {Array.from(Array(quantity).keys()).map((item, index) => {
         return (
           <div className="w-[250px] h-[185px]" key={index}>

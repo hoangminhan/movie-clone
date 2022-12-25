@@ -48,6 +48,7 @@ const HistoryPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [dataDeleteOne, setDataDeleteOne] = useState({});
   const [typeDelete, setTypeDelete] = useState("one");
+  const [typeDeleteModal, setTypeDeleteModal] = useState();
 
   const navigate = useNavigate();
   const [currentOption, setCurrentOption] = useState("multi");
@@ -66,15 +67,15 @@ const HistoryPage = () => {
 
   useEffect(() => {
     if (dataUser.uid) {
-      setIsLoading(true);
       const getData = async () => {
+        setIsLoading(true);
         const dbfireStore = getFirestore();
 
         const queryReplyReaction = query(
           collection(dbfireStore, "user"),
           where("user_id", "==", dataUser?.uid)
         );
-        onSnapshot(queryReplyReaction, (querySnapshot) => {
+        await onSnapshot(queryReplyReaction, (querySnapshot) => {
           querySnapshot.forEach((doc) => {
             if (currentOption === "multi") {
               setDataHistory([...doc.data().history]);
@@ -89,9 +90,9 @@ const HistoryPage = () => {
             }
           });
         });
+        setIsLoading(true);
       };
       getData();
-      setIsLoading(false);
     }
   }, [dataUser, currentOption, db]);
   const [isEdit, setIsEdit] = useState(false);
@@ -139,14 +140,13 @@ const HistoryPage = () => {
   return (
     <>
       <div className="min-h-[100vh]">
-        {isLoading ? (
-          // <Skeleton active paragraph={{ rows: 20 }} />
-          <SkeletonCustom />
-        ) : (
-          <>
+        <>
+          {!isLoading ? (
+            <SkeletonCustom quantity={15} />
+          ) : (
             <Row gutter={[24, 24]} className="mt-8 flex-wrap-reverse">
-              {dataHistory?.length ? (
-                <Col xs={24} md={24} lg={18} xl={19} xxl={20}>
+              <Col xs={24} md={24} lg={18} xl={19} xxl={20}>
+                {dataHistory?.length ? (
                   <>
                     {isEdit ? (
                       <div className="mb-7 flex items-center gap-4">
@@ -159,10 +159,10 @@ const HistoryPage = () => {
                           <p className="">
                             <FontAwesomeIcon
                               icon={faClose}
-                              className=" text-[#ccc] text-[22px] border-[#ccc] border-solid border-[1px] rounded-full w-[18px] h-[18px] "
+                              className=" text-[#ccc] text-[18px] border-[#ccc] border-solid border-[1px] rounded-full w-[18px] h-[18px] "
                             />
                           </p>
-                          <span className="ml-1 text-[22px]">
+                          <span className="ml-1 text-[18px]">
                             {t("Cancel")}
                           </span>
                         </div>
@@ -171,14 +171,15 @@ const HistoryPage = () => {
                           className="group hover:cursor-pointer"
                           onClick={() => {
                             handleClickDelete(dataHistory, "all");
+                            setTypeDeleteModal("all");
                           }}
                         >
                           <FontAwesomeIcon
                             icon={faTrash}
-                            className=" text-[#ccc] text-[22px]"
+                            className=" text-[#ccc] text-[18px]"
                           />
-                          <span className="ml-1 text-[22px]">
-                            {t("Remove all")}
+                          <span className="ml-1 text-[18px]">
+                            {t("Delete all")}
                           </span>
                         </div>
                       </div>
@@ -194,18 +195,22 @@ const HistoryPage = () => {
                             icon={faPenToSquare}
                             className="group-hover:underline text-[22px]"
                           />
-                          <span className="ml-1 text-[22px]">{t("Edit")}</span>
+                          <span className="ml-1 text-[18px]">{t("Edit")}</span>
                         </div>
                       </div>
                     )}
                   </>
+                ) : (
+                  ""
+                )}
 
+                {dataHistory?.length ? (
                   <div className="flex gap-10 flex-wrap">
                     {dataHistory.map((history, index) => {
                       return (
                         <div
                           key={history.id}
-                          className="max-w-[185px] relative flex flex-col cursor-pointer hover:scale-110 hover:duration-200"
+                          className="max-w-[185px] relative flex flex-col cursor-pointer hover:scale-110 hover:duration-200 transition-all ease-linear"
                         >
                           <img
                             alt=""
@@ -226,9 +231,11 @@ const HistoryPage = () => {
                             }}
                           />
                           <div>
-                            <p className="text-[18px] text-center line-clamp-1">
-                              {history.name}
-                            </p>
+                            <Tooltip title={history.name}>
+                              <p className="text-[16px] text-center line-clamp-1">
+                                {history.name}
+                              </p>
+                            </Tooltip>
                           </div>
                           <div className="absolute top-[-8px] right-[0px] text-[13px]">
                             <Badge.Ribbon
@@ -256,9 +263,11 @@ const HistoryPage = () => {
                                 className=" hover:scale-110 hover:duration-150"
                                 onClick={() => {
                                   handleClickDelete(history, "one");
+                                  setTypeDeleteModal("one");
                                 }}
                               >
                                 <FontAwesomeIcon
+                                  beat
                                   icon={faClose}
                                   className="w-[24px] h-[24px] bg-[red] rounded-full"
                                 />
@@ -269,14 +278,26 @@ const HistoryPage = () => {
                       );
                     })}
                   </div>
-                </Col>
-              ) : (
-                <Col xs={24} md={24} lg={18} xl={19} xxl={20}>
-                  <div className="h-[100vh] flex justify-center items-center">
+                ) : (
+                  <div
+                    className={`h-[100vh] justify-center items-center ${
+                      isLoading ? "hidden" : "flex"
+                    }`}
+                  >
                     <Empty />
                   </div>
-                </Col>
-              )}
+                )}
+              </Col>
+
+              {/* <Col xs={24} md={24} lg={18} xl={19} xxl={20}>
+                  <div
+                    className={`h-[100vh] justify-center items-center ${
+                      isLoading ? "hidden" : "flex"
+                    }`}
+                  >
+                    <Empty />
+                  </div>
+                </Col> */}
 
               <Col xs={24} md={24} lg={6} xl={5} xxl={4}>
                 <StyledCollapse
@@ -300,7 +321,7 @@ const HistoryPage = () => {
                           return (
                             <div
                               key={item.value}
-                              className={`text-[18px] mb-3 text-center hover:bg-[#49494b] py-1 rounded-md cursor-pointer ${
+                              className={`text-[16px] mb-3 text-center hover:bg-[#49494b] py-1 rounded-md cursor-pointer ${
                                 item.value === currentOption
                                   ? "bg-[#49494b]"
                                   : ""
@@ -313,7 +334,7 @@ const HistoryPage = () => {
                                 }
                               }}
                             >
-                              {item.name}
+                              {t(item.name)}
                             </div>
                           );
                         })}
@@ -323,13 +344,14 @@ const HistoryPage = () => {
                 </StyledCollapse>
               </Col>
             </Row>
-          </>
-        )}
+          )}
+        </>
       </div>
 
       {/* modal confirm */}
 
       <ModalConfirm
+        typeDeleteModal={typeDeleteModal}
         showModal={showModal}
         handleClickCancel={handleClickCancel}
         handleClickAccept={handleClickAccept}

@@ -50,7 +50,7 @@ export const ContentSearch = ({ dataContentSearch, isLoading, type }) => {
                   item.id
                 }`}
               >
-                <div className="relative hover:scale-110 hover:duration-150 cursor-pointer max-w-[185px] h-full flex flex-col">
+                <div className="relative hover:scale-110 hover:duration-150 transition-all ease-linear cursor-pointer max-w-[185px] h-full flex flex-col">
                   <img
                     className="flex-1 rounded-md"
                     src={

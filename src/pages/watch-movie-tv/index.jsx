@@ -120,6 +120,7 @@ const WatchMovieTv = () => {
     }
   };
 
+  // load more
   const handleLoadMoreSimilar = async () => {
     setIsLoadMore(true);
     const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
@@ -167,6 +168,7 @@ const WatchMovieTv = () => {
     setDataReply({ ...dataReply, reply: [...newDataReply] });
   };
 
+  //  syn params with url
   useEffect(() => {
     const type = sessionStorage.getItem("currentTab") || "/";
     const currentType = type === "tab-tv-show" ? "tv" : "movie";
@@ -279,8 +281,7 @@ const WatchMovieTv = () => {
     handleGetData();
   }, [idDetail, season.currentEpisode, season.currentSeason]);
 
-  // get name current user
-
+  // get name user current
   useEffect(() => {
     const getNameCurrentUser = async () => {
       const dbfireStore = getFirestore();
@@ -320,6 +321,8 @@ const WatchMovieTv = () => {
 
       const docSnap = await getDoc(checkDocumentComment);
       if (!docSnap.exists()) {
+        debugger;
+
         setDoc(
           doc(dbfireStore, "detail", idDetail),
           {
@@ -456,7 +459,7 @@ const WatchMovieTv = () => {
 
             {/* xem phim */}
             <div className="my-10 mx-4 overflow-hidden" id="movie-id">
-              {currentUrl && (
+              {/* {currentUrl && (
                 <Iframe
                   id="movie-id"
                   src={currentUrl}
@@ -464,7 +467,7 @@ const WatchMovieTv = () => {
                   width="100%"
                   allowFullScreen
                 ></Iframe>
-              )}
+              )} */}
             </div>
 
             {/* eposide tv */}

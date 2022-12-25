@@ -97,7 +97,17 @@
   "results found":"kết quả tìm thấy",
   "search filter":"Bộ lọc tìm kiếm",
   "Watched":"Đã xem",
-  "Logout":"Đăng xuất"
+  "Logout":"Đăng xuất",
+  "Edit":"Chỉnh sửa",
+  "Cancel":"Hủy bỏ",
+  "Delete all":"Xóa hết",
+  "Click to delete":"Nhấn để xóa",
+  "This will remove your films from this bookmark list":"Thao tác này sẽ xóa phim của bạn khỏi danh sách",
+  "This will remove all your films from this bookmark list":"Thao tác này sẽ xóa toàn bộ phim của bạn khỏi danh sách",
+  "Are you sure?":"Bạn có chắc không?",
+  "Yes":"Có",
+  "All":"Tất cả"
+
 
 
 }

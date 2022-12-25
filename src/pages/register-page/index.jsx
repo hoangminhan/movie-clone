@@ -71,17 +71,16 @@ const RegisterPage = () => {
         bookmark: [],
         history: [],
       };
-      addDoc(collection(db, "user"), data);
+      addDoc(collection(db, "user", response.user.uid), data);
       setIsLoading(false);
 
       localStorage.setItem("accessToken", accessToken);
       navigate("/");
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
-        setIsLoading(false);
-
         message.error("email already in use");
       }
+      setIsLoading(false);
     }
   };
 
@@ -111,7 +110,7 @@ const RegisterPage = () => {
           {t("Register Account")}
         </p>
 
-        <div>
+        {/* <div>
           <div className="flex justify-center gap-5 mt-3">
             <p className="w-[50px] h-[50px] bg-[#fff] rounded-full flex items-center justify-center cursor-pointer hover:scale-110 duration-200">
               <img src={iconImg.googleImg} alt="" />
@@ -120,10 +119,10 @@ const RegisterPage = () => {
               <img src={iconImg.facebookImg} alt="" />
             </p>
           </div>
-        </div>
-        <p className="text-center mt-5 text-white font-[300]">
+        </div> */}
+        {/* <p className="text-center mt-5 text-white font-[300]">
           {t("Or register with email account")}
-        </p>
+        </p> */}
         <div className="text-center mt-9">
           <Form
             layout="vertical"

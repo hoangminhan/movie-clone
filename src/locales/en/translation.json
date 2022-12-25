@@ -97,5 +97,14 @@
   "results found":"results found",
   "search filter":"Search filter",
   "Watched":"Watched",
-  "Logout":"Logout"
+  "Logout":"Logout",
+  "Edit":"Edit",
+  "Cancel":"Cancel",
+  "Delete all":"Delete all",
+  "Click to delete":"Click to delete",
+  "This will remove your films from this bookmark list":"This will remove your films from this bookmark list",
+  "Are you sure?":"Are you sure?",
+  "Yes":"Yes",
+  "All":"All"
+
 }

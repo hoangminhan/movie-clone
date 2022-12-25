@@ -8,15 +8,26 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
-  getAuth,
   signInWithEmailAndPassword,
   FacebookAuthProvider,
   signInWithPopup,
   GoogleAuthProvider,
+  getAuth,
+  onAuthStateChanged,
 } from "firebase/auth";
+
 import { useState } from "react";
-import { useTitle } from "hooks";
-// import { authentication } from "firebase";
+import { useFirebaseRealTime, useTitle } from "hooks";
+import { app } from "firebase-custom";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getFirestore,
+  setDoc,
+} from "firebase/firestore";
+import { AVATAR_EMPTY } from "constant";
 
 const StyleInput = styled(Input)`
   &.ant-input {
@@ -56,6 +67,7 @@ const LoginPage = () => {
   const [dataUser, setDataUser] = currentDataUser;
   const navigate = useNavigate();
   const { handleChangeTitle } = useTitle();
+  const { handleCheckUserExist } = useFirebaseRealTime();
 
   // login with user and password
   const onFinish = async (values) => {
@@ -87,31 +99,33 @@ const LoginPage = () => {
     }
   };
 
-  const onFinishFailed = (errorInfo) => {};
-
   // login with facebook
-  const handleSignInWithfacebook = async () => {
-    try {
-      const provider = new FacebookAuthProvider();
-      const authentication = getAuth();
-      const res = await signInWithPopup(authentication, provider);
-      const {
-        oauthAccessToken: accessToken,
-        refreshToken,
-        displayName,
-        email,
-      } = res._tokenResponse;
-      setDataUser(res.user);
-      const userInfo = {
-        displayName,
-        email,
-      };
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-      localStorage.setItem("userInfo", JSON.stringify(userInfo));
-      navigate("/");
-    } catch (error) {}
-  };
+  // const handleSignInWithfacebook = async () => {
+  //   try {
+  //     const provider = new FacebookAuthProvider();
+  //     const authentication = getAuth();
+  //     const res = await signInWithPopup(authentication, provider);
+  //     console.log({ res });
+  //     const {
+  //       oauthAccessToken: accessToken,
+  //       refreshToken,
+  //       displayName,
+  //       email,
+  //     } = res._tokenResponse;
+  //     handleCheckUserExist(res.user);
+  //     setDataUser(res.user);
+  //     const userInfo = {
+  //       displayName,
+  //       email,
+  //     };
+  //     localStorage.setItem("accessToken", accessToken);
+  //     localStorage.setItem("refreshToken", refreshToken);
+  //     localStorage.setItem("userInfo", JSON.stringify(userInfo));
+  //     navigate("/");
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  // };
   // login with google
   const handleSignInWithGoogle = async () => {
     try {
@@ -124,6 +138,8 @@ const LoginPage = () => {
         displayName,
         email,
       } = res._tokenResponse;
+      // check user exist in db
+      handleCheckUserExist(res.user);
       setDataUser(res.user);
 
       const userInfo = {
@@ -166,13 +182,13 @@ const LoginPage = () => {
                 onClick={handleSignInWithGoogle}
               />
             </p>
-            <p className="w-[50px] h-[50px] bg-[#fff] rounded-full flex items-center justify-center cursor-pointer hover:scale-110 duration-200">
+            {/* <p className="w-[50px] h-[50px] bg-[#fff] rounded-full flex items-center justify-center cursor-pointer hover:scale-110 duration-200">
               <img
                 src={iconImg.facebookImg}
                 alt=""
                 onClick={handleSignInWithfacebook}
               />
-            </p>
+            </p> */}
           </div>
         </div>
         <p className="text-center mt-5 text-white font-[300]">
@@ -188,7 +204,6 @@ const LoginPage = () => {
               remember: true,
             }}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
             <Form.Item

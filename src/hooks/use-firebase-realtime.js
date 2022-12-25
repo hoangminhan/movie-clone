@@ -1,11 +1,14 @@
+import { AVATAR_EMPTY } from "constant";
 import {
   arrayRemove,
   collection,
   doc,
+  getDoc,
   getDocs,
   getFirestore,
   onSnapshot,
   query,
+  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -119,9 +122,38 @@ export const useFirebaseRealTime = () => {
       handlePopupNotification("Xoa thanh cong", "success");
     }
   };
+
+  // handle check user exits to push into db
+  const handleCheckUserExist = async (user) => {
+    try {
+      // access to db
+      const db = getFirestore();
+      // reference to doc of collection user
+      const snapshot = await getDoc(doc(db, "user", user.uid));
+      if (snapshot.exists()) {
+        console.log("yes");
+      } else {
+        console.log("no");
+        const data = {
+          user_id: user.uid || "",
+          url: user.photoURL || AVATAR_EMPTY,
+          name: user.displayName,
+          email: user.email || "",
+          bookmark: [],
+          history: [],
+        };
+        // add doc to user collection
+        setDoc(doc(db, "user", user.uid), data);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   return {
     handleCheckIsExist,
     handleDeleteOneBookmarkOrHistory,
     handleDeleteAllBookmarkOrHistory,
+    handleCheckUserExist,
   };
 };
