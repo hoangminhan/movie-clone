@@ -1,5 +1,6 @@
 import {
   faArrowRight,
+  faPlus,
   faStar,
   faThumbsDown,
   faThumbsUp,
@@ -16,7 +17,12 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Iframe from "react-iframe";
 import { useDispatch } from "react-redux";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import {
   embedMovie,
   embedTV,
@@ -422,6 +428,12 @@ const WatchMovieTv = () => {
     };
     handleGetdata();
   }, [idDetail]);
+  const location = useLocation();
+  const { pathname } = location;
+
+  const handleGenerateText = (pathname) => {
+    return pathname.includes("/movie/") ? "movie" : "tv";
+  };
 
   const [isHiddenDrawer, setIsHiddenDrawer] = useState(
     sessionStorage.getItem("isHiddenDrawer") === "true" ? true : false
@@ -431,7 +443,7 @@ const WatchMovieTv = () => {
     <div>
       <Row
         className={`h-full transition-all duration-150 ease-linear ${
-          isHiddenDrawer ? "mr-[0px]" : "mr-[250px]"
+          isHiddenDrawer ? "mr-[0px]" : "mr-[150px] lg:mr-[250px]"
         }`}
       >
         <Col span={24}>
@@ -441,22 +453,29 @@ const WatchMovieTv = () => {
             // handleChangeUrl={handleChangeUrl}
             isLoadingDetail={isLoadingDetail}
           />
-
-          <div
-            className={`flex justify-end mt-3 transition-all duration-200 ease-linear ${
-              isHiddenDrawer ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <p
-              className="text-[16px] cursor-pointer"
-              onClick={() => {
-                setIsHiddenDrawer(false);
-                sessionStorage.setItem("isHiddenDrawer", false);
-              }}
+          {isLoading ? (
+            ""
+          ) : (
+            <div
+              className={`z-[2] right-12 fixed bottom-[100px] mt-3 transition-all duration-200 ease-linear ${
+                isHiddenDrawer ? "opacity-100" : "opacity-0"
+              }`}
             >
-              Open similar content
-            </p>
-          </div>
+              <Tooltip
+                title={t(`Open similar ${handleGenerateText(pathname)}`)}
+              >
+                <p
+                  className="cursor-pointer w-[50px] h-[50px] bg-primarybg rounded-full flex justify-center items-center hover:scale-105 transition-all duration-150 ease-linear"
+                  onClick={() => {
+                    setIsHiddenDrawer(false);
+                    sessionStorage.setItem("isHiddenDrawer", false);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPlus} beat />
+                </p>
+              </Tooltip>
+            </div>
+          )}
 
           <div className="w-full mt-10">
             <BodyWatch
@@ -483,7 +502,7 @@ const WatchMovieTv = () => {
 
             {/* xem phim */}
             <div className="my-10 mx-4 overflow-hidden" id="movie-id">
-              {currentUrl && (
+              {/* {currentUrl && (
                 <Iframe
                   id="movie-id"
                   src={currentUrl}
@@ -491,7 +510,7 @@ const WatchMovieTv = () => {
                   width="100%"
                   allowFullScreen
                 ></Iframe>
-              )}
+              )} */}
             </div>
 
             {/* eposide tv */}
@@ -500,16 +519,23 @@ const WatchMovieTv = () => {
               ""
             ) : (
               <div className="flex flex-col justify-end items-end px-[24px]">
-                <p className="italic font-bold">
-                  {t("Episode")}
-                  <span className="italic">{season.currentEpisode}</span>
+                <p className="italic font-bold text-[18px]">
+                  {t("Episode")}&nbsp;
+                  <span className="italic text-[18px]">
+                    {season.currentEpisode}
+                  </span>
                 </p>
                 <div className="flex">
-                  <p>
-                    {t("Season")} <span>{season.currentSeason}</span>
+                  <p className="text-[18px]">
+                    {t("Season")}{" "}
+                    <span className="text-[18px]">{season.currentSeason}</span>
                   </p>
-                  &nbsp; - {t("Episode")}
-                  <span className="ml-1">{season.currentEpisode}</span>{" "}
+                  &nbsp; -&nbsp;{" "}
+                  <span className="text-[18px]">{t("Episode")}</span>
+                  <span className="ml-1 text-[18px]">
+                    &nbsp;
+                    {season.currentEpisode}
+                  </span>{" "}
                 </div>
               </div>
             )}
@@ -530,7 +556,7 @@ const WatchMovieTv = () => {
                       }`}
                       onClick={() => {
                         if (season.currentSeason === +item) {
-                          message.warning(`Bạn đang ở Season ${item}`);
+                          message.warning(t(`Bạn đang ở Season ${item}`));
                         } else {
                           setSeason({
                             ...season,
@@ -596,7 +622,7 @@ const WatchMovieTv = () => {
             </div>
 
             {/* recommendation */}
-            <div className="px-4">
+            <div className="pb-4">
               <ComponentSlider
                 type={tabGlobal === "/" ? "movie" : "tv"}
                 dataPopular={listRecommendationMovie}
@@ -610,13 +636,13 @@ const WatchMovieTv = () => {
         className={`
       bg-black  border-l-[#ccc] border-l-[1px] border-l-solid fixed z-[2] h-full overflow-y-auto top-0 right-0 scroll-smooth no-scrollbar
       transition-all duration-150 ease-linear ${
-        isHiddenDrawer ? "w-[0px] p-0" : "w-[250px] p-4"
+        isHiddenDrawer ? "w-[0px] p-0" : "w-[150px] lg:w-[250px] p-2 tablet:p-4"
       }
       `}
       >
         {tabGlobal === "/" ? (
           <div className="h-[100%]">
-            <div className="flex justify-between items-center mb-2">
+            <div className="flex justify-between items-center mb-4">
               <p
                 id="similar-movie"
                 className="text-white uppercase text-[22px]"
@@ -631,7 +657,7 @@ const WatchMovieTv = () => {
               >
                 <FontAwesomeIcon
                   icon={faArrowRight}
-                  className="cursor-pointer"
+                  className="cursor-pointer text-white"
                 />
               </div>
             </div>
@@ -654,7 +680,7 @@ const WatchMovieTv = () => {
                           alt=""
                         />
                       </div>
-                      <div className="grow">
+                      <div className="flex-1">
                         <Tooltip
                           title={
                             similarContent.title
@@ -662,13 +688,13 @@ const WatchMovieTv = () => {
                               : similarContent.name
                           }
                         >
-                          <p className="text-[14px] line-clamp-2">
+                          <p className="text-[15px] line-clamp-2">
                             {similarContent.title
                               ? similarContent.title
                               : similarContent.name}
                           </p>
                         </Tooltip>
-                        <p className="text-[15px] text-[#ccc]">
+                        <p className="text-[14px] text-[#ccc]">
                           {similarContent.release_date
                             ? similarContent.release_date
                             : similarContent.first_air_date}
@@ -719,6 +745,7 @@ const WatchMovieTv = () => {
                 dataEpisode={dataSeasonTv}
                 currentSeason={season.currentSeason}
                 currentEpisode={season.currentEpisode}
+                setIsHiddenDrawer={setIsHiddenDrawer}
               />
             )}
           </div>

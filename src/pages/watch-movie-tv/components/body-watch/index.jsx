@@ -98,8 +98,8 @@ export const BodyWatch = ({
                 <ReactPlayer
                   url={embedMovieTrailer(infoTrailerMovie?.key)}
                   style={{ margin: "0 auto" }}
-                  width="80%"
                   height={500}
+                  width="100%"
                   controls
                 />
               )}

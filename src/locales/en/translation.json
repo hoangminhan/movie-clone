@@ -109,6 +109,9 @@
   "Logout success":"Logout success",
   "Login success":"Login success",
   "Register success":"Register success",
-  "Write comment...":"Write comment..."
+  "Write comment...":"Write comment...",
+  "Open similar movie":"Similar movies",
+  "Open similar tv":"Open similar tv show",
+  "You are in Season":"You are in season"
 
 }

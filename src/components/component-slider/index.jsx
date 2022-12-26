@@ -1,14 +1,12 @@
-import { faCaretRight, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Badge, Skeleton, Tooltip } from "antd";
+import { Badge, Tooltip } from "antd";
 import iconImg from "assets";
 import { ButtonPlay, ImageCustom, SkeletonCustom } from "components";
 import { UserContext } from "contexts";
-import { useHomePage } from "hooks/use-homepage";
 import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { formatNumber, getImage } from "utils";

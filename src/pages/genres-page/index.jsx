@@ -2,7 +2,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Empty, Skeleton, Tooltip } from "antd";
 import iconImg from "assets";
-import { ImageCustom } from "components";
+import { ImageCustom, SkeletonCustom } from "components";
 import { UserContext } from "contexts";
 import { useTitle } from "hooks";
 import { useHomePage } from "hooks/use-homepage";
@@ -103,9 +103,9 @@ const GenresPage = () => {
         }`}
       >
         {isLoading ? (
-          <Skeleton active paragraph={{ rows: 20 }}></Skeleton>
+          <SkeletonCustom quantity={15} />
         ) : (
-          <div className="flex flex-wrap gap-6">
+          <div className="flex flex-wrap gap-6 justify-evenly">
             {dataGenres?.map((item, index) => {
               return (
                 index < quanlityItem && (

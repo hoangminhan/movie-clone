@@ -10,7 +10,6 @@ export const useNotification = () => {
       // placement: "top",
       style: {
         borderRadius: "12px",
-        padding: "12px 20px",
       },
     });
   };

@@ -86,19 +86,6 @@ export const Hero = ({ dataDetail }) => {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0b0b0bd9] to-transparent "></div>
 
-          {/* poster */}
-          <div className="absolute bottom-[-15%] left-[15%] max-w-[185px]">
-            <img
-              src={
-                getImage(dataDetail.poster_path, "w185").includes("null")
-                  ? iconImg.Img404
-                  : getImage(dataDetail.poster_path, "w185")
-              }
-              // className="rounded-global"
-              alt="poster"
-            />
-          </div>
-
           {/* add list */}
           <div
             className="absolute right-2 top-2 cursor-pointer hover:scale-110 duration-200"
@@ -137,31 +124,44 @@ export const Hero = ({ dataDetail }) => {
               </p>
             </Tooltip>
           </div>
+          {/* poster */}
+          <div className="absolute bottom-[-15%] left-[15%] max-w-[185px] rounded-lg overflow-hidden">
+            <img
+              src={
+                getImage(dataDetail.poster_path, "w185").includes("null")
+                  ? iconImg.Img404
+                  : getImage(dataDetail.poster_path, "w185")
+              }
+              // className="rounded-global"
+              alt="poster"
+            />
+          </div>
 
-          {/* name phim */}
-          <div className="absolute  left-[30%] bottom-[20%] max-w-[500px] ">
-            <p className="text-white text-[30px] font-medium drop-shadow-2xl shadow-[red]  p-5 ml-3 pr-0  leading-10 stroke-text">
+          <div className="absolute left-[45%] tablet:left-[40%] lg:left-[35%] xl:left-[30%] xxl:left-[25%] bottom-[15%]">
+            {/* name phim */}
+            <p className="text-white text-[30px] xl:text-[35px] font-medium drop-shadow-2xl shadow-[red] ml-3 pr-0 leading-10 stroke-text max-w-[500px] line-clamp-1 overflow-hidden">
               {dataDetail?.title ? dataDetail?.title : dataDetail?.name}
             </p>
+
+            {/* genres */}
+            <div className="p-5 ml-3 flex">
+              {dataDetail?.genres?.map((genre, index) => {
+                return (
+                  <Tooltip title={genre.name} key={index}>
+                    <Link
+                      to={`/genres/${genre.id}-${genre.name}`}
+                      state={{ genreName: genre.name }}
+                    >
+                      <p className="text-center text-[14px] max-w-[120px] min-w-[80px] line-clamp-1 px-3 border-solid border-white border-[1px] mr-3 rounded-3xl text-white  uppercase cursor-pointer hover:scale-110 duration-150 ">
+                        {genre.name.replace("Phim", "")}
+                      </p>
+                    </Link>
+                  </Tooltip>
+                );
+              })}
+            </div>
           </div>
 
-          {/* genres */}
-          <div className="absolute left-[30%] bottom-[8%] p-5 ml-3 flex">
-            {dataDetail?.genres?.map((genre, index) => {
-              return (
-                <Tooltip title={genre.name} key={index}>
-                  <Link
-                    to={`/genres/${genre.id}-${genre.name}`}
-                    state={{ genreName: genre.name }}
-                  >
-                    <p className="max-w-[120px] line-clamp-1 px-3 border-solid border-white border-[1px] mr-3 rounded-3xl text-white text-[13px] uppercase cursor-pointer hover:scale-110 duration-150 ">
-                      {genre.name.replace("Phim", "")}
-                    </p>
-                  </Link>
-                </Tooltip>
-              );
-            })}
-          </div>
           {/* watch */}
 
           <div
