@@ -216,7 +216,6 @@ export const useHomePage = () => {
 
   // get api movie and tv
   const handleGetApiForMovieAndTvPage = async () => {
-    console.log("get Api");
     const currentTab = sessionStorage.getItem("currentTab") || "/";
     const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
 

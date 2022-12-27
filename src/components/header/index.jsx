@@ -28,7 +28,7 @@ export const Header = ({ page, setIsHiddenSidebar, isHiddenSidebar }) => {
       case "History":
         return t("Watched");
       case "Account Settings":
-        return t("Account Settings");
+        return t("Account Info");
       default:
         return <Menu setIsHiddenSidebar={setIsHiddenSidebar} />;
     }

@@ -144,7 +144,7 @@ export const Sidebar = ({
             localStorage.removeItem("refreshToken");
             localStorage.removeItem("userInfo");
             handlePopupNotification("Logout success", "success");
-            navigate("/login");
+            navigate("/");
           })
           .catch((error) => {});
       } else {

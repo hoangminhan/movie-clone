@@ -148,7 +148,7 @@ const LoginPage = () => {
     handleChangeTitle(t("Login"));
   }, []);
   return (
-    <div>
+    <div className="h-[100vh]">
       <video
         autoPlay
         loop
@@ -161,7 +161,7 @@ const LoginPage = () => {
       <div className="bg-black/40 h-[100vh]"></div>
 
       <div className="absolute left-0 right-0 px-3 sm:p-0 top-[50%] sm:left-[50%] sm:-translate-x-1/2 -translate-y-1/2 w-full sm:max-w-[500px] text-center leading-relaxed ">
-        <p className="text-[white] text:[25px] sm:text-[30px] font-bold">
+        <p className="text-[white] text:[25px] sm:text-[30px] font-bold whitespace-nowrap">
           {t("Login to Your Account")}
         </p>
 
@@ -252,7 +252,7 @@ const LoginPage = () => {
             <button
               disabled={isLoading ? true : false}
               type="primary"
-              htmlType="submit"
+              htmltype="submit"
               className={`bg-primarybg hover:opacity-90 text-white hover:text-[#ccc] font-bold  w-[150px] py-2 rounded-lg text-[18px] min-w-[110px] mt-4
               ${isLoading ? "cursor-not-allowed bg-[#ccc] hover:bg-[#ccc]" : ""}
               

@@ -1,4 +1,5 @@
 import { UserOutlined } from "@ant-design/icons";
+import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
 import {
   faArrowRightFromBracket,
   faUserTie,
@@ -7,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, Dropdown, Menu } from "antd";
 import { UserContext } from "contexts";
 import { getAuth, signOut } from "firebase/auth";
+import { useNotification } from "hooks";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -25,6 +27,7 @@ export const Profile = () => {
   const { currentDataUser } = stateContext;
   const [dataUser, setDataUser] = currentDataUser;
   const [t] = useTranslation();
+  const { handlePopupNotification } = useNotification();
 
   const menu = (
     <Menu
@@ -32,39 +35,37 @@ export const Profile = () => {
         {
           key: "1",
           label: (
-            <div className="flex items-center gap-x-2 text-[16px]">
-              <FontAwesomeIcon icon={faArrowRightFromBracket} color="white" />
-              <p
-                onClick={() => {
-                  const auth = getAuth();
-                  signOut(auth)
-                    .then((data) => {
-                      localStorage.removeItem("accessToken");
-                      localStorage.removeItem("refreshToken");
-                      localStorage.removeItem("userInfo");
-                      navigate("/");
-                    })
-                    .catch((error) => {});
-                }}
-              >
-                {t("Logout")}
-              </p>
+            <div
+              className="flex items-center gap-x-2 text-[16px]"
+              onClick={() => {
+                navigate("/account");
+              }}
+            >
+              <FontAwesomeIcon icon={faUserTie} color="white" />
+              <p>{t("Profile")}</p>
             </div>
           ),
         },
         {
           key: "2",
           label: (
-            <div className="flex items-center gap-x-2 text-[16px]">
-              <FontAwesomeIcon icon={faUserTie} color="white" />
-              <p
-                onClick={() => {
-                  console.log("account");
-                  navigate("/account");
-                }}
-              >
-                {t("Profile")}
-              </p>
+            <div
+              className="flex items-center gap-x-2 text-[16px]"
+              onClick={() => {
+                const auth = getAuth();
+                signOut(auth)
+                  .then((data) => {
+                    localStorage.removeItem("accessToken");
+                    localStorage.removeItem("refreshToken");
+                    localStorage.removeItem("userInfo");
+                    navigate("/");
+                    handlePopupNotification("Logout success", "success");
+                  })
+                  .catch((error) => {});
+              }}
+            >
+              <FontAwesomeIcon icon={faArrowRightFromBracket} color="white" />
+              <p>{t("Logout")}</p>
             </div>
           ),
         },
@@ -81,7 +82,7 @@ export const Profile = () => {
       <Avatar
         size="large"
         src={dataUser?.photoURL}
-        icon={<UserOutlined />}
+        icon={<FontAwesomeIcon icon={faCircleUser} />}
         className="cursor-pointer"
       />
     </StyledDropdown>

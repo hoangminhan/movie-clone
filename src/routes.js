@@ -1,4 +1,5 @@
 import { TabMovie, TabSeries, TabTvShow } from "components";
+import { PrivateRouter } from "components/commons";
 import { DefaultLayout } from "layout";
 
 import { lazy } from "react";
@@ -57,7 +58,9 @@ let RouteList = [
     path: "/account",
     element: (
       <DefaultLayout page="Account Settings">
-        <UserPage />
+        <PrivateRouter>
+          <UserPage />
+        </PrivateRouter>
       </DefaultLayout>
     ),
   },
@@ -81,7 +84,9 @@ let RouteList = [
     path: "/favorite",
     element: (
       <DefaultLayout page="Favorite">
-        <BookMarkedPage />
+        <PrivateRouter>
+          <BookMarkedPage />
+        </PrivateRouter>
       </DefaultLayout>
     ),
   },
@@ -89,7 +94,9 @@ let RouteList = [
     path: "/history",
     element: (
       <DefaultLayout page="History">
-        <HistoryPage />
+        <PrivateRouter>
+          <HistoryPage />
+        </PrivateRouter>
       </DefaultLayout>
     ),
   },
