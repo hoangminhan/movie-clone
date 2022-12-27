@@ -312,13 +312,17 @@ export const ModalTrailer = ({
                   <span className="text-[16px] mr-2">
                     {t("Production companies")}:
                   </span>
-                  <span>
+                  <p>
                     {dataDetail?.production_companies?.map((company, index) => {
-                      return index < dataDetail.production_companies.length - 1
-                        ? `${company.name},  `
-                        : company.name;
+                      return (
+                        <span key={index}>
+                          {index < dataDetail.production_companies.length - 1
+                            ? `${company.name},  `
+                            : company.name}
+                        </span>
+                      );
                     })}
-                  </span>
+                  </p>
                 </p>
                 <p className="mt-2">
                   <span className="text-[16px] mr-2">{t("Collection")}:</span>

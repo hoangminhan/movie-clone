@@ -25,11 +25,11 @@ export const SimilarContent = ({ dataSimilar }) => {
                     className="h-[278px]"
                     alt=""
                   />
-                  <p>
+                  <div>
                     <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2  hidden group-hover:block delay-250 hover:scale-110 duration-300">
                       <ButtonPlay size="middle" />
                     </div>
-                  </p>
+                  </div>
 
                   {/* rating */}
                   <div className="absolute top-[-8px] right-0">

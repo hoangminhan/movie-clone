@@ -18,34 +18,6 @@ const BookMarkedPage = lazy(() => import("./pages/bookmark-page"));
 const HistoryPage = lazy(() => import("./pages/history-page"));
 const WatchMovieTv = lazy(() => import("./pages/watch-movie-tv"));
 
-//  const RouteList = [
-//   {
-//     path: "*",
-//     component: NotFound,
-//     layout: null,
-//   },
-//   {
-//     path: "/",
-//     component: HomePage,
-//     layout: true,
-//     routes: [
-//       {
-//         component: TabMovie,
-//         layout: true,
-//       },
-//       {
-//         path: "/tab-tv-show",
-//         component: TabTvShow,
-//         layout: true,
-//       },
-//     ],
-//   },
-//   {
-//     path: "/movie",
-//     component: PageMovie,
-//     layout: true,
-//   },
-// ];
 let RouteList = [
   { path: "*", element: <NotFound /> },
   {
@@ -55,20 +27,23 @@ let RouteList = [
         <HomePage />
       </DefaultLayout>
     ),
-    children: [
-      {
-        index: true,
-        element: <TabMovie />,
-      },
-      {
-        element: <TabTvShow />,
-        path: "/tv-show",
-      },
-      {
-        element: <PeoplePage />,
-        path: "/people",
-      },
-    ],
+  },
+
+  {
+    path: "/tv-show",
+    element: (
+      <DefaultLayout showTab>
+        <TabTvShow />
+      </DefaultLayout>
+    ),
+  },
+  {
+    path: "/people",
+    element: (
+      <DefaultLayout showTab>
+        <PeoplePage />
+      </DefaultLayout>
+    ),
   },
   {
     path: "/login",

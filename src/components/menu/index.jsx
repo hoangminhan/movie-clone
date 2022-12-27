@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Tabs } from "antd";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "contexts";
-import { reducerLoadingChangeTab } from "features";
 import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 const { TabPane } = Tabs;
 
@@ -32,13 +32,30 @@ const StyledTabs = styled(Tabs)`
   }
 `;
 
-export const Menu = ({ setIsHiddenSidebar }) => {
+// menu
+const menus = [
+  {
+    title: "Movie",
+    path: "/",
+  },
+  {
+    title: "Tv Show",
+    path: "/tv-show",
+  },
+  {
+    title: "People",
+    path: "/people",
+  },
+];
+
+export const Menu = () => {
   const stateContext = useContext(UserContext);
   const { currentTabGlobal } = stateContext;
   const [tabGlobal, setTabGlobal] = currentTabGlobal;
   const [currentTab, setCurrentTab] = useState(tabGlobal);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const location = useLocation();
+  const { pathname } = location;
 
   const handleChangeCurrentTab = (data) => {
     sessionStorage.setItem("currentTab", data);
@@ -48,26 +65,36 @@ export const Menu = ({ setIsHiddenSidebar }) => {
 
     if (data === "/") {
       navigate(`/`);
-    } else if (data === "tab-people") {
+    } else if (data === "/people") {
       navigate("/people");
     } else {
       navigate("/tv-show");
     }
-
-    // setTimeout(() => {
-    //   dispatch(reducerLoadingChangeTab(false));
-    // }, 100);
   };
+  const [isLocation, setIsLocation] = useState();
+  useEffect(() => {
+    setIsLocation(pathname);
+  }, [pathname]);
   return (
     <nav className="basis-1/5">
-      {/* <div
-        className="block tablet:hidden"
-        onClick={() => {
-          setIsHiddenSidebar(false);
-        }}
-      >
-        Menu
-      </div> */}
+      <ul className="flex gap-x-5">
+        {menus.map((menu, index) => {
+          return (
+            <li
+              key={index}
+              className={`transition-all duration-150 ease-linear cursor-pointer hover:text-primarybg text-[22px] ${
+                isLocation === menu.path ? "text-primarybg" : "text-white"
+              }`}
+              onClick={() => {
+                handleChangeCurrentTab(menu.path);
+              }}
+            >
+              {menu.title}
+            </li>
+          );
+        })}
+      </ul>
+      {/* 
       <StyledTabs
         defaultActiveKey={currentTab}
         activeKey={currentTab}
@@ -77,7 +104,7 @@ export const Menu = ({ setIsHiddenSidebar }) => {
         <TabPane key={"/"} tab={"Movie"}></TabPane>
         <TabPane key={"tab-tv-show"} tab={"Tv Show"}></TabPane>
         <TabPane key={"tab-people"} tab={"People"}></TabPane>
-      </StyledTabs>
+      </StyledTabs> */}
     </nav>
   );
 };

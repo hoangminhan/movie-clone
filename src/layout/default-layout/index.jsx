@@ -1,7 +1,10 @@
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowCircleUp,
+  faArrowLeft,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Footer, Header, Sidebar } from "components";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 export const DefaultLayout = ({
@@ -29,9 +32,31 @@ export const DefaultLayout = ({
   const handleClickLeftArrow = () => {
     setIsHiddenSidebar(true);
   };
+  const topRef = useRef(null);
+  const handleClick = () => {
+    topRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // visible back to top button when height window >500
+  const [isVisible, setIsVisible] = useState(false);
+  useEffect(() => {
+    function handleScroll() {
+      if (window.scrollY > 500) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
-    <div className="bg-[#162a45]">
+    <div className="bg-[#162a45]" ref={topRef}>
       <aside
         className={`fixed z-[3] top-0 bottom-0 left-0 bg-[#22354e] duration-300 ease-in-out transition-all ${
           !toggleMenu ? "tablet:w-[180px] lg:w-[270px]" : "tablet:w-[80px]"
@@ -99,6 +124,18 @@ export const DefaultLayout = ({
         </section>
       </div>
       <Footer toggleMenu={toggleMenu} />
+      <div
+        className={` transition-all duration-150 ease-linear ${
+          isVisible
+            ? "fixed z-[2] bottom-9 right-4 text-white bg-primarybg w-[50px] h-[50px] justify-center items-center rounded-full cursor-pointer flex"
+            : "hidden"
+        }`}
+        onClick={() => {
+          handleClick();
+        }}
+      >
+        <FontAwesomeIcon beat icon={faArrowCircleUp} />
+      </div>
     </div>
   );
 };

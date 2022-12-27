@@ -3,13 +3,15 @@ import RouteList from "routes";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./App.less";
-import { useContext, useLayoutEffect } from "react";
+import { useContext } from "react";
 import { useEffect } from "react";
 import { UserContext } from "contexts";
 import { ConfigProvider } from "antd";
 import viVN from "antd/es/locale/vi_VN";
 import enUS from "antd/es/locale/en_US";
 import { app } from "./firebase-custom";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const stateContext = useContext(UserContext);
@@ -34,8 +36,11 @@ function App() {
 
   return (
     <ConfigProvider locale={globalLocale === "vi-VN" ? viVN : enUS}>
-      <div className="text-2xl text-[#989898] font-poppin">
-        {/* <Routes>
+      <>
+        <ToastContainer limit={3} />
+
+        <div className="text-2xl text-[#989898] font-poppin">
+          {/* <Routes>
         {RouteList.map((item, index) => {
           let Page = item.component;
           const checkLayout = item.layout;
@@ -65,8 +70,10 @@ function App() {
           );
         })}
       </Routes> */}
-        {mainContent}
-      </div>
+          {mainContent}
+          {/* back to top */}
+        </div>
+      </>
     </ConfigProvider>
   );
 }

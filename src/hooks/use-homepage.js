@@ -214,6 +214,57 @@ export const useHomePage = () => {
     return dispatch(getEpisodeTv(payload));
   };
 
+  // get api movie and tv
+  const handleGetApiForMovieAndTvPage = async () => {
+    console.log("get Api");
+    const currentTab = sessionStorage.getItem("currentTab") || "/";
+    const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
+
+    const type = currentTab === "/" ? "movie" : "tv";
+
+    try {
+      const result = await Promise.all([
+        handleGetListTrending(
+          {
+            api_key: process.env.REACT_APP_API_KEY,
+            language: locale,
+          },
+          type
+        ),
+        handleGetMovie(
+          "popular",
+          {
+            page: 1,
+            api_key: process.env.REACT_APP_API_KEY,
+            language: locale,
+          },
+          type
+        ),
+        handleGetMovie(
+          "top_rated",
+          {
+            page: 1,
+            api_key: process.env.REACT_APP_API_KEY,
+            language: locale,
+          },
+          type
+        ),
+        handleGetMovie(
+          "upcoming",
+          {
+            page: 1,
+            api_key: process.env.REACT_APP_API_KEY,
+            language: locale,
+          },
+          type
+        ),
+      ]);
+      return { result, success: true };
+    } catch (error) {
+      return { error, success: false };
+    }
+  };
+
   return {
     listMovie,
     listMovieTopRated,
@@ -254,5 +305,6 @@ export const useHomePage = () => {
     handleGetListMovieOfGenres,
     handleGetSeasonTv,
     handleGetEpisodeTv,
+    handleGetApiForMovieAndTvPage,
   };
 };

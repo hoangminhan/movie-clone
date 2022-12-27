@@ -457,7 +457,7 @@ const WatchMovieTv = () => {
             ""
           ) : (
             <div
-              className={`z-[2] right-12 fixed bottom-[100px] mt-3 transition-all duration-200 ease-linear ${
+              className={`z-[2] right-[72px] fixed bottom-9 mt-3 transition-all duration-200 ease-linear ${
                 isHiddenDrawer ? "opacity-100" : "opacity-0"
               }`}
             >

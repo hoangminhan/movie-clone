@@ -1,59 +1,26 @@
+import { TabMovie } from "components";
 import { UserContext } from "contexts";
 import { useHomePage } from "hooks/use-homepage";
 import React, { useContext, useEffect } from "react";
 import { useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
 
-const HomePage = () => {
+const HomePage = ({ children }) => {
   const stateContext = useContext(UserContext);
-  const { handleGetMovie, handleGetListTrending } = useHomePage();
+  const { handleGetApiForMovieAndTvPage } = useHomePage();
+  const [isLoadingMovie, setIsLoadingMovie] = useState(false);
 
   useEffect(() => {
-    const getDataApi = async () => {
-      const currentTab = sessionStorage.getItem("currentTab") || "/";
-      const locale = sessionStorage.getItem("currentLocale") || "vi-VN";
-
-      const type = currentTab === "/" ? "movie" : "tv";
-      await handleGetListTrending(
-        {
-          api_key: process.env.REACT_APP_API_KEY,
-          language: locale,
-        },
-        type
-      );
-      await handleGetMovie(
-        "popular",
-        {
-          page: 1,
-          api_key: process.env.REACT_APP_API_KEY,
-          language: locale,
-        },
-        type
-      );
-      await handleGetMovie(
-        "top_rated",
-        {
-          page: 1,
-          api_key: process.env.REACT_APP_API_KEY,
-          language: locale,
-        },
-        type
-      );
-      await handleGetMovie(
-        "upcoming",
-        {
-          page: 1,
-          api_key: process.env.REACT_APP_API_KEY,
-          language: locale,
-        },
-        type
-      );
+    const getData = async () => {
+      setIsLoadingMovie(true);
+      await handleGetApiForMovieAndTvPage();
+      setIsLoadingMovie(false);
     };
-    getDataApi();
-  }, [stateContext]);
+    getData();
+  }, [stateContext.localeGlobal[0], stateContext.currentTabGlobal[0]]);
+
   return (
     <div className="py-6">
-      <Outlet />
+      <TabMovie isLoading={isLoadingMovie} />
     </div>
   );
 };

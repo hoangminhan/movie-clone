@@ -105,7 +105,7 @@ const GenresPage = () => {
         {isLoading ? (
           <SkeletonCustom quantity={15} />
         ) : (
-          <div className="flex flex-wrap gap-6 justify-evenly">
+          <div className="flex flex-wrap gap-6 justify-around">
             {dataGenres?.map((item, index) => {
               return (
                 index < quanlityItem && (

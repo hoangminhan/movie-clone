@@ -9,25 +9,13 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
   signInWithEmailAndPassword,
-  FacebookAuthProvider,
   signInWithPopup,
   GoogleAuthProvider,
   getAuth,
-  onAuthStateChanged,
 } from "firebase/auth";
 
 import { useState } from "react";
 import { useFirebaseRealTime, useNotification, useTitle } from "hooks";
-import { app } from "firebase-custom";
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getFirestore,
-  setDoc,
-} from "firebase/firestore";
-import { AVATAR_EMPTY } from "constant";
 
 const StyleInput = styled(Input)`
   &.ant-input {
