@@ -3,7 +3,6 @@ import {
   HomeOutlined,
   LeftOutlined,
   RightOutlined,
-  SettingOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -11,12 +10,9 @@ import styled from "styled-components";
 
 import { faClock, faCompass } from "@fortawesome/free-regular-svg-icons";
 import {
-  faArrowLeft,
-  faArrowRight,
   faRightFromBracket,
   faRightToBracket,
   faSearch,
-  faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import iconImg from "assets";
@@ -25,7 +21,6 @@ import { useNotification } from "hooks";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import "./style.scss";
-import { useState } from "react";
 import { getAuth, signOut } from "firebase/auth";
 
 // styled

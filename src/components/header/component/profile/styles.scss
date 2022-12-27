@@ -1,0 +1,10 @@
+.dropdown-profile {
+  min-width: 150px !important;
+  .ant-dropdown-menu {
+    background-color: #1c1c1e;
+    padding: 6px 0px;
+  }
+  .ant-dropdown-menu-item:hover {
+    background-color: rgb(73, 71, 71);
+  }
+}

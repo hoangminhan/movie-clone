@@ -1,3 +1,5 @@
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Col, Row } from "antd";
 import { UserContext } from "contexts";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -25,17 +27,19 @@ const UserPage = () => {
           if (user) {
             setDataUser(user);
             // ...
-          } else {
           }
         });
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     };
     getUserInfo();
   }, []);
+  console.log({ dataUser });
   return (
     <div className="min-h-[100vh]">
       <Row className="mt-7 text-[20px]">
-        <Col span={12}>
+        <Col span={16}>
           <div>
             <p className="text-[20px]">{t("User Information")}</p>
             <p className="text-[16px] text-[#989898]">
@@ -62,9 +66,23 @@ const UserPage = () => {
             </p>
           </div>
         </Col>
-        <Col span={12}>
-          <div>
-            <p>{t("Profile photo")}</p>
+        <Col span={8}>
+          <p>{t("Profile photo")}</p>
+          <div className="mt-3 flex justify-center items-center flex-col">
+            <img
+              src={dataUser.photoURL}
+              alt=""
+              className="w-[250px] h-[250px] object-cover rounded-full"
+            />
+            {/* upload new photo */}
+            <div className="flex items-center gap-x-2 bg-[#333335] px-10 py-3 mt-5 rounded-full cursor-pointer hover:scale-105 transition-all duration-150 ease-linear">
+              <FontAwesomeIcon
+                icon={faUpload}
+                beat
+                className="text-primary text-[16px]"
+              />
+              <p className="text-[16px]">{t("Upload new photo")}</p>
+            </div>
           </div>
         </Col>
       </Row>
