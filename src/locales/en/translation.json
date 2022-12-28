@@ -128,6 +128,8 @@
   "Are you sure to delete this account?":"Are you sure to delete this account?",
   "No":"No",
   "Something went wrong":"Something went wrong",
-  "Change user name success":"Change user name success"
+  "Change user name success":"Change user name success",
+  "If you signed in with Google or Facebook, you can't change your email and password":"If you signed in with Google or Facebook, you can't change your email and password",
+  "Here you can edit public information about yourself":"Here you can edit public information about yourself"
 
 }

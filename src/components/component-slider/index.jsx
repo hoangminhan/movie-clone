@@ -2,7 +2,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Tooltip } from "antd";
 import iconImg from "assets";
-import { ButtonPlay, ImageCustom, SkeletonCustom } from "components";
+import { ButtonPlay, SkeletonCustom } from "components";
 import { UserContext } from "contexts";
 import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";

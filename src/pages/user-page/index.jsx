@@ -175,6 +175,13 @@ const UserPage = () => {
       setIsEditUserName(false);
     }
   };
+
+  // handle click esc
+  const handleClickEsc = () => {
+    console.log("pressed Esc ✅");
+    setIsEditUserName(false);
+  };
+
   // auto focus when userRef exist
   useEffect(() => {
     if (userRef.current) {
@@ -184,6 +191,26 @@ const UserPage = () => {
 
   useEffect(() => {
     handleChangeTitle(t("Profile"));
+  }, []);
+
+  // press est to exist edit
+  useEffect(() => {
+    const keyDownHandler = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+
+        // 👇️ your logic here
+        handleClickEsc();
+      }
+    };
+
+    document.addEventListener("keydown", keyDownHandler);
+
+    // 👇️ clean up event listener
+    return () => {
+      console.log("clean up");
+      document.removeEventListener("keydown", keyDownHandler);
+    };
   }, []);
   return (
     <div className="min-h-[100vh]">
@@ -255,10 +282,10 @@ const UserPage = () => {
             {/* info */}
             <div>
               <p className="text-[18px]">{t("User Information")}</p>
-              <p className="text-[16px] text-[#989898]">
+              <p className="text-[15px] ">
                 {t("Here you can edit public information about yourself")}.
               </p>
-              <p className="text-[16px] text-[#989898]">
+              <p className="text-[15px] ">
                 {t(
                   "If you signed in with Google or Facebook, you can't change your email and password"
                 )}
@@ -270,18 +297,23 @@ const UserPage = () => {
               <p className="text-[18px]">{t("Name")}</p>
               <div className="flex justify-between items-center">
                 {isEditUserName ? (
-                  <input
-                    value={nameUser}
-                    ref={userRef}
-                    type="text"
-                    className="border-none outline-none rounded-md pl-2 text-white bg-[#333335] text-[16px] flex-1 max-w-[400px]"
-                    onChange={(event) => {
-                      setNameUser(event.target.value);
-                    }}
-                    onKeyPress={handlePressEnterInput}
-                  />
+                  <div className="flex flex-col">
+                    <input
+                      value={nameUser}
+                      ref={userRef}
+                      type="text"
+                      className="border-none outline-none rounded-md pl-2 text-white bg-[#333335] text-[15px] flex-1 min-w-[300px] max-w-[400px]"
+                      onChange={(event) => {
+                        setNameUser(event.target.value);
+                      }}
+                      onKeyPress={handlePressEnterInput}
+                    />
+                    <p className="text-[13px] pl-2 ">
+                      {t("Press Esc to exit")}
+                    </p>
+                  </div>
                 ) : (
-                  <p className="text-[16px] text-[#989898] capitalize">
+                  <p className="text-[15px]  capitalize">
                     {dataUser?.displayName
                       ? dataUser?.displayName
                       : dataUser?.email?.replace("@gmail.com", "")}
@@ -315,8 +347,8 @@ const UserPage = () => {
             <div className="mt-4">
               <div>
                 <p className="text-[18px]">Email</p>
-                <div className="text-[16px] flex justify-between">
-                  <p className="text-[#989898]">{dataUser?.email}</p>
+                <div className="text-[15px] flex justify-between">
+                  <p className="">{dataUser?.email}</p>
 
                   {/* verify email */}
                   {!dataUser?.emailVerified ? (

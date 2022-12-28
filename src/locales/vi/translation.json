@@ -129,7 +129,9 @@
   "Are you sure to delete this account?":"Bạn có chắc muốn xóa tài khoản không",
   "No":"Không",
   "Something went wrong":"Something went wrong",
-  "Change user name success":"Thay đổi tên người dùng thành công"
+  "Change user name success":"Thay đổi tên người dùng thành công",
+  "If you signed in with Google or Facebook, you can't change your email and password":"Nếu bạn đã đăng nhập bằng Google hoặc Facebook, bạn không thể thay đổi email và mật khẩu của mình",
+  "Here you can edit public information about yourself":"Tại đây bạn có thể chỉnh sửa thông tin công khai về bản thân"
 
 
 
