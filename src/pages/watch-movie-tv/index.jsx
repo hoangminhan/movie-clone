@@ -7,7 +7,7 @@ import {
   faThumbTack,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Col, message, Row, Skeleton, Tooltip } from "antd";
+import { Col, message, Rate, Row, Skeleton, Tooltip } from "antd";
 import ReactLoading from "react-loading";
 
 import { ComponentSlider, SkeletonCustom } from "components";
@@ -34,8 +34,10 @@ import { BodyWatch, CommentMovie, EpisodeTv, Hero } from "./components";
 import { useContext } from "react";
 import { UserContext } from "contexts";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { useTitle } from "hooks";
+import { useNotification, useTitle } from "hooks";
 import {
+  arrayRemove,
+  arrayUnion,
   collection,
   doc,
   getDoc,
@@ -43,10 +45,15 @@ import {
   getFirestore,
   onSnapshot,
   setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
 
 import { query } from "firebase/database";
+const handleGetRateCurrent = (dataRate, uid) => {
+  const result = dataRate.find((item) => item.id_rate === uid);
+  return result;
+};
 
 const WatchMovieTv = () => {
   const {
@@ -101,6 +108,11 @@ const WatchMovieTv = () => {
   const [isLoadingComment, setIsLoadingComment] = useState(false);
 
   const [currentUrl, setCurrentUrl] = useState("");
+  const { handlePopupNotification } = useNotification();
+
+  const location = useLocation();
+  const { pathname } = location;
+  const [dataRaTe, setDataRate] = useState();
   const handleChangeQuantityComment = (data) => {
     setLengthShow((pre) => pre + data);
   };
@@ -185,6 +197,7 @@ const WatchMovieTv = () => {
     }
   }, [season]);
 
+  // sync title
   useEffect(() => {
     handleChangeTitle(dataDetail.title ? dataDetail.title : dataDetail.name);
   }, [dataDetail]);
@@ -302,7 +315,9 @@ const WatchMovieTv = () => {
         setUrlImgUser(doc.data().url);
       });
     };
-    getNameCurrentUser();
+    if (dataUser) {
+      getNameCurrentUser();
+    }
   }, [dataUser]);
 
   // check movie have at realtime yet, to push item
@@ -327,12 +342,11 @@ const WatchMovieTv = () => {
 
       const docSnap = await getDoc(checkDocumentComment);
       if (!docSnap.exists()) {
-        debugger;
-
         setDoc(
           doc(dbfireStore, "detail", idDetail),
           {
             comment: [],
+            listRate: [],
             id_detail: idDetail,
           },
           { merge: true }
@@ -415,11 +429,19 @@ const WatchMovieTv = () => {
       // listening db comment
       onSnapshot(querySnapsotComment, (querySnapshot) => {
         querySnapshot.forEach((docs) => {
+          setDataRate((pre) => {
+            const result = handleGetRateCurrent(
+              docs.data().listRate,
+              dataUser.uid
+            );
+            return result ? result.value_rate : pre;
+          });
           setDataComment({
             id_detail: docs.data().id_detail,
             comment: docs.data().comment.sort(function (x, y) {
               return y.createAt.seconds - x.createAt.seconds;
             }),
+            listRate: docs.data().listRate,
           });
           setCurrentKey(docs.data().id_detail);
         });
@@ -427,9 +449,7 @@ const WatchMovieTv = () => {
       setIsLoadingComment(false);
     };
     handleGetdata();
-  }, [idDetail]);
-  const location = useLocation();
-  const { pathname } = location;
+  }, [idDetail, dataUser]);
 
   const handleGenerateText = (pathname) => {
     return pathname.includes("/movie/") ? "movie" : "tv";
@@ -438,6 +458,51 @@ const WatchMovieTv = () => {
   const [isHiddenDrawer, setIsHiddenDrawer] = useState(
     sessionStorage.getItem("isHiddenDrawer") === "true" ? true : false
   );
+
+  const handleAddRateMovie = async (value) => {
+    const isLogin = Boolean(localStorage.getItem("accessToken"));
+    if (isLogin) {
+      const dbfireStore = getFirestore();
+      const rateRef = doc(dbfireStore, "detail", idDetail);
+      try {
+        const { uid } = dataUser;
+        const docSnap = await getDoc(rateRef);
+        if (docSnap.exists()) {
+          const isExistRate = handleGetRateCurrent(
+            docSnap.data().listRate,
+            uid
+          );
+          const dataAdd = {
+            id_rate: uid,
+            value_rate: value,
+          };
+          if (isExistRate) {
+            // remove current to add new
+            updateDoc(rateRef, {
+              listRate: arrayRemove(isExistRate),
+            });
+            updateDoc(rateRef, {
+              listRate: arrayUnion(dataAdd),
+            });
+          } else {
+            // add
+            updateDoc(rateRef, {
+              listRate: arrayUnion(dataAdd),
+            });
+          }
+        } else {
+          console.log("k co");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      handlePopupNotification(
+        "You need to login to perform this function",
+        "warning"
+      );
+    }
+  };
 
   return (
     <div>
@@ -501,7 +566,7 @@ const WatchMovieTv = () => {
             />
 
             {/* xem phim */}
-            <div className="my-10 mx-4 overflow-hidden" id="movie-id">
+            <div className="my-10 px-8 overflow-hidden" id="movie-id">
               {/* {currentUrl && (
                 <Iframe
                   id="movie-id"
@@ -513,6 +578,17 @@ const WatchMovieTv = () => {
               )} */}
             </div>
 
+            {/* rating */}
+            <div className="">
+              <p className="text-[16px] mr-1">{t("Your rating")}:</p>
+              <Rate
+                allowHalf
+                value={dataRaTe}
+                onChange={(value) => {
+                  handleAddRateMovie(value);
+                }}
+              />
+            </div>
             {/* eposide tv */}
 
             {tabGlobal === "/" ? (

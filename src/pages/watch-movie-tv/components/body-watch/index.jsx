@@ -35,13 +35,13 @@ export const BodyWatch = ({
   const navigate = useNavigate();
   return (
     <>
-      <div className="mt-[128px] px-4 text-[#fff]">
+      <div className="mt-[128px] text-[#fff]">
         <p className="uppercase underline font-medium text-primarybg text-[20px]">
           {t("information")}
         </p>
 
         {dataDetail ? (
-          <div className="px-4 mt-6">
+          <div className="mt-6">
             <h3 className="text-[#fff] text-[16px]">
               {currenTab !== "/" ? (
                 <>
