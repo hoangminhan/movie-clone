@@ -79,12 +79,12 @@ const LoginPage = () => {
     } catch (error) {
       setIsLoading(false);
       if (error.code === "auth/wrong-password") {
-        message.error("Please check the Password");
+        message.error(t("Please check the Password"));
       }
       if (error.code === "auth/user-not-found") {
-        message.error("Please check the Email");
+        message.error(t("Please check the Email"));
       } else if (error.code === "auth/invalid-email") {
-        message.error("Emai invalid");
+        message.error(t("Invalid Email"));
       }
     }
   };

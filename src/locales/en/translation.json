@@ -121,6 +121,13 @@
   "Verification email has been sent to":"Verification email has been sent to",
   "Send me verification email":"Send me verification email",
   "Delete account":"Delete account",
-  "Enter your password":"Enter your password"
+  "Enter your password":"Enter your password",
+  "Please check the Password":"Please check the password",
+  "Delete account success":"Delete account success",
+  "Please check the Email":"Please check the email",
+  "Are you sure to delete this account?":"Are you sure to delete this account?",
+  "No":"No",
+  "Something went wrong":"Something went wrong",
+  "Change user name success":"Change user name success"
 
 }

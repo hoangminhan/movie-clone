@@ -122,7 +122,15 @@
   "Verification email has been sent to":"Email xác minh đã được gửi tới",
   "Send me verification email":"Gửi cho tôi email để xác minh",
   "Delete account":"Xóa tài khoản",
-  "Enter your password":"Nhập mật khẩu của bạn"
+  "Enter your password":"Nhập mật khẩu của bạn",
+  "Please check the Password":"Vui lòng kiểm tra lại mật khẩu",
+  "Delete account success":"Xóa tài khoản thành công",
+  "Please check the Email":"Vui lòng kiểm tra lại email",
+  "Are you sure to delete this account?":"Bạn có chắc muốn xóa tài khoản không",
+  "No":"Không",
+  "Something went wrong":"Something went wrong",
+  "Change user name success":"Thay đổi tên người dùng thành công"
+
 
 
 

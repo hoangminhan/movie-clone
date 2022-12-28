@@ -11,7 +11,7 @@ import { getAuth, signOut } from "firebase/auth";
 import { useNotification } from "hooks";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import "./styles.scss";
 const StyledDropdown = styled(Dropdown)`
@@ -28,6 +28,8 @@ export const Profile = () => {
   const [dataUser, setDataUser] = currentDataUser;
   const [t] = useTranslation();
   const { handlePopupNotification } = useNotification();
+  const location = useLocation();
+  const { pathname } = location;
 
   const menu = (
     <Menu
@@ -41,8 +43,19 @@ export const Profile = () => {
                 navigate("/account");
               }}
             >
-              <FontAwesomeIcon icon={faUserTie} color="white" />
-              <p>{t("Profile")}</p>
+              <FontAwesomeIcon
+                icon={faUserTie}
+                className={`${
+                  pathname === "/account" ? "text-primarybg" : "text-white"
+                }`}
+              />
+              <p
+                className={`text-[18px] ${
+                  pathname === "/account" ? "text-primarybg" : "text-white"
+                }`}
+              >
+                {t("Profile")}
+              </p>
             </div>
           ),
         },
@@ -65,7 +78,7 @@ export const Profile = () => {
               }}
             >
               <FontAwesomeIcon icon={faArrowRightFromBracket} color="white" />
-              <p>{t("Logout")}</p>
+              <p className="text-[18px]">{t("Logout")}</p>
             </div>
           ),
         },

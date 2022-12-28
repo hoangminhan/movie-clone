@@ -538,6 +538,7 @@ export const CommentMovie = ({
                                           Edit
                                         </p>
                                         <Popconfirm
+                                          okType="default"
                                           title="Are you sure to delete this comment?"
                                           onConfirm={() => {
                                             if (Boolean(accessToken)) {
@@ -878,6 +879,7 @@ export const CommentMovie = ({
                                                       Edit
                                                     </p>
                                                     <Popconfirm
+                                                      okType="default"
                                                       title="Are you sure to delete this comment?"
                                                       onConfirm={() => {
                                                         if (
