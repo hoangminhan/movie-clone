@@ -10,10 +10,12 @@ export const UserProviderContext = ({ children }) => {
     sessionStorage.getItem("currentTab") || "/"
   );
   const [dataUser, setDataUser] = useState({});
+  const [isChangeAvatar, setIsChangeAvatar] = useState(false);
   const stateContext = {
     localeGlobal: [globalLocale, setGlobalLocale],
     currentTabGlobal: [tabGlobal, setTabGlobal],
     currentDataUser: [dataUser, setDataUser],
+    changeAvatar: [isChangeAvatar, setIsChangeAvatar],
   };
 
   useEffect(() => {
@@ -23,7 +25,8 @@ export const UserProviderContext = ({ children }) => {
       // console.log(auth.currentUser);
       // const user = auth.currentUser;
       // setDataUser({ ...user });
-      onAuthStateChanged(getAuth(), async (user) => {
+      onAuthStateChanged(auth, async (user) => {
+        console.log("profile");
         if (user) {
           setDataUser(user);
           // ...
@@ -32,7 +35,7 @@ export const UserProviderContext = ({ children }) => {
       });
     };
     handleGetDataUser();
-  }, []);
+  }, [isChangeAvatar]);
 
   return (
     <UserContext.Provider value={stateContext}>{children}</UserContext.Provider>

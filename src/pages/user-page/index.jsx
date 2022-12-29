@@ -7,7 +7,7 @@ import {
   faUserSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Col, Empty, Form, Modal, Popconfirm, Row, Spin } from "antd";
+import { Col, Empty, Form, Modal, Popconfirm, Row, Spin, Upload } from "antd";
 import { UserContext } from "contexts";
 import {
   deleteUser,
@@ -18,7 +18,7 @@ import {
   sendEmailVerification,
   updateProfile,
 } from "firebase/auth";
-import { useNotification, useTitle } from "hooks";
+import { useFirebaseRealTime, useNotification, useTitle } from "hooks";
 import React, { useEffect, useLayoutEffect } from "react";
 import { useState } from "react";
 import { useRef } from "react";
@@ -28,11 +28,14 @@ import { useNavigate } from "react-router";
 import ReactLoading from "react-loading";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { AiOutlineSend, AiOutlineEdit } from "react-icons/ai";
+import { getStorage, ref } from "firebase/storage";
 
 const UserPage = () => {
   const stateContext = useContext(UserContext);
-  const { currentDataUser } = stateContext;
+  const { currentDataUser, changeAvatar } = stateContext;
   const [dataUser] = currentDataUser;
+  const [isChangeAvatar, setIsChangeAvatar] = changeAvatar;
+
   const [t] = useTranslation();
   const { handlePopupNotification } = useNotification();
   const { handleChangeTitle } = useTitle();
@@ -51,6 +54,7 @@ const UserPage = () => {
   const [isEditUserName, setIsEditUserName] = useState(false);
   const [nameUser, setNameUser] = useState("");
   const userRef = useRef(null);
+  const { handleUploadAvatar } = useFirebaseRealTime();
 
   // verify email
   const handleVerifyEmail = () => {
@@ -66,28 +70,6 @@ const UserPage = () => {
       // ...
     });
   };
-
-  // useLayoutEffect(() => {
-  //   const getUserInfo = async () => {
-  //     try {
-  //       const authentication = getAuth();
-  //       console.log({ authentication });
-  //       const userData = authentication.currentUser;
-  //       console.log({ userData });
-
-  //       onAuthStateChanged(authentication, (user) => {
-  //         console.log({ user });
-  //         if (user) {
-  //           setDataUser(user);
-  //           // ...
-  //         }
-  //       });
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   getUserInfo();
-  // }, []);
 
   const handleConfirmDeleteAccount = (event) => {
     setIsShowModalPassword(true);
@@ -212,6 +194,30 @@ const UserPage = () => {
       document.removeEventListener("keydown", keyDownHandler);
     };
   }, []);
+
+  const [file, setFile] = useState(null);
+  const [photoUrl, setPhotoUrl] = useState();
+  const [isLoadingAvatar, setIsLoadingAvatar] = useState(false);
+  function handleChangeFile(e) {
+    if (e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  }
+  const handleSubmitChangeAvatar = async () => {
+    setIsLoadingAvatar(true);
+    await handleUploadAvatar(file, dataUser);
+    setIsLoadingAvatar(false);
+  };
+  useEffect(() => {
+    if (dataUser?.photoURL) {
+      setPhotoUrl(dataUser.photoURL);
+    }
+  }, [dataUser, isChangeAvatar]);
+  useEffect(() => {
+    if (file) {
+      handleSubmitChangeAvatar();
+    }
+  }, [file]);
   return (
     <div className="min-h-[100vh]">
       <Modal
@@ -392,25 +398,58 @@ const UserPage = () => {
         <Col xs={24} lg={8}>
           <p className="text-[18px]">{t("Profile photo")}</p>
           <div className="mt-3 flex justify-center items-center flex-col">
-            {dataUser?.photoURL ? (
-              <img
-                src={dataUser?.photoURL}
-                alt=""
-                className="w-[250px] h-[250px] object-cover rounded-full"
-              />
+            {photoUrl ? (
+              <>
+                {/* {isLoadingAvatar ? ( */}
+
+                <div className="w-[250px] h-[x]250p relative">
+                  <img
+                    src={photoUrl}
+                    alt=""
+                    className=" object-cover rounded-full"
+                  />
+                  {isLoadingAvatar && (
+                    <div
+                      className="absolute left-[50%] top-[50%]
+                -translate-x-1/2 -translate-y-1/2
+                "
+                    >
+                      {/* <Spin /> */}
+                      <ReactLoading type="bubbles" color="white" height={50} />
+                    </div>
+                  )}
+                </div>
+              </>
             ) : (
               <Empty />
             )}
 
             {/* upload new photo */}
-            <div className="flex items-center justify-center gap-x-2 bg-[#333335] w-[230px] py-2 mt-5 rounded-full cursor-pointer hover:scale-105 transition-all duration-150 ease-linear">
-              <FontAwesomeIcon
-                icon={faUpload}
-                beat
-                className="text-primary text-[16px]"
-              />
+            <label
+              htmlFor="upload-avatar"
+              className={`${
+                isLoadingAvatar ? "pointer-events-none" : "pointer-events-auto"
+              } flex items-center justify-center gap-x-2 bg-[#333335] w-[230px] py-2 mt-5 rounded-full cursor-pointer hover:scale-105 transition-all duration-150 ease-linear`}
+            >
+              {isLoadingAvatar ? (
+                <Spin />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faUpload}
+                  beat
+                  className="text-primary text-[16px]"
+                />
+              )}
               <p className="text-[16px]">{t("Upload new photo")}</p>
-            </div>
+            </label>
+
+            <input
+              id="upload-avatar"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleChangeFile}
+            />
           </div>
         </Col>
       </Row>

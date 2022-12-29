@@ -293,7 +293,7 @@ export const Banner = ({ listTrending, isLoading }) => {
                   ease-in-out delay-250 hover:scale-110 duration-300 hidden  group-hover:block"
                       onClick={() => {
                         const currentType =
-                          sessionStorage.getItem("currentTab") === "tab-tv-show"
+                          sessionStorage.getItem("currentTab") === "/tv-show"
                             ? "tv"
                             : "movie";
                         navigate(`/${currentType}/${slider.id}`);

@@ -493,9 +493,7 @@ const WatchMovieTv = () => {
         } else {
           console.log("k co");
         }
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     } else {
       handlePopupNotification(
         "You need to login to perform this function",
@@ -578,6 +576,43 @@ const WatchMovieTv = () => {
               )} */}
             </div>
 
+            <div>
+              {/* season */}
+              {handleRenderSeason(season.numberSearson)?.length === 1 ? (
+                ""
+              ) : (
+                <div className="flex gap-5 gap-y-7 flex-wrap mb-2 mt-[32px]">
+                  {handleRenderSeason(season.numberSearson).map(
+                    (item, index) => {
+                      return (
+                        <p
+                          key={index}
+                          className={`transition-all duration-150 hover:scale-105 ease-linear px-2 py-[2px] rounded-md overflow-hidden cursor-pointer flex text-[18px] ${
+                            +season.currentSeason === +item
+                              ? "bg-black text-white"
+                              : "bg-primarybg"
+                          }`}
+                          onClick={() => {
+                            if (season.currentSeason === +item) {
+                              message.warning(t(`Bạn đang ở Season ${item}`));
+                            } else {
+                              setSeason({
+                                ...season,
+                                currentSeason: +item,
+                                currentEpisode: 1,
+                              });
+                              handleScrollToTop();
+                            }
+                          }}
+                        >
+                          Season &nbsp;<span>{item}</span>
+                        </p>
+                      );
+                    }
+                  )}
+                </div>
+              )}
+            </div>
             {/* rating */}
             <div className="">
               <p className="text-[16px] mr-1">{t("Your rating")}:</p>
@@ -613,40 +648,6 @@ const WatchMovieTv = () => {
                     {season.currentEpisode}
                   </span>{" "}
                 </div>
-              </div>
-            )}
-
-            {/* season */}
-            {handleRenderSeason(season.numberSearson)?.length === 1 ? (
-              ""
-            ) : (
-              <div className="flex gap-5 gap-y-7 flex-wrap px-[24px] mt-[32px]">
-                {handleRenderSeason(season.numberSearson).map((item, index) => {
-                  return (
-                    <p
-                      key={index}
-                      className={`px-2 py-1 rounded-md overflow-hidden cursor-pointer flex text-[18px]  ${
-                        +season.currentSeason === +item
-                          ? "bg-black text-white"
-                          : "bg-slate-400"
-                      }`}
-                      onClick={() => {
-                        if (season.currentSeason === +item) {
-                          message.warning(t(`Bạn đang ở Season ${item}`));
-                        } else {
-                          setSeason({
-                            ...season,
-                            currentSeason: +item,
-                            currentEpisode: 1,
-                          });
-                          handleScrollToTop();
-                        }
-                      }}
-                    >
-                      Season &nbsp;<span>{item}</span>
-                    </p>
-                  );
-                })}
               </div>
             )}
 

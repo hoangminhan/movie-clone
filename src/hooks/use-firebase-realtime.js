@@ -1,4 +1,7 @@
 import { AVATAR_EMPTY } from "constant";
+import { UserContext } from "contexts";
+import { storageMovie } from "firebase-custom";
+import { updateProfile } from "firebase/auth";
 import {
   arrayRemove,
   collection,
@@ -12,11 +15,15 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { useState } from "react";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { useContext, useState } from "react";
 import { useNotification } from "./use-notification";
 
 export const useFirebaseRealTime = () => {
   const { handlePopupNotification } = useNotification();
+  const stateContext = useContext(UserContext);
+  const { changeAvatar } = stateContext;
+  const [isChangeAvatar, setIsChangeAvatar] = changeAvatar;
 
   const [dataCollection, setDataCollection] = useState();
   const handleCheckIsExist = async (collection, idDetail) => {
@@ -148,10 +155,25 @@ export const useFirebaseRealTime = () => {
     }
   };
 
+  const handleUploadAvatar = async (file, currentUser, typeImage) => {
+    const fileRef = ref(storageMovie, currentUser.uid + ".png");
+    try {
+      await uploadBytes(fileRef, file);
+      // get url file avatar
+      const photoURL = await getDownloadURL(fileRef);
+
+      await updateProfile(currentUser, { photoURL });
+      setIsChangeAvatar(!isChangeAvatar);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     handleCheckIsExist,
     handleDeleteOneBookmarkOrHistory,
     handleDeleteAllBookmarkOrHistory,
     handleCheckUserExist,
+    handleUploadAvatar,
   };
 };
