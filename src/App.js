@@ -9,16 +9,27 @@ import { UserContext } from "contexts";
 import { ConfigProvider } from "antd";
 import viVN from "antd/es/locale/vi_VN";
 import enUS from "antd/es/locale/en_US";
-import { app } from "./firebase-custom";
+import {
+  app,
+  getTokenPermision,
+  messagingMovie,
+  // onMessageListener,
+} from "./firebase-custom";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import { useFirebaseRealTime, useNotification } from "hooks";
+import { onMessage } from "firebase/messaging";
+import { onBackgroundMessage } from "firebase/messaging/sw";
 
 function App() {
   const stateContext = useContext(UserContext);
-  const { localeGlobal } = stateContext;
+  const { localeGlobal, currentDataUser } = stateContext;
   const [globalLocale, setGlobalLocale] = localeGlobal;
+  const [dataUser] = currentDataUser;
   let mainContent = useRoutes(RouteList);
   const location = useLocation();
+  const { handlePopupNotification } = useNotification();
+  const { handleAddNotification } = useFirebaseRealTime();
 
   useEffect(() => {
     window.scrollTo({
@@ -33,6 +44,49 @@ function App() {
       easing: "ease-in-sine",
     });
   }, []);
+
+  // FCM
+  useEffect(() => {
+    getTokenPermision();
+    const channel = new BroadcastChannel("notifications");
+    channel.addEventListener("message", (event) => {
+      console.log("Receive background: ", event.data);
+    });
+  }, []);
+  // onMessageListener().then((data) => {
+  //   handlePopupNotification(data.notification.body, "info");
+  //   console.log("Receive foreground: ", data);
+  // });
+  // nhận thông báo when đang sử dụng web site
+
+  onMessage(messagingMovie, async (payload) => {
+    console.log({ payload });
+    const { messageId, notification } = payload;
+    try {
+      await handleAddNotification(
+        { noti_id: messageId, description: notification.body },
+        dataUser.uid
+      );
+      handlePopupNotification(payload.notification.body, "info");
+    } catch (error) {
+      console.log("error");
+    }
+  });
+
+  onBackgroundMessage(messagingMovie, async (payload) => {
+    console.log({ payload });
+    // const { messageId, notification } = payload;
+    // try {
+    //   await handleAddNotification(
+    //     { noti_id: messageId, description: notification.body },
+    //     dataUser.uid
+    //   );
+    //   handlePopupNotification(payload.notification.body, "info");
+    // } catch (error) {
+    //   console.log("error");
+    // }
+  });
+  console.log({ dataUser });
 
   return (
     <ConfigProvider locale={globalLocale === "vi-VN" ? viVN : enUS}>

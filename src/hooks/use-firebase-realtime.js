@@ -4,6 +4,7 @@ import { storageMovie } from "firebase-custom";
 import { updateProfile } from "firebase/auth";
 import {
   arrayRemove,
+  arrayUnion,
   collection,
   doc,
   getDoc,
@@ -146,6 +147,7 @@ export const useFirebaseRealTime = () => {
           email: user.email || "",
           bookmark: [],
           history: [],
+          notification: [],
         };
         // add doc to user collection
         setDoc(doc(db, "user", user.uid), data);
@@ -168,6 +170,27 @@ export const useFirebaseRealTime = () => {
       console.log(error);
     }
   };
+  const handleAddNotification = async (data, idUser) => {
+    // reference to db
+    const dbfireStore = getFirestore();
+
+    const userRef = doc(dbfireStore, "user", idUser);
+    try {
+      const docSnap = await getDoc(userRef);
+      if (docSnap.exists()) {
+        const dataAdd = {
+          description: data.description,
+          noti_id: data.noti_id,
+        };
+        await updateDoc(userRef, {
+          notification: arrayUnion(dataAdd),
+        });
+        console.log("success");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   return {
     handleCheckIsExist,
@@ -175,5 +198,6 @@ export const useFirebaseRealTime = () => {
     handleDeleteAllBookmarkOrHistory,
     handleCheckUserExist,
     handleUploadAvatar,
+    handleAddNotification,
   };
 };

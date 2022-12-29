@@ -35,11 +35,11 @@ export const Header = ({ page, setIsHiddenSidebar, isHiddenSidebar }) => {
   };
   return (
     <header className="flex justify-between items-center h-[70px] before:absolute before:h-[1px] before:w-[100%] before:left-[0px] before:right-[0px] before:top-[70px] before:bg-[#4f4e4e] text-white">
-      <div className="text-[20px] whitespace-nowrap">
+      <div className="text-[16px] ssm:text-[20px] whitespace-nowrap">
         {handleContentHeader(page)}
       </div>
 
-      <div className="flex justify-end items-center gap-[20px] basis-3/5">
+      <div className="flex justify-end items-center gap-[10px] ssm:gap-[20px] basis-3/5">
         <div
           className="block tablet:hidden"
           onClick={() => {

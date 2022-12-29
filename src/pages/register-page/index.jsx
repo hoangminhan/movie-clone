@@ -77,6 +77,7 @@ const RegisterPage = () => {
         email: response.user.email || "",
         bookmark: [],
         history: [],
+        notification: [],
       };
       // addDoc(collection(db, "user", response.user.uid), data);
       setDoc(doc(db, "user", response.user.uid), data);

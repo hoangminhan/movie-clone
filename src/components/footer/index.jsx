@@ -17,7 +17,7 @@ export const Footer = ({ toggleMenu }) => {
   const { t } = useTranslation();
   return (
     <div
-      className={`left-0 right-0 h-[260px] max-h-[260px] bg-[#1c1c1e] border-t-[1px] border-[#ccc] duration-300 ease-in-out ${
+      className={`left-0 right-0 min-h-[260px] bg-[#1c1c1e] border-t-[1px] border-[#ccc] duration-300 ease-in-out ${
         !toggleMenu ? "pl-[310px]" : "pl-3 tablet:pl-[92px] xl:pl-[130px] pr-3"
       } ${pathname === "/movie" ? "mr-[350px]" : ""}`}
     >
@@ -29,7 +29,7 @@ export const Footer = ({ toggleMenu }) => {
       </div>
       <div className="text-[14px] lg:text-[16px] pt-2 md:pt-4">
         <Row>
-          <Col span={6}>
+          <Col xs={24} md={6}>
             <div>
               <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
                 {t("Audio description")}
@@ -42,7 +42,7 @@ export const Footer = ({ toggleMenu }) => {
               </p>
             </div>
           </Col>
-          <Col span={6}>
+          <Col xs={24} md={6}>
             <div>
               <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
                 {t("Help center")}
@@ -55,7 +55,7 @@ export const Footer = ({ toggleMenu }) => {
               </p>
             </div>
           </Col>
-          <Col span={6}>
+          <Col xs={24} md={6}>
             <div>
               <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
                 {t("Gift card")}
@@ -68,7 +68,7 @@ export const Footer = ({ toggleMenu }) => {
               </p>
             </div>
           </Col>
-          <Col span={6}>
+          <Col xs={24} md={6}>
             <div>
               <p className="hover:cursor-pointer hover:underline hover:underline-offset-2 hover:text-white duration-200 ease-in-out">
                 {t("Multimedia Center")}

@@ -1,4 +1,5 @@
 import {
+  faCircleUser,
   faEdit,
   faEye,
   faEyeSlash,
@@ -7,7 +8,17 @@ import {
   faUserSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Col, Empty, Form, Modal, Popconfirm, Row, Spin, Upload } from "antd";
+import {
+  Avatar,
+  Col,
+  Empty,
+  Form,
+  Modal,
+  Popconfirm,
+  Row,
+  Spin,
+  Upload,
+} from "antd";
 import { UserContext } from "contexts";
 import {
   deleteUser,
@@ -29,6 +40,7 @@ import ReactLoading from "react-loading";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { AiOutlineSend, AiOutlineEdit } from "react-icons/ai";
 import { getStorage, ref } from "firebase/storage";
+import { IMAGE_URL } from "constant";
 
 const UserPage = () => {
   const stateContext = useContext(UserContext);
@@ -190,7 +202,6 @@ const UserPage = () => {
 
     // 👇️ clean up event listener
     return () => {
-      console.log("clean up");
       document.removeEventListener("keydown", keyDownHandler);
     };
   }, []);
@@ -353,13 +364,13 @@ const UserPage = () => {
             <div className="mt-4">
               <div>
                 <p className="text-[18px]">Email</p>
-                <div className="text-[15px] flex justify-between">
+                <div className="text-[15px] flex justify-between flex-wrap">
                   <p className="">{dataUser?.email}</p>
 
                   {/* verify email */}
                   {!dataUser?.emailVerified ? (
                     <p
-                      className="w-fit cursor-pointer text-[14px] ml-8 underline text-yellow-500"
+                      className="w-fit cursor-pointer text-[14px] ml-0 ssm:ml-8 underline text-yellow-500"
                       onClick={() => {
                         handleVerifyEmail();
                       }}
@@ -373,7 +384,7 @@ const UserPage = () => {
               </div>
             </div>
             {/* delete button */}
-            <div className="absolute bottom-0 left-[50%] -translate-x-1/2">
+            <div className="absolute bottom-2 left-[50%] -translate-x-1/2">
               <Popconfirm
                 title={t("Are you sure to delete this account?")}
                 onConfirm={handleConfirmDeleteAccount}
@@ -402,7 +413,7 @@ const UserPage = () => {
               <>
                 {/* {isLoadingAvatar ? ( */}
 
-                <div className="w-[250px] h-[x]250p relative">
+                <div className="w-[250px] h-[250px] relative">
                   <img
                     src={photoUrl}
                     alt=""
@@ -421,7 +432,29 @@ const UserPage = () => {
                 </div>
               </>
             ) : (
-              <Empty />
+              <div className="w-[250px] h-[250px] flex justify-center items-center relative">
+                <Avatar
+                  size="large"
+                  src={dataUser?.photoURL}
+                  icon={
+                    <FontAwesomeIcon
+                      icon={faCircleUser}
+                      className="w-full h-full"
+                    />
+                  }
+                  className="cursor-pointer w-[250px] h-[250px]"
+                />
+                {isLoadingAvatar && (
+                  <div
+                    className="absolute left-[50%] top-[50%]
+                -translate-x-1/2 -translate-y-1/2
+                "
+                  >
+                    {/* <Spin /> */}
+                    <ReactLoading type="bubbles" color="white" height={50} />
+                  </div>
+                )}
+              </div>
             )}
 
             {/* upload new photo */}
@@ -429,7 +462,7 @@ const UserPage = () => {
               htmlFor="upload-avatar"
               className={`${
                 isLoadingAvatar ? "pointer-events-none" : "pointer-events-auto"
-              } flex items-center justify-center gap-x-2 bg-[#333335] w-[230px] py-2 mt-5 rounded-full cursor-pointer hover:scale-105 transition-all duration-150 ease-linear`}
+              } flex items-center justify-center gap-x-2 bg-[#333335] w-[230px] py-2 mt-10 rounded-full cursor-pointer hover:scale-105 transition-all duration-150 ease-linear`}
             >
               {isLoadingAvatar ? (
                 <Spin />
