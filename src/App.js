@@ -9,17 +9,13 @@ import { UserContext } from "contexts";
 import { ConfigProvider } from "antd";
 import viVN from "antd/es/locale/vi_VN";
 import enUS from "antd/es/locale/en_US";
-import {
-  app,
-  getTokenPermision,
-  messagingMovie,
-  // onMessageListener,
-} from "./firebase-custom";
+import { app, getTokenPermision, messagingMovie } from "./firebase-custom";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { useFirebaseRealTime, useNotification } from "hooks";
-import { onMessage } from "firebase/messaging";
-import { onBackgroundMessage } from "firebase/messaging/sw";
+import { getMessaging, onMessage } from "firebase/messaging";
+import { v4 as uuidv4 } from "uuid";
+import { Timestamp } from "firebase/firestore";
 
 function App() {
   const stateContext = useContext(UserContext);
@@ -53,18 +49,19 @@ function App() {
       console.log("Receive background: ", event.data);
     });
   }, []);
-  // onMessageListener().then((data) => {
-  //   handlePopupNotification(data.notification.body, "info");
-  //   console.log("Receive foreground: ", data);
-  // });
-  // nhận thông báo when đang sử dụng web site
 
+  // nhận thông báo when đang sử dụng web site
   onMessage(messagingMovie, async (payload) => {
-    console.log({ payload });
     const { messageId, notification } = payload;
     try {
       await handleAddNotification(
-        { noti_id: messageId, description: notification.body },
+        {
+          noti_id: messageId,
+          description: notification.body,
+          title: notification.title,
+          createAt: Timestamp.fromDate(new Date()),
+          isReview: false,
+        },
         dataUser.uid
       );
       handlePopupNotification(payload.notification.body, "info");
@@ -73,20 +70,28 @@ function App() {
     }
   });
 
-  onBackgroundMessage(messagingMovie, async (payload) => {
-    console.log({ payload });
-    // const { messageId, notification } = payload;
-    // try {
-    //   await handleAddNotification(
-    //     { noti_id: messageId, description: notification.body },
-    //     dataUser.uid
-    //   );
-    //   handlePopupNotification(payload.notification.body, "info");
-    // } catch (error) {
-    //   console.log("error");
-    // }
-  });
-  console.log({ dataUser });
+  // nhận thông báo when không ở trong ứng dụng web site
+
+  const channel = new BroadcastChannel("my-channel");
+  channel.onmessage = async (event) => {
+    if (event.data.type === "message-from-sw") {
+      const { payload } = event?.data;
+      try {
+        await handleAddNotification(
+          {
+            noti_id: uuidv4(),
+            description: payload.body,
+            title: payload.title,
+            createAt: Timestamp.fromDate(new Date()),
+            isReview: false,
+          },
+          dataUser.uid
+        );
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
+  };
 
   return (
     <ConfigProvider locale={globalLocale === "vi-VN" ? viVN : enUS}>

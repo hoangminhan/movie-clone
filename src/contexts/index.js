@@ -21,12 +21,7 @@ export const UserProviderContext = ({ children }) => {
   useEffect(() => {
     const handleGetDataUser = async () => {
       const auth = getAuth();
-      // console.log(auth);
-      // console.log(auth.currentUser);
-      // const user = auth.currentUser;
-      // setDataUser({ ...user });
       onAuthStateChanged(auth, async (user) => {
-        console.log("profile");
         if (user) {
           setDataUser(user);
           // ...

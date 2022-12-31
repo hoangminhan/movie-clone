@@ -13,6 +13,7 @@ import {
   onSnapshot,
   query,
   setDoc,
+  Timestamp,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -27,6 +28,7 @@ export const useFirebaseRealTime = () => {
   const [isChangeAvatar, setIsChangeAvatar] = changeAvatar;
 
   const [dataCollection, setDataCollection] = useState();
+
   const handleCheckIsExist = async (collection, idDetail) => {
     // doc(collection, "detail", idDetail)
     try {
@@ -181,6 +183,9 @@ export const useFirebaseRealTime = () => {
         const dataAdd = {
           description: data.description,
           noti_id: data.noti_id,
+          title: data.title,
+          createAt: data.createAt,
+          isReview: data.isReview,
         };
         await updateDoc(userRef, {
           notification: arrayUnion(dataAdd),

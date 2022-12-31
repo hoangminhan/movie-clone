@@ -8,3 +8,14 @@ export const AVATAR_EMPTY =
 export const TYPEMODAL = {
   MODAL_TRAILER: "MODAL_TRAILER",
 };
+
+export const firebaseConfig = {
+  apiKey: process.env.REACT_APP_KEY_FIREBASE,
+  authDomain: "movie-demo-fe607.firebaseapp.com",
+  projectId: "movie-demo-fe607",
+  // storageBucket: "movie-demo-fe607.appspot.com",
+  storageBucket: "gs://movie-demo-fe607.appspot.com",
+  messagingSenderId: "796250366453",
+  appId: "1:796250366453:web:68e59a7c1da86fa08880bc",
+  measurementId: "G-THC1RP8P6G",
+};

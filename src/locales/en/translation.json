@@ -131,6 +131,8 @@
   "Change user name success":"Change user name success",
   "If you signed in with Google or Facebook, you can't change your email and password":"If you signed in with Google or Facebook, you can't change your email and password",
   "Here you can edit public information about yourself":"Here you can edit public information about yourself",
-  "Your rating":"Your rating"
+  "Your rating":"Your rating",
+  "Delete notification":"Delete notification",
+  "Notification":"Notification"
 
 }
