@@ -565,7 +565,7 @@ const WatchMovieTv = () => {
 
             {/* xem phim */}
             <div className="my-10 px-8 overflow-hidden" id="movie-id">
-              {/* {currentUrl && (
+              {currentUrl && (
                 <Iframe
                   id="movie-id"
                   src={currentUrl}
@@ -573,7 +573,7 @@ const WatchMovieTv = () => {
                   width="100%"
                   allowFullScreen
                 ></Iframe>
-              )} */}
+              )}
             </div>
 
             <div>
