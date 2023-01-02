@@ -15,16 +15,19 @@ export const LanguageProject = () => {
   const { localeGlobal } = stateContext;
   const [globalLocale, setGlobalLocale] = localeGlobal;
   const [t] = useTranslation();
+  const isLogin = localStorage.getItem("accessToken");
 
   return (
     <div className="flex items-center gap-x-2">
-      <NotificationFCM>
-        <Tooltip title={t("Notification")}>
-          <p className="w-[24px] h-[24px] p-5 flex justify-center items-center rounded-full hover:bg-[#8a8888] cursor-pointer">
-            <FontAwesomeIcon icon={faBell} className="" />
-          </p>
-        </Tooltip>
-      </NotificationFCM>
+      {Boolean(isLogin) && (
+        <NotificationFCM>
+          <Tooltip title={t("Notification")}>
+            <p className="w-[24px] h-[24px] p-5 flex justify-center items-center rounded-full hover:bg-[#8a8888] cursor-pointer">
+              <FontAwesomeIcon icon={faBell} className="" />
+            </p>
+          </Tooltip>
+        </NotificationFCM>
+      )}
 
       <Tooltip title={t("Click to change language")}>
         <div

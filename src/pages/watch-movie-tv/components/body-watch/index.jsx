@@ -68,7 +68,7 @@ export const BodyWatch = ({
             {/* genres */}
 
             {currenTab === "/" ? (
-              <div className="text-[16px] flex items-center">
+              <div className="text-[16px] flex items-center flex-wrap">
                 <span className="mr-2 text-[16px]">{t("Genres")}:</span>
                 {dataDetail?.genres?.map((genre, index) => {
                   return (
@@ -131,7 +131,7 @@ export const BodyWatch = ({
                 <span className="text-[16px]">{t("Updating")}...</span>
               )}
             </h3>
-            <div className="flex flex-wrap gap-x-4 gap-y-6 my-4 pl-4">
+            <div className="flex flex-wrap gap-x-4 gap-y-6 my-4 pl-4 justify-between">
               {listCastsMovie?.map((cast, index) => {
                 return (
                   <Link key={index} to={`/cast/${cast.id}`}>
@@ -156,7 +156,7 @@ export const BodyWatch = ({
                               {cast.name}
                             </p>
                           </Tooltip>
-                          <p className="line-clamp-2">
+                          <p className="line-clamp-1">
                             <span className="mr-1">as</span>
                             {cast.character}
                           </p>

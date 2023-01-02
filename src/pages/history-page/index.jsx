@@ -205,7 +205,7 @@ const HistoryPage = () => {
                 )}
 
                 {dataHistory?.length ? (
-                  <div className="flex gap-10 flex-wrap">
+                  <div className="flex gap-3 tablet:gap-10 flex-wrap justify-center sm:justify-start">
                     {dataHistory.map((history, index) => {
                       return (
                         <div
@@ -221,10 +221,10 @@ const HistoryPage = () => {
                                 setTabGlobal("/");
                                 sessionStorage.setItem("currentTab", "/");
                               } else {
-                                setTabGlobal("tab-tv-show");
+                                setTabGlobal("/tv-show");
                                 sessionStorage.setItem(
                                   "currentTab",
-                                  "tab-tv-show"
+                                  "/tv-show"
                                 );
                               }
                               navigate(`/${history.type}/${history.id}`);

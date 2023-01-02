@@ -11,7 +11,7 @@ export const ButtonPlay = ({ size, sizeImg }) => {
           ? "py-[2px] px-[12px]"
           : size === "middle"
           ? "py-[8px] px-[16px]"
-          : "py-[14px] px-[24px]"
+          : "py-[10px] sm:py-[14px] px-[20px] sm:px-[24px]"
       }  rounded-full bg-gradient-to-br from-primary to-[#f80223] cursor-pointer
       
       `}

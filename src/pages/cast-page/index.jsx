@@ -68,13 +68,13 @@ const CastPage = () => {
   }, [dataDetailCast]);
   return (
     <div className="min-h-[100vh]">
-      <div className="px-5 py-10 flex justify-center text-[20px]">
+      <div className="py-10 flex justify-center text-[20px]">
         <div className="w-[1000px]">
           <h3 className="text-center uppercase text-primarybg text-[35px] mb-8">
             {dataDetailCast.name}
           </h3>
           <StyleSkeleton avatar active loading={isLoading}>
-            <div className="flex justify-start gap-10">
+            <div className="flex justify-start gap-4 sm:gap-10">
               <div>
                 <img
                   src={getImage(dataDetailCast.profile_path)}
@@ -181,7 +181,7 @@ const CastPage = () => {
         </div>
       </div>
 
-      <div className="px-5 pb-8  flex justify-center text-[16px]">
+      <div className="pb-8 flex justify-center text-[16px]">
         <div className="w-[1000px]">
           <StyleSkeleton
             active

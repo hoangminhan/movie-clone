@@ -59,9 +59,9 @@ export const DefaultLayout = ({
     <div className="bg-[#162a45]" ref={topRef}>
       <aside
         className={`fixed z-[3] top-0 bottom-0 left-0 bg-[#22354e] duration-300 ease-in-out transition-all ${
-          !toggleMenu ? "tablet:w-[180px] lg:w-[270px]" : "tablet:w-[80px]"
+          !toggleMenu ? "tablet:w-[180px] lg:w-[230px]" : "tablet:w-[80px]"
         }
-        ${isHiddenSidebar ? "w-0" : "w-[270px]"}
+        ${isHiddenSidebar ? "w-0" : "w-[230px]"}
         
         `}
       >
@@ -86,7 +86,7 @@ export const DefaultLayout = ({
         className={`relative ${
           toggleMenu
             ? "ml-0 tablet:ml-[80px] duration-300 ease-in-out transition-all"
-            : "ml-0 tablet:ml-[180px] lg:ml-[270px]"
+            : "ml-0 tablet:ml-[180px] lg:ml-[230px]"
         }`}
       >
         {/* overlay on mobile */}

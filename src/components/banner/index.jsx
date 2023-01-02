@@ -50,7 +50,7 @@ export const Banner = ({ listTrending, isLoading }) => {
   const { resultModal, handleToggleAutoBanner } = useModal();
   const { stopSlider } = resultModal;
   const currentType =
-    sessionStorage.getItem("currentTab") === "tab-tv-show" ? "tv" : "movie";
+    sessionStorage.getItem("currentTab") === "/tv-show" ? "tv" : "movie";
 
   // get type movie
   const handleGetTypeMovie = (listId, listType) => {
@@ -71,7 +71,7 @@ export const Banner = ({ listTrending, isLoading }) => {
   // handle click trailer
   const handleClickTrailer = async (slider) => {
     const currentType =
-      sessionStorage.getItem("currentTab") === "tab-tv-show" ? "tv" : "movie";
+      sessionStorage.getItem("currentTab") === "/tv-show" ? "tv" : "movie";
     const currentLocale = sessionStorage.getItem("currentLocale") || "vi-VN";
     const { id: idMovie, media_type: type } = slider;
 
@@ -142,7 +142,7 @@ export const Banner = ({ listTrending, isLoading }) => {
       const idMovie = listTrending[currentActiveIndex]?.id;
       const getDataDetail = async () => {
         const type = sessionStorage.getItem("currentTab") || "/";
-        const currentType = type === "tab-tv-show" ? "tv" : "movie";
+        const currentType = type === "/tv-show" ? "tv" : "movie";
         const result = await handleGetDetailMovie(
           idMovie,
           {
@@ -203,7 +203,7 @@ export const Banner = ({ listTrending, isLoading }) => {
                           : getImage(slider.backdrop_path, "w1280")
                       }
                       alt=""
-                      className="max-h-[400px] xl:max-h-[500px] object-fill w-full"
+                      className="min-h-[400px] max-h-[400px] xl:max-h-[500px] object-fill w-full"
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-[#000000] to-transparent "></div>
                     {/* vote_average */}
@@ -217,12 +217,12 @@ export const Banner = ({ listTrending, isLoading }) => {
                     <div className="absolute top-[-8px] right-[0px] text-[13px]"></div>
                     {/* title */}
                     <div className="absolute top-[40%] left-[5%] -translate-y-1/2">
-                      <h2 className="flex text-[32px] text-primarybg max-w-[500px]">
+                      <h2 className="flex text-[25px] sm:text-[32px] text-primarybg max-w-[500px]">
                         {slider.title ? slider.title : slider.original_name}
                       </h2>
 
                       <div>
-                        <p className="flex mt-[32px] ">
+                        <p className="flex mt-[4px] sm:mt-[32px] text-[18px] sm:text-[24px]">
                           {t("First air day")}:{" "}
                           <span className="pl-[12px]">
                             {slider.release_date
@@ -230,13 +230,15 @@ export const Banner = ({ listTrending, isLoading }) => {
                               : slider.first_air_date}
                           </span>
                         </p>
-                        <div className="text-left max-w-[500px] flex text-base line-clamp-3">
-                          <p className="stroke-[red]">{slider.overview}</p>
+                        <div className="text-left max-w-[500px] flex text-base line-clamp-2 sm:line-clamp-3">
+                          <p className="stroke-[red] text-[13px] sm:text-[15px] tablet:text-[16px]">
+                            {slider.overview}
+                          </p>
                         </div>
                       </div>
                       {/* genres */}
                       {listType?.length ? (
-                        <div className="mt-7 flex gap-3">
+                        <div className="mt-3 sm:mt-7 flex gap-3">
                           {listType?.map((item, index) => {
                             return (
                               <div
@@ -244,7 +246,7 @@ export const Banner = ({ listTrending, isLoading }) => {
                                 onClick={() => {
                                   const currentType =
                                     sessionStorage.getItem("currentTab") ===
-                                    "tab-tv-show"
+                                    "/tv-show"
                                       ? "tv"
                                       : "movie";
                                   if (currentType === "tv") {
@@ -255,13 +257,13 @@ export const Banner = ({ listTrending, isLoading }) => {
                                 }}
                               >
                                 <p
-                                  className={`bg-zinc-900  px-2 border-[#ccc] backdrop-opacity-5 text-[18px] border-[1px] border-solid rounded-xl ${
+                                  className={`max-w-[150px] line-clamp-1 bg-zinc-900 px-2 border-[#ccc] backdrop-opacity-5 text-[18px] border-[1px] border-solid rounded-xl ${
                                     currentType === "movie"
                                       ? "cursor-pointer"
                                       : ""
                                   }`}
                                 >
-                                  <span className="text-[#dcd4d4]">
+                                  <span className="text-[#dcd4d4] text-[13px] sm:text-[15px] tablet:text-[16px]">
                                     {item.name}
                                   </span>
                                 </p>

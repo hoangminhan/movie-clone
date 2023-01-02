@@ -417,7 +417,7 @@ const UserPage = () => {
                   <img
                     src={photoUrl}
                     alt=""
-                    className=" object-cover rounded-full"
+                    className="object-cover rounded-full w-[250px] h-[250px]"
                   />
                   {isLoadingAvatar && (
                     <div

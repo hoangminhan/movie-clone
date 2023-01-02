@@ -127,7 +127,7 @@ let RouteList = [
   {
     path: "/:type/:idDetail",
     element: (
-      <DefaultLayout page="movie" showMenu={false}>
+      <DefaultLayout page="movie">
         <WatchMovieTv />
       </DefaultLayout>
     ),

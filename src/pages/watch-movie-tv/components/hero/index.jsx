@@ -70,18 +70,18 @@ export const Hero = ({ dataDetail }) => {
   }, [dataDetail, dataUser.uid, isFavorite, replaceStatus]);
 
   return (
-    <div className="max-h-[500px]">
+    <div className="min-h-[400px] max-h-[500px] mt-6">
       {isLoading ? (
         <Skeleton active round paragraph={{ rows: 17 }}></Skeleton>
       ) : (
-        <div className="max-h-[500px] w-full relative">
+        <div className="min-h-[400px] max-h-[500px] w-full relative">
           <img
             src={
               getImage(dataDetail.backdrop_path).includes("null")
                 ? iconImg.Img404Backdrop
                 : getImage(dataDetail.backdrop_path)
             }
-            className="object-fill max-h-[500px] w-full rounded-b-lg"
+            className="object-cover sm:object-fill min-h-[400px] max-h-[500px] w-full rounded-xl overflow-hidden"
             alt="hero"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0b0b0bd9] to-transparent "></div>
@@ -125,21 +125,21 @@ export const Hero = ({ dataDetail }) => {
             </Tooltip>
           </div>
           {/* poster */}
-          <div className="absolute bottom-[-15%] left-[15%] max-w-[185px] rounded-lg overflow-hidden">
+          <div className="absolute bottom-[-15%] left-[5%] tablet:left-[15%] max-w-[185px]">
             <img
               src={
                 getImage(dataDetail.poster_path, "w185").includes("null")
                   ? iconImg.Img404
                   : getImage(dataDetail.poster_path, "w185")
               }
-              // className="rounded-global"
+              className="rounded-lg w-[80%] tablet:w-full"
               alt="poster"
             />
           </div>
 
-          <div className="absolute left-[45%] tablet:left-[40%] lg:left-[35%] xl:left-[30%] xxl:left-[25%] bottom-[15%]">
+          <div className="absolute sm:left-[30%] tablet:left-[40%] lg:left-[35%] xl:left-[30%] xxl:left-[25%] bottom-[40%] sm:bottom-[15%]">
             {/* name phim */}
-            <p className="text-white text-[30px] xl:text-[35px] font-medium drop-shadow-2xl shadow-[red] ml-3 pr-0 leading-10 stroke-text max-w-[500px] line-clamp-1 overflow-hidden">
+            <p className="text-white text-[25px] sm:text-[30px] xl:text-[35px] font-medium drop-shadow-2xl shadow-[red] ml-3 pr-0 leading-10 stroke-text max-w-[500px] line-clamp-1 overflow-hidden">
               {dataDetail?.title ? dataDetail?.title : dataDetail?.name}
             </p>
 
@@ -152,7 +152,7 @@ export const Hero = ({ dataDetail }) => {
                       to={`/genres/${genre.id}-${genre.name}`}
                       state={{ genreName: genre.name }}
                     >
-                      <p className="text-center text-[14px] max-w-[120px] min-w-[80px] line-clamp-1 px-3 border-solid border-white border-[1px] mr-3 rounded-3xl text-white  uppercase cursor-pointer hover:scale-110 duration-150 ">
+                      <p className="text-center text-[13px] sm:text-[14px] max-w-[120px] min-w-[80px] line-clamp-1 px-3 border-solid border-white border-[1px] mr-3 rounded-3xl text-white  uppercase cursor-pointer hover:scale-110 duration-150 ">
                         {genre.name.replace("Phim", "")}
                       </p>
                     </Link>

@@ -18,7 +18,9 @@ export const Footer = ({ toggleMenu }) => {
   return (
     <div
       className={`left-0 right-0 min-h-[260px] bg-[#1c1c1e] border-t-[1px] border-[#ccc] duration-300 ease-in-out ${
-        !toggleMenu ? "pl-[310px]" : "pl-3 tablet:pl-[92px] xl:pl-[130px] pr-3"
+        !toggleMenu
+          ? "pl-3 lg:pl-[310px]"
+          : "pl-3 tablet:pl-[92px] xl:pl-[130px] pr-3"
       } ${pathname === "/movie" ? "mr-[350px]" : ""}`}
     >
       <div className="pt-4 lg:pt-[32px] flex gap-8 text-white text-[30px] cursor-pointer ">

@@ -102,7 +102,7 @@ export const Menu = () => {
         onChange={handleChangeCurrentTab}
       >
         <TabPane key={"/"} tab={"Movie"}></TabPane>
-        <TabPane key={"tab-tv-show"} tab={"Tv Show"}></TabPane>
+        <TabPane key={"/tv-show"} tab={"Tv Show"}></TabPane>
         <TabPane key={"tab-people"} tab={"People"}></TabPane>
       </StyledTabs> */}
     </nav>

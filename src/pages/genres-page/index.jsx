@@ -105,7 +105,7 @@ const GenresPage = () => {
         {isLoading ? (
           <SkeletonCustom quantity={15} />
         ) : (
-          <div className="flex flex-wrap gap-6 justify-around">
+          <div className="flex flex-wrap gap-6 justify-evenly sm:justify-start">
             {dataGenres?.map((item, index) => {
               return (
                 index < quanlityItem && (
@@ -118,7 +118,7 @@ const GenresPage = () => {
                         item?.media_type === "movie" ? "movie" : "tv";
                       sessionStorage.setItem(
                         "currentTab",
-                        item.media_type === "movie" ? "/" : "tab-tv-show"
+                        item.media_type === "movie" ? "/" : "/tv-show"
                       );
 
                       navigate(`/${type}/${item.id}`);

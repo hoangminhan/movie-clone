@@ -12,7 +12,7 @@ export const SimilarContent = ({ dataSimilar }) => {
       <div className="flex flex-wrap gap-12 justify-center">
         {dataSimilar?.map((similar, index) => {
           const currentType =
-            sessionStorage.getItem("currentTab") === "tab-tv-show"
+            sessionStorage.getItem("currentTab") === "/tv-show"
               ? "tv"
               : "movie";
           return (

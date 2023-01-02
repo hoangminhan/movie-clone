@@ -189,7 +189,7 @@ const WatchMovieTv = () => {
   //  syn params with url
   useEffect(() => {
     const type = sessionStorage.getItem("currentTab") || "/";
-    const currentType = type === "tab-tv-show" ? "tv" : "movie";
+    const currentType = type === "/tv-show" ? "tv" : "movie";
     if (currentType === "tv") {
       setSearchParams({
         ...season,
@@ -506,7 +506,7 @@ const WatchMovieTv = () => {
     <div>
       <Row
         className={`h-full transition-all duration-150 ease-linear ${
-          isHiddenDrawer ? "mr-[0px]" : "mr-[150px] lg:mr-[250px]"
+          isHiddenDrawer ? "mr-[0px]" : "mr-0 lg:mr-[160px] xl:mr-[250px]"
         }`}
       >
         <Col span={24}>
@@ -709,20 +709,22 @@ const WatchMovieTv = () => {
           </div>
         </Col>
       </Row>
+
       <div
         className={`
-      bg-black  border-l-[#ccc] border-l-[1px] border-l-solid fixed z-[2] h-full overflow-y-auto top-0 right-0 scroll-smooth no-scrollbar
+        fixed top-0 xl:top-[70px] right-0 bottom-0 lg:absolute bg-black border-l-[#ccc] border-l-[1px] border-l-solid z-[2] h-full overflow-y-auto scroll-smooth no-scrollbar
       transition-all duration-150 ease-linear ${
-        isHiddenDrawer ? "w-[0px] p-0" : "w-[150px] lg:w-[250px] p-2 tablet:p-4"
+        isHiddenDrawer ? "w-[0px] p-0" : "w-[160px] xl:w-[250px] p-2 tablet:p-4"
       }
       `}
       >
+        {/* milimar movie */}
         {tabGlobal === "/" ? (
           <div className="h-[100%]">
             <div className="flex justify-between items-center mb-4">
               <p
                 id="similar-movie"
-                className="text-white uppercase text-[22px]"
+                className="text-white uppercase text-[18px] xl:text-[22px]"
               >
                 {t("Similar")}
               </p>
@@ -743,21 +745,21 @@ const WatchMovieTv = () => {
                 return (
                   <Link key={index} to={`/movie/${similarContent.id}`}>
                     <div
-                      className="group flex gap-4 text-[#fff] cursor-pointer hover:brightness-125
+                      className="group flex justify-center flex-col xl:flex-row flex-wrap-reverse xl:flex-wrap gap-4 text-[#fff] cursor-pointer hover:brightness-125
                 
                 "
                       onClick={() => {
                         // navigate(`movie/${similarContent.id}`);
                       }}
                     >
-                      <div className="max-w-[100px] w-full group-hover:scale-110 duration-200 delay-150">
+                      <div className="max-w-full xl:max-w-[100px] w-full group-hover:scale-110 duration-200 delay-150">
                         <img
                           src={getImage(similarContent.poster_path, "w154")}
                           className="w-[154px] object-contain rounded-lg rounded-global"
                           alt=""
                         />
                       </div>
-                      <div className="flex-1">
+                      <div className="flex-1 text-center xl:text-left">
                         <Tooltip
                           title={
                             similarContent.title

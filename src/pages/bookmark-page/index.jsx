@@ -271,7 +271,7 @@ const BookMarkedPage = () => {
                 {/* content */}
                 <>
                   {dataFavorite?.length ? (
-                    <div className="flex gap-10 flex-wrap">
+                    <div className="flex gap-3 tablet:gap-10 flex-wrap justify-center sm:justify-start">
                       {dataFavorite.map((favorite, index) => {
                         return (
                           <div
@@ -287,10 +287,10 @@ const BookMarkedPage = () => {
                                   setTabGlobal("/");
                                   sessionStorage.setItem("currentTab", "/");
                                 } else {
-                                  setTabGlobal("tab-tv-show");
+                                  setTabGlobal("/tv-show");
                                   sessionStorage.setItem(
                                     "currentTab",
-                                    "tab-tv-show"
+                                    "/tv-show"
                                   );
                                 }
                                 navigate(`/${favorite.type}/${favorite.id}`);

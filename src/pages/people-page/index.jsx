@@ -76,19 +76,8 @@ const PeoplePage = () => {
   return (
     <>
       <div className="min-h-[100vh] py-6">
-        {/* <div className="flex justify-end mb-10">
-        <div className="grow-[1] max-w-[350px]">
-          <input
-            type="text"
-            placeholder={`${t("Search")}...`}
-            className="p-2 focus:ring-blue-500 focus:border-blue-500 rounded-lg"
-            defaultValue={filters.query}
-            onChange={handleSearch}
-          />
-        </div>
-      </div> */}
         <div className="flex justify-end mb-10">
-          <div className="w-[250px] relative">
+          <div className="w-full sm:w-[250px] relative">
             <input
               ref={refSearch}
               placeholder={`${t("Search")}...`}
@@ -109,7 +98,7 @@ const PeoplePage = () => {
           <SkeletonCustom quantity={10} />
         ) : (
           <div className="flex justify-between">
-            <div className="flex flex-wrap gap-10 justify-center">
+            <div className="flex flex-wrap gap-10 justify-evenly">
               {listPopularPeople.map((people, index) => {
                 return (
                   <Link to={`/cast/${people.id}`} key={index}>

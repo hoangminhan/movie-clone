@@ -18,7 +18,7 @@ export const Header = ({ page, setIsHiddenSidebar, isHiddenSidebar }) => {
       case "genres":
         return t("Genres");
       case "movie":
-        return "Detail movie";
+        return t("Detail movie");
       case "Cast":
         return t("Actor Info");
       case "Search":
@@ -29,17 +29,19 @@ export const Header = ({ page, setIsHiddenSidebar, isHiddenSidebar }) => {
         return t("Watched");
       case "Account Settings":
         return t("Account Info");
+      case "":
+        return "";
       default:
         return <Menu setIsHiddenSidebar={setIsHiddenSidebar} />;
     }
   };
   return (
     <header className="flex justify-between items-center h-[70px] before:absolute before:h-[1px] before:w-[100%] before:left-[0px] before:right-[0px] before:top-[70px] before:bg-[#4f4e4e] text-white">
-      <div className="text-[16px] ssm:text-[20px] whitespace-nowrap">
+      <div className="text-[16px] ssm:text-[20px] whitespace-nowrap hidden sm:block">
         {handleContentHeader(page)}
       </div>
 
-      <div className="flex justify-end items-center gap-[10px] ssm:gap-[20px] basis-3/5">
+      <div className="flex flex-1 justify-between sm:justify-end items-center gap-[10px] ssm:gap-[20px] basis-3/5">
         <div
           className="block tablet:hidden"
           onClick={() => {
@@ -48,8 +50,10 @@ export const Header = ({ page, setIsHiddenSidebar, isHiddenSidebar }) => {
         >
           <FontAwesomeIcon icon={faBars} />
         </div>
-        <LanguageProject />
-        <Profile />
+        <div className="flex items-center gap-x-3">
+          <LanguageProject />
+          <Profile />
+        </div>
       </div>
     </header>
   );

@@ -39,7 +39,7 @@ export const ModalTrailer = ({
   const [t] = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const currentType =
-    sessionStorage.getItem("currentTab") === "tab-tv-show" ? "tv" : "movie";
+    sessionStorage.getItem("currentTab") === "/tv-show" ? "tv" : "movie";
   const navigate = useNavigate();
   const { handleAddBookMarked, handleAddHistory } = useAddList();
   const [isFavorite, setIsFavorite] = useState(false);
@@ -277,7 +277,7 @@ export const ModalTrailer = ({
                   <div className="flex">
                     {dataDetail?.genres?.map((genre, index) => {
                       const currentType =
-                        sessionStorage.getItem("currentTab") === "tab-tv-show"
+                        sessionStorage.getItem("currentTab") === "/tv-show"
                           ? "tv"
                           : "movie";
                       return (

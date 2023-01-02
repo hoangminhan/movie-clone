@@ -148,8 +148,8 @@ export const ContentDiscovery = ({
                     className="hover:scale-110 duration-200 cursor-pointer relative rounded-b-lg rounded-tl-lg overflow-hidden"
                     onClick={() => {
                       navigate(`/tv/${itemMovie.id}`);
-                      sessionStorage.setItem("currentTab", "tab-tv-show");
-                      setTabGlobal("/tab-tv-show");
+                      sessionStorage.setItem("currentTab", "/tv-show");
+                      setTabGlobal("//tv-show");
                     }}
                   >
                     <div className="h-[100%] flex flex-col">
