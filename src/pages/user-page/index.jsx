@@ -86,9 +86,7 @@ const UserPage = () => {
   const handleConfirmDeleteAccount = (event) => {
     setIsShowModalPassword(true);
   };
-  const handleCancelDeleteAccount = (event) => {
-    console.log({ event });
-  };
+  const handleCancelDeleteAccount = (event) => {};
   //
   const handleFinishSuccess = async (values) => {
     setIsLoadingContinue(true);
@@ -312,9 +310,9 @@ const UserPage = () => {
             {/* name */}
             <div className="mt-4">
               <p className="text-[18px]">{t("Name")}</p>
-              <div className="flex justify-between items-center">
-                {isEditUserName ? (
-                  <div className="flex flex-col">
+              <>
+                <div className="flex justify-between items-center">
+                  {isEditUserName ? (
                     <input
                       value={nameUser}
                       ref={userRef}
@@ -325,40 +323,39 @@ const UserPage = () => {
                       }}
                       onKeyPress={handlePressEnterInput}
                     />
-                    <p className="text-[13px] pl-2 ">
-                      {t("Press Esc to exit")}
-                    </p>
-                  </div>
-                ) : (
-                  <p className="text-[15px]  capitalize">
-                    {dataUser?.displayName
-                      ? dataUser?.displayName
-                      : dataUser?.email?.replace("@gmail.com", "")}
-                  </p>
-                )}
-                <p className="cursor-pointer">
-                  {isEditUserName ? (
-                    <AiOutlineSend
-                      className="text-[24px]"
-                      onClick={() => {
-                        handleChangeUserName();
-                      }}
-                    />
                   ) : (
-                    <AiOutlineEdit
-                      className="text-[24px]"
-                      onClick={() => {
-                        handleOpenEditUserName();
-                      }}
-                    />
-                    // <FontAwesomeIcon
-                    //   icon={faPenToSquare}
-                    //   className="text-[22px]"
-
-                    // />
+                    <p className="text-[15px] capitalize">
+                      {dataUser?.displayName
+                        ? dataUser?.displayName
+                        : dataUser?.email?.replace("@gmail.com", "")}
+                    </p>
                   )}
-                </p>
-              </div>
+                  <p className="cursor-pointer">
+                    {isEditUserName ? (
+                      <AiOutlineSend
+                        className="text-[24px]"
+                        onClick={() => {
+                          handleChangeUserName();
+                        }}
+                      />
+                    ) : (
+                      <AiOutlineEdit
+                        className="text-[24px]"
+                        onClick={() => {
+                          handleOpenEditUserName();
+                        }}
+                      />
+                      // <FontAwesomeIcon
+                      //   icon={faPenToSquare}
+                      //   className="text-[22px]"
+
+                      // />
+                    )}
+                  </p>
+                </div>
+
+                <p className="text-[13px]">{t("Press Esc to exit")}</p>
+              </>
             </div>
             {/* email */}
             <div className="mt-4">

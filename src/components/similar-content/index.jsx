@@ -57,7 +57,7 @@ export const SimilarContent = ({ dataSimilar }) => {
             h-[80px] text-center px-2 pt-[8px] pb-1
             "
                 >
-                  <p className="line-clamp-2">
+                  <p className="line-clamp-1 tablet:line-clamp-2">
                     {similar.title ? similar.title : similar.name}
                   </p>
                   <p className="">

@@ -70,7 +70,7 @@ export const ComponentSlider = React.memo(
               return (
                 <SwiperSlide key={index} className="cursor-pointer">
                   <div
-                    className="group relative delay-150 hover:scale-110 duration-[250ms]"
+                    className="group relative delay-150 hover:scale-110 duration-[150ms] ease-linear"
                     onClick={() => {
                       sessionStorage.setItem(
                         "currentTab",

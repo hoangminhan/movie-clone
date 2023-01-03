@@ -1,6 +1,6 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Popover, Tooltip } from "antd";
+import { Empty, Popover, Tooltip } from "antd";
 import { UserContext } from "contexts";
 import {
   arrayRemove,
@@ -21,14 +21,23 @@ import "./styles.scss";
 import styled from "styled-components";
 import { t } from "i18next";
 import ReactTimeAgo from "react-time-ago";
-const StyledPopover = styled(Popover)`
-  .ant-popover {
-    min-width: 250px !important;
-  }
-  .ant-popover-inner-content {
-    padding: 0 !important;
-  }
-`;
+// const StyledPopover = styled(Popover)`
+//   &.ant-popover {
+//   }
+//   &.ant-popover-content {
+//     min-width: 350px;
+//     max-width: 350px;
+//     border-radius: 8px;
+//     overflow: hidden;
+//   }
+//   .ant-popover-title {
+//     font-size: 18px;
+//     padding: 8px 16px;
+//   }
+//   &.ant-popover-inner-content {
+//     padding: 0 !important;
+//   }
+// `;
 const ContentPopover = ({
   dataContent,
   handleDeleteNotification,
@@ -41,7 +50,7 @@ const ContentPopover = ({
   return (
     <div className="max-h-[400px] overflow-y-scroll scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-[#a09f9f] scrollbar-track-[#ffffff] scrollbar-h-5px">
       <ul className="pb-1">
-        {dataContent.map((data, index) => {
+        {dataContent?.map((data, index) => {
           return (
             <li
               className="py-[2px] relative mt-2 px-4 hover:bg-[#0000000d] group transition-all duration-150 ease-linear flex items-center cursor-pointer gap-4"
@@ -65,7 +74,11 @@ const ContentPopover = ({
                   <div>
                     <ReactTimeAgo
                       className="text-[12px] text-[#8a8787]"
-                      date={new Date(data.createAt.seconds * 1000)}
+                      date={
+                        data?.createAt?.seconds
+                          ? new Date(data?.createAt?.seconds * 1000)
+                          : ""
+                      }
                       locale={globalLocale}
                     />
                   </div>
@@ -152,19 +165,29 @@ export const NotificationFCM = ({ children }) => {
     }
   }, [dataUser]);
   return (
-    <StyledPopover
-      content={
-        <ContentPopover
-          dataContent={dataNoti}
-          handleDeleteNotification={handleDeleteNotification}
-          handleUpdateNotification={handleUpdateNotification}
-        />
-      }
-      placement="bottomLeft"
-      title={t("Notification")}
-      trigger="click"
-    >
-      {children}
-    </StyledPopover>
+    <div>
+      <Popover
+        content={
+          dataNoti?.length ? (
+            <ContentPopover
+              dataContent={dataNoti}
+              handleDeleteNotification={handleDeleteNotification}
+              handleUpdateNotification={handleUpdateNotification}
+            />
+          ) : (
+            <div className="py-4">
+              <Empty />
+            </div>
+          )
+        }
+        placement="bottomLeft"
+        title={t("Notification")}
+        overlayClassName="movie-fcm"
+        trigger="click"
+        zIndex={999}
+      >
+        {children}
+      </Popover>
+    </div>
   );
 };

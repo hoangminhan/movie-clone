@@ -190,7 +190,6 @@ export const useFirebaseRealTime = () => {
         await updateDoc(userRef, {
           notification: arrayUnion(dataAdd),
         });
-        console.log("success");
       }
     } catch (error) {
       console.log("error", error);

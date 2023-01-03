@@ -215,9 +215,9 @@ export const ModalTrailer = ({
             gutter={[32, 16]}
             className="border-solid border-[1px] border-[#ccc] py-4"
           >
-            <Col span={12}>
+            <Col xs={24} md={12}>
               {/* run time */}
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex flex-col tablet:flex-row items-start tablet:items-center justify-start tablet:justify-between gap-2 tablet:gap-4">
                 <p>
                   <span>{t("Run time")}: </span>
                   {dataDetail?.runtime} phút
@@ -254,7 +254,7 @@ export const ModalTrailer = ({
                 </ShowMoreText>
               </div>
             </Col>
-            <Col span={12}>
+            <Col xs={24} md={12}>
               <div>
                 <div className="flex">
                   <span className="text-[16px] mr-2">{t("Cast")}:</span>
@@ -272,9 +272,9 @@ export const ModalTrailer = ({
                     })}
                   </p>
                 </div>
-                <div className="mt-2 flex">
+                <div className="mt-2 flex flex-wrap">
                   <span className="text-[16px] mr-2">{t("Genres")}:</span>
-                  <div className="flex">
+                  <div className="flex flex-wrap">
                     {dataDetail?.genres?.map((genre, index) => {
                       const currentType =
                         sessionStorage.getItem("currentTab") === "/tv-show"

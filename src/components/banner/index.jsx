@@ -178,7 +178,7 @@ export const Banner = ({ listTrending, isLoading }) => {
           <Swiper
             ref={swiperRef}
             autoplay={{
-              delay: 1000000,
+              delay: 4000,
               disableOnInteraction: false,
             }}
             className="banner-wrapper"
