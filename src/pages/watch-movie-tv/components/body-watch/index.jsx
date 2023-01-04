@@ -131,7 +131,7 @@ export const BodyWatch = ({
                 <span className="text-[16px]">{t("Updating")}...</span>
               )}
             </h3>
-            <div className="flex flex-wrap gap-x-4 gap-y-6 my-4 pl-4 justify-between">
+            <div className="flex flex-wrap gap-x-4 gap-y-6 my-4 pl-4 justify-between tablet:justify-start">
               {listCastsMovie?.map((cast, index) => {
                 return (
                   <Link key={index} to={`/cast/${cast.id}`}>

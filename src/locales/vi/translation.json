@@ -135,7 +135,13 @@
   "Your rating":"Đánh giá của bạn",
   "Delete notification":"Xóa thông báo",
   "Notification":"Thông báo",
-  "Detail movie":"Chi tiết phim"
+  "Detail movie":"Chi tiết phim",
+  "Reaction list":"Danh sách reaction",
+  "Click to see detail reaction of this comment":"Nhấn để xem danh sách reaction",
+  "Click to see detail reaction of this reply":"Nhấn để xem danh sách reaction",
+  "Add Comment":"Thêm bình luận",
+  "Show less comments":"Ẩn bớt bình luận",
+  "Load more comments":"Tải thêm bình luận"
 
 
 

@@ -134,6 +134,12 @@
   "Your rating":"Your rating",
   "Delete notification":"Delete notification",
   "Notification":"Notification",
-  "Detail movie":"Detail movie"
+  "Detail movie":"Detail movie",
+  "Reaction list":"Reaction list",
+  "Click to see detail reaction of this comment":"Click to see detail reaction of this comment",
+  "Click to see detail reaction of this reply":"Click to see detail reaction of this reply",
+  "Add Comment":"Add comment",
+  "Show less comments":"Show less comments",
+  "Load more comments":"Load more comments"
 
 }

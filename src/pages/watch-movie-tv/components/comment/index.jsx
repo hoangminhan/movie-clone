@@ -1,10 +1,8 @@
 import {
   Avatar,
-  Button,
   Comment,
   Form,
   Input,
-  List,
   message,
   Modal,
   Popconfirm,
@@ -16,18 +14,12 @@ import { UserContext } from "contexts";
 import { ReactionBarSelector } from "@charkour/react-reactions";
 
 import {
-  addDoc,
   arrayRemove,
   arrayUnion,
-  collection,
   doc,
-  FieldValue,
-  getDocs,
   getFirestore,
-  setDoc,
   Timestamp,
   updateDoc,
-  where,
 } from "firebase/firestore";
 
 import React, { useContext, useState } from "react";
@@ -65,13 +57,6 @@ export const CommentMovie = ({
   dataReplyReaction,
   isLoadingComment,
 }) => {
-  const [reactions, setReactions] = useState({
-    like: 0,
-    haha: 1,
-    angry: 0,
-    sad: 0,
-    wow: 0,
-  });
   const stateContext = useContext(UserContext);
   const { localeGlobal } = stateContext;
 
@@ -932,7 +917,7 @@ export const CommentMovie = ({
                                     <div className="flex gap-2 mt-2 items-center justify-start max-w-[100px]">
                                       <Tooltip
                                         title={t(
-                                          "Click to see detail reaction of this comment"
+                                          "Click to see detail reaction of this reply"
                                         )}
                                       >
                                         <div
@@ -1071,7 +1056,7 @@ export const CommentMovie = ({
               {lenghtShow < dataComment?.comment?.length
                 ? t("Load more comments")
                 : t("Show less comments")}
-              {`(${
+              {` (${
                 lenghtShow < dataComment?.comment?.length
                   ? lenghtShow
                   : dataComment?.comment?.length
@@ -1096,9 +1081,7 @@ export const CommentMovie = ({
       >
         <div>
           <div className="flex justify-between items-center">
-            <h2 className="text-[20px] text-white">
-              {t("People's reaction to this info")}
-            </h2>
+            <h2 className="text-[20px] text-white">{t("Reaction list")}</h2>
             <p>
               <FontAwesomeIcon
                 icon={faClose}

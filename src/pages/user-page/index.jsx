@@ -1,46 +1,31 @@
 import {
   faCircleUser,
-  faEdit,
   faEye,
   faEyeSlash,
-  faPaperPlane,
   faUpload,
   faUserSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Avatar,
-  Col,
-  Empty,
-  Form,
-  Modal,
-  Popconfirm,
-  Row,
-  Spin,
-  Upload,
-} from "antd";
+import { Avatar, Col, Form, Modal, Popconfirm, Row, Spin } from "antd";
 import { UserContext } from "contexts";
 import {
   deleteUser,
   EmailAuthProvider,
   getAuth,
-  onAuthStateChanged,
   reauthenticateWithCredential,
   sendEmailVerification,
   updateProfile,
 } from "firebase/auth";
 import { useFirebaseRealTime, useNotification, useTitle } from "hooks";
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useRef } from "react";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import ReactLoading from "react-loading";
-import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { AiOutlineSend, AiOutlineEdit } from "react-icons/ai";
-import { getStorage, ref } from "firebase/storage";
-import { IMAGE_URL } from "constant";
+import { arrayUnion, doc, getFirestore, updateDoc } from "firebase/firestore";
 
 const UserPage = () => {
   const stateContext = useContext(UserContext);
@@ -131,10 +116,18 @@ const UserPage = () => {
   // handle update info user
   const handleUpdateInfoUser = async (newUserName) => {
     const auth = getAuth();
+    const dbfireStore = getFirestore();
+
+    const userRef = doc(dbfireStore, "user", dataUser.uid);
     try {
-      await updateProfile(auth.currentUser, {
-        displayName: newUserName,
-      });
+      await Promise.all([
+        updateProfile(auth.currentUser, {
+          displayName: newUserName,
+        }),
+        updateDoc(userRef, {
+          name: newUserName,
+        }),
+      ]);
       handlePopupNotification("Change user name success", "success");
     } catch (error) {
       console.log(error);

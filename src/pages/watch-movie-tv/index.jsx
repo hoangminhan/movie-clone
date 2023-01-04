@@ -712,7 +712,7 @@ const WatchMovieTv = () => {
 
       <div
         className={`
-        fixed top-0 xl:top-[70px] right-0 bottom-0 lg:absolute bg-black border-l-[#ccc] border-l-[1px] border-l-solid z-[2] h-full overflow-y-auto scroll-smooth no-scrollbar
+        fixed top-0 xl:top-[70px] right-0 bottom-0 lg:absolute bg-black border-l-[#ccc] border-l-[1px] border-l-solid z-[2] overflow-y-auto scroll-smooth no-scrollbar
       transition-all duration-150 ease-linear ${
         isHiddenDrawer ? "w-[0px] p-0" : "w-[160px] xl:w-[250px] p-2 tablet:p-4"
       }

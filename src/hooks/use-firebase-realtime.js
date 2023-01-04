@@ -161,12 +161,19 @@ export const useFirebaseRealTime = () => {
 
   const handleUploadAvatar = async (file, currentUser, typeImage) => {
     const fileRef = ref(storageMovie, currentUser.uid + ".png");
+
+    // update user in firebase store
+    const dbfireStore = getFirestore();
+    const userRef = doc(dbfireStore, "user", currentUser.uid);
     try {
       await uploadBytes(fileRef, file);
       // get url file avatar
       const photoURL = await getDownloadURL(fileRef);
 
       await updateProfile(currentUser, { photoURL });
+      await updateDoc(userRef, {
+        url: photoURL,
+      });
       setIsChangeAvatar(!isChangeAvatar);
     } catch (error) {
       console.log(error);
